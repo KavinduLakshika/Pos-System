@@ -16,7 +16,9 @@ app.use(bodyParser.json());
 //supplier routes
 app.post("/supplier", SupplierController.createSupplier);
 app.get("/supplier", SupplierController.getAllSupplier);
-app.get("/supplier/id", SupplierController.getSupplierById);
+app.get("/supplier/:id", SupplierController.getSupplierById);
+app.put("/supplier/:id", SupplierController.updateSupplier);
+app.delete("/supplier/:id", SupplierController.deleteSupplier);
 
 
 // Sync the database

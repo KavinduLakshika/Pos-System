@@ -79,8 +79,58 @@ const getSupplierById = async (req, res) => {
     }
 };
 
+// Update a Supplier
+const updateSupplier = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            supplierName,
+            supplierAddress,
+            supplierNic,
+            supplierEmail,
+            supplierTP,
+            supplierStatus
+        } = req.body;
+
+        const supplier = await Supplier.findByPk(id);
+        if (!supplier) {
+            return res.status(404).json({ message: "Supplier not found" });
+        }
+
+        await supplier.update({
+            supplierName,
+            supplierAddress,
+            supplierNic,
+            supplierEmail,
+            supplierTP,
+            supplierStatus
+        });
+
+        res.status(200).json(supplier);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+// Delete a Supplier
+const deleteSupplier = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const supplier = await Supplier.findByPk(id);
+        if (!supplier) {
+            return res.status(404).json({ message: "Supplier not found" });
+        }
+        await supplier.destroy();
+        res.status(200).json({ message: "Supplier deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     createSupplier,
     getAllSupplier,
     getSupplierById,
+    updateSupplier,
+    deleteSupplier,
 }
