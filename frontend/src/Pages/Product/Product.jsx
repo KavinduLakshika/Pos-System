@@ -1,0 +1,22 @@
+import React from 'react'
+import { Route, Routes } from 'react-router-dom';
+import CreateProduct from '../../components/ProductPages/CreateProduct'
+import CreateProductLable from '../../components/ProductPages/CreateProductLable'
+import ProductList from '../../components/ProductPages/ProductList'
+import ProductCategory from '../../components/ProductPages/ProductCategory'
+
+const Product = () => {
+  return (
+    <div>
+        <h1>Products</h1>
+        <Routes>
+            <Route path='create' element={<CreateProduct/>}/>
+            <Route path='category' element={<ProductCategory/>}/>
+            <Route path='product-lable' element={<CreateProductLable/>}/>
+            <Route path='product-list' element={<ProductList/>}/>
+        </Routes>
+    </div>
+  )
+}
+
+export default Product
