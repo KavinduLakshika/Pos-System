@@ -56,7 +56,7 @@ const createSupplier = async (req, res) => {
 };
 
 // Get all Suppliers
-const getAllSupplier = async (req, res) => {
+const getAllSuppliers = async (req, res) => {
     try {
         const supplier = await Supplier.findAll();
         res.status(200).json(supplier);
@@ -129,7 +129,7 @@ const deleteSupplier = async (req, res) => {
 
 module.exports = {
     createSupplier,
-    getAllSupplier,
+    getAllSuppliers,
     getSupplierById,
     updateSupplier,
     deleteSupplier,

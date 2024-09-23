@@ -32,10 +32,16 @@ const Customer = sequelize.define(
         cusPoints: {
             type: DataTypes.INTEGER,
             allowNull: true,
+            defaultValue: '10',
+        },
+        cusStatus: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: "Active",
         },
     },
     {
-        tableName: "customers",
+        tableName: "customer",
         timestamps: false,
     }
 );

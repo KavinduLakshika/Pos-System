@@ -13,6 +13,10 @@ const User = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        userPassword: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         userType: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -36,6 +40,7 @@ const User = sequelize.define(
         userStatus: {
             type: DataTypes.STRING,
             allowNull: true,
+            defaultValue: "Active",
         },
     },
     {
