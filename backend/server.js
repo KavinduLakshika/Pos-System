@@ -6,7 +6,9 @@ const sequelize = require("./dbConfig");
 //Controllers
 const SupplierController = require("./controller/SupplerController");
 const UserController = require("./controller/UserController");
-const CustomerController = require("./controller/CustomerController")
+const CustomerController = require("./controller/CustomerController");
+const CategoryController = require("./controller/CategoryController");
+const ProductController = require("./controller/ProductController");
 
 const app = express();
 const PORT = process.env.PORT;
@@ -36,6 +38,20 @@ app.get("/suppliers", SupplierController.getAllSuppliers);
 app.get("/supplier/:id", SupplierController.getSupplierById);
 app.put("/supplier/:id", SupplierController.updateSupplier);
 app.delete("/supplier/:id", SupplierController.deleteSupplier);
+
+//category routes
+app.post("/category", CategoryController.createCategory);
+app.get("/categories", CategoryController.getAllCategories);
+app.get("/category/:id", CategoryController.getCategoryById);
+app.put("/category/:id", CategoryController.updateCategory);
+app.delete("/category/:id", CategoryController.deleteCustomer);
+
+//product routes
+app.post("/product", ProductController.createProduct);
+app.get("/products", ProductController.getAllProducts);
+app.get("/product/:id", ProductController.getProductById);
+app.put("/product/:id", ProductController.updateProduct);
+app.delete("/product/:id", ProductController.deleteProduct);
 
 
 // Sync the database
