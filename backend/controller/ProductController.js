@@ -1,6 +1,7 @@
 const Product = require("../model/Products");
 const Category = require("../model/Category");
 
+//Create product
 const createProduct = async (req, res) => {
     try {
         const {
@@ -45,6 +46,7 @@ const createProduct = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+
 // Get all products
 const getAllProducts = async (req, res) => {
     try {
@@ -97,7 +99,6 @@ const updateProduct = async (req, res) => {
             categoryId
         } = req.body;
 
-        // Check if the category exists
         if (categoryId) {
             const category = await Category.findByPk(categoryId);
             if (!category) {
@@ -120,7 +121,7 @@ const updateProduct = async (req, res) => {
                 category_categoryId: categoryId
             });
 
-            // Fetch the updated product with its category
+
             const updatedProductWithCategory = await Product.findByPk(id, {
                 include: [{
                     model: Category,
