@@ -13,7 +13,7 @@ const CustomerList = () => {
 
   return (
     <div>
-      <h1>Customer List</h1>
+      <h4>Customer List</h4>
       <Table
       data={data}
       columns={columns}
