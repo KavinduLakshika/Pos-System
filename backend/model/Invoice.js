@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../dbConfig");
-const Product = require("./Product");
+const Product = require("./Products");
 const Return = require("./Return");
 
 const Invoice = sequelize.define(
@@ -19,13 +19,9 @@ const Invoice = sequelize.define(
             type: DataTypes.FLOAT,
             allowNull: false,
         },
-        paidAmount: {
+        discount: {
             type: DataTypes.FLOAT,
-            allowNull: true,
-        },
-        dueAmount: {
-            type: DataTypes.FLOAT,
-            allowNull: true,
+            allowNull: false,
         },
         products_productId: {
             type: DataTypes.INTEGER,

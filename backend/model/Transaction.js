@@ -1,7 +1,7 @@
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../dbConfig"); 
-const Customer = require("./Customer");
-const Product = require("./Product");
+const { DataTypes } = require("sequelize");
+const sequelize = require("../dbConfig");
+const Customer = require("./Customers");
+const Invoice = require("./Invoice");
 
 const Transaction = sequelize.define(
     "Transaction",
@@ -11,9 +11,10 @@ const Transaction = sequelize.define(
             primaryKey: true,
             autoIncrement: true,
         },
-        transactionQty: {
-            type: DataTypes.INTEGER,
+        transactionType: {
+            type: DataTypes.STRING(255),
             allowNull: false,
+            defaultValue: "Cash",
         },
         price: {
             type: DataTypes.FLOAT,
@@ -31,11 +32,11 @@ const Transaction = sequelize.define(
             },
             allowNull: false,
         },
-        products_productId: {
+        invoice_invoiceId: {
             type: DataTypes.INTEGER,
             references: {
-                model: Product,
-                key: "productId",
+                model: Invoice,
+                key: "invoiceId",
             },
             allowNull: false,
         },
@@ -50,9 +51,9 @@ Transaction.belongsTo(Customer, {
     foreignKey: "customer_cusId",
     as: "customer",
 });
-Transaction.belongsTo(Product, {
-    foreignKey: "products_productId",
-    as: "product",
+Transaction.belongsTo(Invoice, {
+    foreignKey: "invoice_invoiceId",
+    as: "invoice",
 });
 
 module.exports = Transaction;

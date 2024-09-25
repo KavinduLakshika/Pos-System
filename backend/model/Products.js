@@ -41,6 +41,7 @@ const Product = sequelize.define(
     productStatus: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "In stock",
     },
     category_categoryId: {
       type: DataTypes.INTEGER,
