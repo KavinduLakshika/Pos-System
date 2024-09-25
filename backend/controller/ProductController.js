@@ -12,7 +12,6 @@ const createProduct = async (req, res) => {
             productSellingPrice,
             productWarranty,
             productQty,
-            productStatus,
             categoryId
         } = req.body;
 
@@ -20,6 +19,17 @@ const createProduct = async (req, res) => {
 
         if (!category) {
             return res.status(400).json({ message: 'Invalid category ID' });
+        }
+
+        if (!productName ||
+            !productCode ||
+            !productWeight ||
+            !productBuyingPrice ||
+            !productSellingPrice ||
+            !productWarranty ||
+            !productQty ||
+            !categoryId) {
+            return res.status(400).json({ error: "All fields are required." });
         }
 
         const newProduct = await Product.create({
@@ -30,7 +40,7 @@ const createProduct = async (req, res) => {
             productSellingPrice,
             productWarranty,
             productQty,
-            productStatus,
+            productStatus: "In stock",
             category_categoryId: categoryId
         });
 
@@ -43,7 +53,20 @@ const createProduct = async (req, res) => {
 
         res.status(201).json(productWithCategory);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        if (error.name === "SequelizeValidationError") {
+            return res
+                .status(400)
+                .json({ error: "Validation error: Please check the provided data." });
+        }
+
+        if (error.name === "SequelizeUniqueConstraintError") {
+            return res.status(400).json({
+                error:
+                    "Duplicate field value: A product name already exists.",
+            });
+        }
+
+        res.status(400).json({ error: `An error occurred: ${error.message}` });
     }
 };
 

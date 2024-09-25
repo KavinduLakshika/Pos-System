@@ -22,13 +22,17 @@ const Stock = sequelize.define(
             type: DataTypes.DATE,
             allowNull: false,
         },
+        stockStatus: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: "In Stock",
+        },
         supplier_supplierId: {
             type: DataTypes.INTEGER,
             references: {
                 model: Supplier,
                 key: "supplierId",
             },
-            allowNull: false,
         },
     },
     {

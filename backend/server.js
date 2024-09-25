@@ -9,6 +9,8 @@ const UserController = require("./controller/UserController");
 const CustomerController = require("./controller/CustomerController");
 const CategoryController = require("./controller/CategoryController");
 const ProductController = require("./controller/ProductController");
+const StockController = require("./controller/StockController");
+const TransactionController = require("./controller/TransactionController");
 
 const app = express();
 const PORT = process.env.PORT;
@@ -53,6 +55,15 @@ app.get("/product/:id", ProductController.getProductById);
 app.put("/product/:id", ProductController.updateProduct);
 app.delete("/product/:id", ProductController.deleteProduct);
 
+//stock routes
+app.post("/stock", StockController.createStock);
+app.get("/stocks", StockController.getAllStocks);
+app.get("/stock/:id", StockController.getStockById);
+app.put("/stock/:id", StockController.updateCategory);
+app.delete("/stock/:id", StockController.deleteStock);
+
+//transaction routes
+app.post("/transaction", TransactionController.createTransaction);
 
 // Sync the database
 sequelize
