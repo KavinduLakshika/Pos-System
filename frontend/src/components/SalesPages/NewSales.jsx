@@ -5,7 +5,7 @@ import Table from '../Table/Table'
 const NewSales = () => {
 
   const [data,] = useState([
-    ["Maleesha", "MaleeshaBalla@gmail.com"],
+    ["MaleeshaPa", "MaleeshaBalla@gmail.com"],
   ]);
 
   const columns = ["Name", "Email"];
