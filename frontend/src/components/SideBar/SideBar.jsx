@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { File, LayoutDashboard, ShoppingCart, Package, Users, BarChart2, Settings, Boxes, Truck, BadgeDollarSignIcon, FileText, User } from 'lucide-react';
+import { File, LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, BadgeDollarSignIcon, FileText, User } from 'lucide-react';
 import './SideBar.css';
 
 const Sidebar = () => {
