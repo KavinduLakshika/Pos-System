@@ -16,6 +16,7 @@ const Category = sequelize.define(
         categoryStatus: {
             type: DataTypes.STRING,
             allowNull: true,
+            defaultValue:"In stock"
         },
     },
     {

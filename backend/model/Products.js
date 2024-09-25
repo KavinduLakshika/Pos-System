@@ -14,9 +14,9 @@ const Product = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    productCategory: {
+    productCode: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     productWeight: {
       type: DataTypes.STRING,
@@ -30,6 +30,25 @@ const Product = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: false,
     },
+    productWarranty: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    productQty: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    productStatus: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    category_categoryId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "category",
+        key: "categoryId",
+      },
+    },
   },
   {
     tableName: "products",
@@ -38,7 +57,7 @@ const Product = sequelize.define(
 );
 
 Product.belongsTo(Category, {
-  foreignKey: "categoryId",
+  foreignKey: "category_categoryId",
   as: "category",
 });
 
