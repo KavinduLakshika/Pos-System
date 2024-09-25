@@ -1,11 +1,47 @@
-import React from 'react'
+import React, { useState } from 'react';
+import Table from '../Table/Table';
+import Form from '../../Models/Form/Form';
+import Modal from 'react-modal';
+
 
 const CustomerList = () => {
+  const [data] = useState([
+    ['1', 'MaleeshaPa', 'pinkubura', '6969696969', 'MaleeshaBalla@gmail.com', '2000210021', '0', 'Active']
+  ]);
+
+  const columns = ['id', 'Customer', 'Address', 'Phone', 'Email', 'NIC', 'Points', 'Status'];
+  const btnName = 'New Customer';
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
   return (
     <div>
-      <h1>Customer List</h1>
-    </div>
-  )
-}
+      <h4>Customer List</h4>
+      
+      <Table
+        data={data}
+        columns={columns}
+        btnName={btnName}
+        onAdd={openModal}
+      />
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="New Customer Form"
+      >
 
-export default CustomerList
+        <Form closeModal={closeModal} />
+      </Modal>
+    </div>
+  );
+};
+
+export default CustomerList;
