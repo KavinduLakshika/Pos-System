@@ -22,12 +22,6 @@
   padding: 10px 100px;
 }
 
-.form-group-name {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .form-group {
   width: 400px;
   margin-bottom: 15px;
@@ -40,6 +34,31 @@
 
 .form-group input,
 .form-group select {
+  width: 100%;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid rgb(195, 195, 195);
+  outline: none;
+}
+
+.form-group-name-flex{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap:wrap ;
+}
+
+.form-group-name {
+  margin-bottom: 15px;
+}
+
+.form-group-name label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group-name input,
+.form-group-name select {
   width: 100%;
   padding: 8px 10px;
   box-sizing: border-box;

@@ -31,19 +31,20 @@ const Form = ({ closeModal }) => {
       <form onSubmit={handleSubmit} className="form-container">
         <div className="form-gorup-1">
 
-          <div className="form-group-name">
-            <div className="form-group">
+          <div className="form-group-name-flex">
+            <div className="form-group-name">
               <label>Title <span>*</span></label>
               <select name="title" value={formData.title} onChange={handleChange}>
                 <option value="Mr.">Mr.</option>
                 <option value="Mrs.">Mrs.</option>
                 <option value="Ms.">Ms.</option>
               </select>
-              <div className="form-group">
-                <label>Name <span>*</span></label>
-                <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter Full Name" required />
-              </div>
             </div>
+            <div className="form-group-name">
+              <label>Name <span>*</span></label>
+              <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter Full Name" required />
+            </div>
+
           </div>
 
           <div className="form-group">
