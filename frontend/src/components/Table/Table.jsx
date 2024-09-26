@@ -81,7 +81,7 @@ const Table = ({ data, columns, onAdd, btnName, onEdit, onDelete }) => {
                                             onClick={() => onEdit(rowIndex)}
                                         >
                                             <FontAwesomeIcon icon={faPen} />
-                                        </button>
+                                        </button>{' '}
                                         <button
                                             className="btn btn-danger btn-sm"
                                             onClick={() => onDelete(rowIndex)}

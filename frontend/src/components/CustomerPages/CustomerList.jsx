@@ -41,8 +41,8 @@ const CustomerList = () => {
         <Form closeModal={closeModal}
         style={{
           content: {
-            width: '30%', // Change modal width
-            height: '90%', // Change modal height
+            width: '30%',  
+            height: '90%',  
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
