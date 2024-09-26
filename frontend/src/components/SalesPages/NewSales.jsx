@@ -1,9 +1,19 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 import { PlusCircle } from 'lucide-react';
 import './NewSales.css';
+import Form from '../../Models/Form/Form';
+import Modal from 'react-modal';
 
 const NewSales = () => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
 
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
 
   return (
     <div>
@@ -13,8 +23,15 @@ const NewSales = () => {
           <div className="customer">
             <div className="subCaption">
               <p>Customer Details</p>
-              <PlusCircle />
+              <button className='addCusBtn' type="button" onClick={openModal}><PlusCircle size={30} /></button>
             </div>
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              contentLabel="New Customer Form"
+            >
+              <Form closeModal={closeModal} />
+            </Modal>
 
             <div className="customer-details">
               <label htmlFor="">Customer Name</label>
@@ -68,7 +85,7 @@ const NewSales = () => {
       </form>
 
       <div className="product-table">
-        
+
       </div>
     </div>
 

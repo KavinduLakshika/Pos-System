@@ -45,3 +45,7 @@
     border-radius: 5px;
     border: 1px solid #c3c3c3;
 }
+.addCusBtn{
+    background-color: transparent;
+    border: none;
+}

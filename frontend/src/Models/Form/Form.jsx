@@ -14,7 +14,6 @@ const Form = ({ closeModal }) => {
     workplacePhone: '',
     workplaceAddress: ''
   });
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -23,6 +22,7 @@ const Form = ({ closeModal }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
+    closeModal(); // Close the modal on submit
   };
 
   return (
