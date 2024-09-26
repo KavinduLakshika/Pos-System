@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Table from '../Table/Table'
-import { File, PlusCircle } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 
 const NewSales = () => {
 
