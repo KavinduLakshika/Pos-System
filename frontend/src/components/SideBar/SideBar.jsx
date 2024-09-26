@@ -12,7 +12,7 @@ const Sidebar = () => {
         };
 
         window.addEventListener('resize', handleResize);
-        handleResize(); // Initial check
+        handleResize();
 
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -136,7 +136,7 @@ const Sidebar = () => {
                          transition: 'transform 0.3s ease-in-out'
                      }}
                 >
-                    <div className="text-center p-3">
+                    <div className="text-center mt-5 p-3">
                         <h1>Logo</h1>
                     </div>
                     <div className="position-sticky pt-3">
