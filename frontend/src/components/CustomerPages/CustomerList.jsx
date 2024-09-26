@@ -38,7 +38,16 @@ const CustomerList = () => {
         contentLabel="New Customer Form"
       >
 
-        <Form closeModal={closeModal} />
+        <Form closeModal={closeModal}
+        style={{
+          content: {
+            width: '20%', // Change modal width
+            height: '80%', // Change modal height
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+          },
+        }} />
       </Modal>
     </div>
   );
