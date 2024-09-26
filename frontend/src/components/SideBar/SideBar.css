@@ -2,6 +2,15 @@
   background: linear-gradient(rgb(255, 216, 126), rgb(255, 255, 255));
 }
 
+.sidebar {
+   
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  overflow-y: auto;
+}
+
 .nav-link {
   font-weight: 200;
   color: #222;
@@ -13,18 +22,14 @@
 }
 
 @media (max-width: 768px) {
-
-  /* .sidebar {
-      width: 100px !important;
-    } */
   .menu-link {
     display: none;
   }
 
-  .nav-item{
+  .nav-item {
     font-size: 10px;
   }
-   .nav-link {
+  .nav-link {
     padding: 0.5rem 1rem;
     text-align: center;
   }

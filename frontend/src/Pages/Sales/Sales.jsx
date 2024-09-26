@@ -6,7 +6,7 @@ import SalesHistory from '../../components/SalesPages/SalesHistory';
 const Sales = () => {
   return (
     <div>
-      <h1>Sales</h1>
+      
       <Routes>
         <Route path="new" element={<NewSales />} />
         <Route path="history" element={<SalesHistory />} />
