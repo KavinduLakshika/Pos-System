@@ -12,6 +12,7 @@ const ProductController = require("./controller/ProductController");
 const StockController = require("./controller/StockController");
 const InvoiceController = require("./controller/InvoiceController");
 const TransactionController = require("./controller/TransactionController");
+const StoreController = require("./controller/StoreController");
 
 const app = express();
 const PORT = process.env.PORT;
@@ -72,6 +73,9 @@ app.put("/invoice/:id", InvoiceController.deleteInvoice);
 
 //transaction routes
 app.post("/transaction", TransactionController.createTransaction);
+
+//store routes
+app.post("/store", StoreController.createStore);
 
 // Sync the database
 sequelize

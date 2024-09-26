@@ -9,16 +9,22 @@ const saltRounds = 10;
 const createUser = async (req, res) => {
     try {
         const {
+            userTitle,
+            userFullName,
             userName,
             userPassword,
             userType,
             userEmail,
             userNIC,
             userTP,
-            userAddress
+            userAddress,
+            userImage,
+            storeId,
         } = req.body;
 
         if (
+            !userTitle ||
+            !userFullName ||
             !userName ||
             !userPassword ||
             !userType ||
@@ -38,6 +44,8 @@ const createUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
 
         const newUser = await User.create({
+            userTitle,
+            userFullName,
             userName,
             userPassword: hashedPassword,
             userType,
@@ -45,7 +53,9 @@ const createUser = async (req, res) => {
             userNIC,
             userTP,
             userAddress,
+            userImage,
             userStatus: "Active",
+            store_storeId: storeId,
         });
 
         // Optional: Generate JWT token on user creation
@@ -101,6 +111,8 @@ const updateUser = async (req, res) => {
     try {
         const { id } = req.params;
         const {
+            userTitle,
+            userFullName,
             userName,
             userPassword,
             userType,
@@ -108,7 +120,8 @@ const updateUser = async (req, res) => {
             userNIC,
             userTP,
             userAddress,
-            userStatus
+            userStatus,
+            userImage,
         } = req.body;
 
         const user = await User.findByPk(id);
@@ -122,6 +135,8 @@ const updateUser = async (req, res) => {
         }
 
         await user.update({
+            userTitle,
+            userFullName,
             userName,
             userPassword: user.userPassword,
             userType,
@@ -129,7 +144,8 @@ const updateUser = async (req, res) => {
             userNIC,
             userTP,
             userAddress,
-            userStatus
+            userStatus,
+            userImage,
         });
 
         res.status(200).json(user);
