@@ -9,7 +9,7 @@ import SaleDuePayment from '../../components/CustomerPages/SaleDuePayment'
 const Customer = () => {
   return (
     <div>
-        <h1>Customer</h1>
+        
         <Routes>
             <Route path='/customer-list' element={<CustomerList/>} />
             <Route path='/jobDue-payment' element={<JobDuePayment/>} />
