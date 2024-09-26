@@ -38,6 +38,14 @@ const Product = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    productDescription: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    productImage: {
+      type: DataTypes.BLOB,
+      allowNull: false,
+    },
     productStatus: {
       type: DataTypes.STRING,
       allowNull: false,

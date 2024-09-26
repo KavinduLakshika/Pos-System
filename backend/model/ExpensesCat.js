@@ -1,32 +1,22 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../dbConfig");
 
-const Category = sequelize.define(
-    "Category",
+const Expenses = sequelize.define(
+    "Expenses",
     {
-        categoryId: {
+        expensesCatId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        categoryName: {
+        expensesCatName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        categoryType: {
+        expensesCatType: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
-        categoryStatus: {
-            type: DataTypes.STRING,
-            allowNull: true,
-            defaultValue: "In stock"
         },
     },
-    {
-        tableName: "category",
-        timestamps: false,
-    }
 );
-
-module.exports = Category;
+module.exports = Expenses;

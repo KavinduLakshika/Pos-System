@@ -10,6 +10,7 @@ const CustomerController = require("./controller/CustomerController");
 const CategoryController = require("./controller/CategoryController");
 const ProductController = require("./controller/ProductController");
 const StockController = require("./controller/StockController");
+const InvoiceController = require("./controller/InvoiceController");
 const TransactionController = require("./controller/TransactionController");
 
 const app = express();
@@ -61,6 +62,13 @@ app.get("/stocks", StockController.getAllStocks);
 app.get("/stock/:id", StockController.getStockById);
 app.put("/stock/:id", StockController.updateCategory);
 app.delete("/stock/:id", StockController.deleteStock);
+
+//invoice routes
+app.post("/invoice", InvoiceController.createInvoice);
+app.get("/invoice", InvoiceController.getAllInvoice);
+app.get("/invoice/:id", InvoiceController.getInvoiceById);
+app.put("/invoice/:id", InvoiceController.updateInvoice);
+app.put("/invoice/:id", InvoiceController.deleteInvoice);
 
 //transaction routes
 app.post("/transaction", TransactionController.createTransaction);

@@ -68,11 +68,10 @@ const getStockById = async (req, res) => {
             }]
         });
 
-        if (stock) {
-            res.status(200).json(stock);
-        } else {
-            res.status(404).json({ message: 'Stock not found' });
+        if (!stock) {
+            return res.status(404).json({ message: "Stock not found" });
         }
+        res.status(200).json(stock);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
