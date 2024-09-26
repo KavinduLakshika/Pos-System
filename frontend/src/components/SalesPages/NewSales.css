@@ -1,0 +1,51 @@
+.sales-add-form {
+    display: flex;
+    justify-content: space-around;
+    margin: 40px 100px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #c3c3c3;
+}
+
+.customer {
+    border-right: 1px solid #c3c3c3;
+}
+
+.customer {
+    padding-right: 40px;
+}
+
+.product {
+    padding-left: 40px;
+}
+
+.subCaption {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.customer-details {
+    width: 400px;
+    margin-bottom: 20px;
+}
+
+.customer-details label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+
+.product-details input,
+.customer-details input {
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    font-size: 15px;
+    border-radius: 5px;
+    border: 1px solid #c3c3c3;
+}
+.addCusBtn{
+    background-color: transparent;
+    border: none;
+}

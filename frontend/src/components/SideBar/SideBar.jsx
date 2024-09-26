@@ -1,22 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { File, LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, BadgeDollarSignIcon, FileText, User } from 'lucide-react';
 import './SideBar.css';
 
 const Sidebar = () => {
     const menuItems = [
         {
-            title: 'Dashboard',
-            icon: <LayoutDashboard size={30} />,
-            path: '/',
-            submenus: [
-                { title: 'Dashboard', path: '/' },
-            ]
-        },
-        {
             title: 'Sales',
-            icon: <ShoppingCart size={30} />,
+            icon: <ShoppingCart size={20} />,
             path: '/sales',
             submenus: [
                 { title: 'New Sale', path: '/sales/new' },
@@ -25,7 +16,7 @@ const Sidebar = () => {
         },
         {
             title: 'Customer',
-            icon: <Users size={30} />,
+            icon: <Users size={20} />,
             path: '/customer',
             submenus: [
                 { title: 'Customer List', path: '/customer/customer-list' },
@@ -35,7 +26,7 @@ const Sidebar = () => {
         },
         {
             title: 'Product',
-            icon: <Package size={30} />,
+            icon: <Package size={20} />,
             path: '/product',
             submenus: [
                 { title: 'Create Product', path: '/product/create' },
@@ -46,7 +37,7 @@ const Sidebar = () => {
         },
         {
             title: 'GRN',
-            icon: <File size={30} />,
+            icon: <File size={20} />,
             path: '/grn',
             submenus: [
                 { title: 'Create GRN', path: '/grn/create-grn' },
@@ -56,7 +47,7 @@ const Sidebar = () => {
         },
         {
             title: 'Stock',
-            icon: <Boxes size={30} />,
+            icon: <Boxes size={20} />,
             path: '/stock',
             submenus: [
                 { title: 'Daily Summary', path: '/stock/daily-sum' },
@@ -66,7 +57,7 @@ const Sidebar = () => {
         },
         {
             title: 'Supplier',
-            icon: <Truck size={30} />,
+            icon: <Truck size={20} />,
             path: '/Supplier',
             submenus: [
                 { title: 'User Management', path: '/Supplier/users' },
@@ -76,7 +67,7 @@ const Sidebar = () => {
         },
         {
             title: 'Finance',
-            icon: <BadgeDollarSignIcon size={30} />,
+            icon: <BadgeDollarSignIcon size={20} />,
             path: '/finance',
             submenus: [
                 { title: 'Daily Summary', path: '/finance/daily' },
@@ -85,7 +76,7 @@ const Sidebar = () => {
             ]
         }, {
             title: 'Sales Reports',
-            icon: <FileText size={30} />,
+            icon: <FileText size={20} />,
             path: '/sales-reports',
             submenus: [
                 { title: 'Daily Summary', path: '/sales-reports/daily' },
@@ -94,58 +85,54 @@ const Sidebar = () => {
             ]
         }, {
             title: 'Stock Reports',
-            icon: <FileText size={30} />,
+            icon: <FileText size={20} />,
             path: '/stock-reports',
             submenus: [
                 { title: 'Daily Summary', path: '/stock-reports/daily' },
                 { title: 'Financial stock-reports', path: '/stock-reports/financial' },
                 { title: 'Product Performance', path: '/stock-reports/product' }
             ]
-        }, {
-            title: 'Staff',
-            icon: <User size={30} />,
-            path: '/staff',
-            submenus: [
-                { title: 'Daily Summary', path: '/staff/daily' },
-                { title: 'Financial staff', path: '/staff/financial' },
-                { title: 'Product Performance', path: '/staff/product' }
-            ]
         },
     ];
 
-
-
     return (
-        <nav className="col-md-3 col-lg-2 d-md-block bg-color sidebar" style={{ height: '100vh' }}>
-            <div className='text-center'>
+        <nav className="col-md-3 col-lg-2 d-md-block bg-color sidebar">
+            <div className="text-center p-3">
                 <h1>Logo</h1>
             </div>
             <div className="position-sticky pt-3">
                 <ul className="nav flex-column">
-
+                    <li className="nav-item">
+                        <Link to={'/'} className="nav-link d-flex align-items-center ">
+                            <span className="me-2"><LayoutDashboard size={20} /></span>
+                            <span className="fs-8 p-2 menu-link d-md-inline">Dashboard</span>
+                        </Link>
+                    </li>
                     {menuItems.map((item, index) => (
                         <li key={index} className="nav-item">
-
-                            <Link to={item.path} className="nav-link d-flex align-items-center " data-bs-toggle="collapse" data-bs-target={`#submenu-${index}`}>
+                            <Link to={item.path} className="nav-link d-flex align-items-center" data-bs-toggle={item.submenus && item.submenus.length > 0 ? "collapse" : ""} data-bs-target={`#submenu-${index}`}>
                                 <span className="me-2">{item.icon}</span>
-                                <span className="fs-5 p-2 d-md-inline">{item.title}</span> {/* remove d-none for responsive */}
+                                <span className="fs-8 p-2 menu-link d-md-inline">{item.title}</span>
                             </Link>
-
-                            {item.submenus.length > 0 && (
+                            {item.submenus && item.submenus.length > 0 && (
                                 <div className="collapse" id={`submenu-${index}`}>
                                     <ul className="nav flex-column ms-3">
-
                                         {item.submenus.map((submenu, subIndex) => (
                                             <li key={subIndex} className="nav-item">
-                                                <Link to={submenu.path} className="nav-link d-none d-md-block">{submenu.title}</Link>
+                                                <Link to={submenu.path} className="nav-link">{submenu.title}</Link>
                                             </li>
                                         ))}
-
                                     </ul>
                                 </div>
                             )}
                         </li>
                     ))}
+                    <li className="nav-item">
+                        <Link to={'/staff'} className="nav-link d-flex align-items-center ">
+                            <span className="me-2"><User size={20} /></span>
+                            <span className="fs-8 p-2 menu-link d-md-inline">Staff</span>
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </nav>
