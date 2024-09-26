@@ -11,6 +11,15 @@
   overflow-y: auto;
 }
 
+sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;     
+}
+
 .nav-link {
   font-weight: 200;
   color: #222;
