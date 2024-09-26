@@ -96,7 +96,7 @@ const Table = ({ data, columns, onAdd, btnName, onEdit, onDelete }) => {
                 </div>
             </div>
 
-            <div className="row mt-2 justify-content-center">
+            {/* <div className="row mt-2 justify-content-center">
                 <div className="col-md-12">
                     <ul className="pagination justify-content-center custom-pagination">
                         {[...Array(totalPages)].map((_, index) => (
@@ -115,7 +115,7 @@ const Table = ({ data, columns, onAdd, btnName, onEdit, onDelete }) => {
                         ))}
                     </ul>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

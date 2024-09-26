@@ -7,14 +7,6 @@ import './SideBar.css';
 const Sidebar = () => {
     const menuItems = [
         {
-            title: 'Dashboard',
-            icon: <LayoutDashboard size={30} />,
-            path: '/',
-            submenus: [
-                { title: 'Dashboard', path: '/' },
-            ]
-        },
-        {
             title: 'Sales',
             icon: <ShoppingCart size={30} />,
             path: '/sales',
@@ -122,30 +114,36 @@ const Sidebar = () => {
             </div>
             <div className="position-sticky pt-3">
                 <ul className="nav flex-column">
+                    <li className="nav-item">
 
-                    {menuItems.map((item, index) => (
-                        <li key={index} className="nav-item">
-
-                            <Link to={item.path} className="nav-link d-flex align-items-center " data-bs-toggle="collapse" data-bs-target={`#submenu-${index}`}>
-                                <span className="me-2">{item.icon}</span>
-                                <span className="fs-5 p-2 d-md-inline">{item.title}</span> {/* remove d-none for responsive */}
-                            </Link>
-
-                            {item.submenus.length > 0 && (
-                                <div className="collapse" id={`submenu-${index}`}>
-                                    <ul className="nav flex-column ms-3">
-
-                                        {item.submenus.map((submenu, subIndex) => (
-                                            <li key={subIndex} className="nav-item">
-                                                <Link to={submenu.path} className="nav-link d-none d-md-block">{submenu.title}</Link>
-                                            </li>
-                                        ))}
-
-                                    </ul>
-                                </div>
-                            )}
+                        <Link to={'/'} className="nav-link d-flex align-items-center ">
+                            <span className="me-2"><LayoutDashboard size={30} /></span>
+                            <span className="fs-5 p-2 d-md-inline">Dashboard</span> {/* remove d-none for responsive */}
+                        </Link>
                         </li>
-                    ))}
+                        {menuItems.map((item, index) => (
+                            <li key={index} className="nav-item">
+
+                                <Link to={item.path} className="nav-link d-flex align-items-center " data-bs-toggle="collapse" data-bs-target={`#submenu-${index}`}>
+                                    <span className="me-2">{item.icon}</span>
+                                    <span className="fs-5 p-2 d-md-inline">{item.title}</span> {/* remove d-none for responsive */}
+                                </Link>
+
+                                {item.submenus.length > 0 && (
+                                    <div className="collapse" id={`submenu-${index}`}>
+                                        <ul className="nav flex-column ms-3">
+
+                                            {item.submenus.map((submenu, subIndex) => (
+                                                <li key={subIndex} className="nav-item">
+                                                    <Link to={submenu.path} className="nav-link d-none d-md-block">{submenu.title}</Link>
+                                                </li>
+                                            ))}
+
+                                        </ul>
+                                    </div>
+                                )}
+                            </li>
+                        ))}
                 </ul>
             </div>
         </nav>

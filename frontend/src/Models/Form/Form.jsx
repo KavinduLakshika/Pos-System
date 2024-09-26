@@ -23,25 +23,29 @@ const Form = ({ closeModal }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    closeModal();
   };
 
   return (
     <div>
       <h2>New Customer</h2>
       <form onSubmit={handleSubmit} className="form-container">
-          <div className="form-group">
-            <label>Title <span>*</span></label>
-            <select name="title" value={formData.title} onChange={handleChange}>
-              <option value="Mr.">Mr.</option>
-              <option value="Mrs.">Mrs.</option>
-              <option value="Ms.">Ms.</option>
-            </select>
+        <div className="form-gorup-1">
+
+          <div className="form-group-name">
+            <div className="form-group">
+              <label>Title <span>*</span></label>
+              <select name="title" value={formData.title} onChange={handleChange}>
+                <option value="Mr.">Mr.</option>
+                <option value="Mrs.">Mrs.</option>
+                <option value="Ms.">Ms.</option>
+              </select>
+              <div className="form-group">
+                <label>Name <span>*</span></label>
+                <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter Full Name" required />
+              </div>
+            </div>
           </div>
-          <div className="form-group">
-            <label>Name <span>*</span></label>
-            <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter Full Name" required />
-          </div>
+
           <div className="form-group">
             <label>Phone <span>*</span></label>
             <input type="text" name="phone1" value={formData.phone1} onChange={handleChange} placeholder="Enter Phone" required />
@@ -58,6 +62,9 @@ const Form = ({ closeModal }) => {
             <label>Address</label>
             <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Enter Address" />
           </div>
+        </div>
+
+        <div className="form-group-2">
           <div className="form-group">
             <label>Company</label>
             <input type="text" name="company" value={formData.company} onChange={handleChange} placeholder="Enter Workplace" />
@@ -72,11 +79,14 @@ const Form = ({ closeModal }) => {
           </div>
           <div className="form-group">
             <label>Workplace Address</label>
-            <input type="text" name="workplaceAddress1" value={formData.workplaceAddress1} onChange={handleChange} placeholder="Workplace Address" />
+            <input type="text" name="workplaceAddress1" value={formData.workplaceAddress} onChange={handleChange} placeholder="Workplace Address" />
           </div>
+
+
           <div className="form-actions">
-          <button type="button" onClick={closeModal}>Close</button>
-          <button type="submit">Save</button>
+            <button type="button" onClick={closeModal}>Close</button>
+            <button type="submit">Save</button>
+          </div>
         </div>
       </form>
     </div>
