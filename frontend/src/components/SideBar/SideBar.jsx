@@ -7,7 +7,7 @@ const Sidebar = () => {
     const menuItems = [
         {
             title: 'Sales',
-            icon: <ShoppingCart size={30} />,
+            icon: <ShoppingCart size={20} />,
             path: '/sales',
             submenus: [
                 { title: 'New Sale', path: '/sales/new' },
@@ -16,7 +16,7 @@ const Sidebar = () => {
         },
         {
             title: 'Customer',
-            icon: <Users size={30} />,
+            icon: <Users size={20} />,
             path: '/customer',
             submenus: [
                 { title: 'Customer List', path: '/customer/customer-list' },
@@ -26,7 +26,7 @@ const Sidebar = () => {
         },
         {
             title: 'Product',
-            icon: <Package size={30} />,
+            icon: <Package size={20} />,
             path: '/product',
             submenus: [
                 { title: 'Create Product', path: '/product/create' },
@@ -37,7 +37,7 @@ const Sidebar = () => {
         },
         {
             title: 'GRN',
-            icon: <File size={30} />,
+            icon: <File size={20} />,
             path: '/grn',
             submenus: [
                 { title: 'Create GRN', path: '/grn/create-grn' },
@@ -47,7 +47,7 @@ const Sidebar = () => {
         },
         {
             title: 'Stock',
-            icon: <Boxes size={30} />,
+            icon: <Boxes size={20} />,
             path: '/stock',
             submenus: [
                 { title: 'Daily Summary', path: '/stock/daily-sum' },
@@ -57,7 +57,7 @@ const Sidebar = () => {
         },
         {
             title: 'Supplier',
-            icon: <Truck size={30} />,
+            icon: <Truck size={20} />,
             path: '/Supplier',
             submenus: [
                 { title: 'User Management', path: '/Supplier/users' },
@@ -67,7 +67,7 @@ const Sidebar = () => {
         },
         {
             title: 'Finance',
-            icon: <BadgeDollarSignIcon size={30} />,
+            icon: <BadgeDollarSignIcon size={20} />,
             path: '/finance',
             submenus: [
                 { title: 'Daily Summary', path: '/finance/daily' },
@@ -76,7 +76,7 @@ const Sidebar = () => {
             ]
         }, {
             title: 'Sales Reports',
-            icon: <FileText size={30} />,
+            icon: <FileText size={20} />,
             path: '/sales-reports',
             submenus: [
                 { title: 'Daily Summary', path: '/sales-reports/daily' },
@@ -85,7 +85,7 @@ const Sidebar = () => {
             ]
         }, {
             title: 'Stock Reports',
-            icon: <FileText size={30} />,
+            icon: <FileText size={20} />,
             path: '/stock-reports',
             submenus: [
                 { title: 'Daily Summary', path: '/stock-reports/daily' },
@@ -94,7 +94,7 @@ const Sidebar = () => {
             ]
         }, {
             title: 'Staff',
-            icon: <User size={30} />,
+            icon: <User size={20} />,
             path: '/staff',
             submenus: [
                 { title: 'Daily Summary', path: '/staff/daily' },
@@ -116,15 +116,15 @@ const Sidebar = () => {
                     <li className="nav-item">
 
                         <Link to={'/'} className="nav-link d-flex align-items-center ">
-                            <span className="me-2"><LayoutDashboard size={30} /></span>
-                            <span className="fs-5 p-2 menu-link d-md-inline">Dashboard</span> {/* remove d-none for responsive */}
+                            <span className="me-2"><LayoutDashboard size={20} /></span>
+                            <span className="fs-8 p-2 menu-link d-md-inline">Dashboard</span> {/* remove d-none for responsive */}
                         </Link>
                         </li>
                         {menuItems.map((item, index) => (
                             <li key={index} className="nav-item">
                                 <Link to={item.path} className="nav-link d-flex align-items-center" data-bs-toggle={item.submenus && item.submenus.length > 0 ? "collapse" : ""} data-bs-target={`#submenu-${index}`}>
                                     <span className="me-2">{item.icon}</span>
-                                    <span className="fs-5 p-2 menu-link d-md-inline">{item.title}</span>
+                                    <span className="fs-8 p-2 menu-link d-md-inline">{item.title}</span>
                                 </Link>
                                 {/* Submenus */}
                                 {item.submenus && item.submenus.length > 0 && (
