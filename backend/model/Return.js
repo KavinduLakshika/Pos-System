@@ -1,6 +1,9 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../dbConfig");
 const Product = require("./Products");
+const Category = require("./Category");
+const Invoice = require("./Invoice");
+const Customer = require("./Customers");
 
 const Return = sequelize.define(
     "Return",
@@ -18,11 +21,51 @@ const Return = sequelize.define(
             type: DataTypes.DATE,
             allowNull: false,
         },
+        invoice_invoiceId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: Invoice,
+                key: "invoiceId",
+            },
+            allowNull: false,
+        },
         products_productId: {
             type: DataTypes.INTEGER,
             references: {
                 model: Product,
                 key: "productId",
+            },
+            allowNull: false,
+        },
+        customer_cusId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: Customer,
+                key: "cusId",
+            },
+            allowNull: false,
+        },
+        store_storeId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: Store,
+                key: "storeId",
+            },
+            allowNull: false,
+        },
+        user_userId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: User,
+                key: "userId",
+            },
+            allowNull: false,
+        },
+        category_categoryId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: Category,
+                key: "categoryId",
             },
             allowNull: false,
         },
@@ -33,9 +76,29 @@ const Return = sequelize.define(
     }
 );
 
+Return.belongsTo(Invoice, {
+    foreignKey: "invoice_invoiceId",
+    as: "invoice",
+});
 Return.belongsTo(Product, {
     foreignKey: "products_productId",
     as: "products",
+});
+Return.belongsTo(Customer, {
+    foreignKey: "customer_cusId",
+    as: "customer",
+});
+Return.belongsTo(Store, {
+    foreignKey: "store_storeId",
+    as: "store",
+});
+Return.belongsTo(User, {
+    foreignKey: "user_userId",
+    as: "user",
+});
+Return.belongsTo(Category, {
+    foreignKey: "category_categoryId",
+    as: "category",
 });
 
 module.exports = Return;

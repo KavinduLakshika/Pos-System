@@ -13,10 +13,14 @@ const Category = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        categoryType: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         categoryStatus: {
             type: DataTypes.STRING,
             allowNull: true,
-            defaultValue:"In stock"
+            defaultValue: "In stock"
         },
     },
     {

@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../dbConfig");
+const Store = require("./Store")
 
 const User = sequelize.define(
     "User",
@@ -8,6 +9,14 @@ const User = sequelize.define(
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
+        },
+        userTitle: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        userFullName: {
+            type: DataTypes.STRING,
+            allowNull: false,
         },
         userName: {
             type: DataTypes.STRING,
@@ -37,10 +46,21 @@ const User = sequelize.define(
             type: DataTypes.STRING,
             allowNull: true,
         },
+        userImage: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         userStatus: {
             type: DataTypes.STRING,
             allowNull: true,
             defaultValue: "Active",
+        },
+        store_storeId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: "store",
+                key: "storeId",
+            },
         },
     },
     {
@@ -48,5 +68,8 @@ const User = sequelize.define(
         timestamps: false,
     }
 );
-
+User.belongsTo(Store, {
+    foreignKey: "store_storeId",
+    as: "store",
+});
 module.exports = User;
