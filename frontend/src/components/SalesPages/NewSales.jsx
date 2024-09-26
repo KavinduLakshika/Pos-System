@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Table from '../Table/Table'
 
-
 const NewSales = () => {
 
   const [data,] = useState([
@@ -14,10 +13,15 @@ const NewSales = () => {
 
   return (
     <div>
-
+      <h2>New Sale</h2>
       <form action="">
-
+        
         <div className="customer">
+          <div className="subCaption">
+            <h3>Customer Details</h3>
+            
+          </div>
+          
           <div className="customer-details">
             <label htmlFor="">Customer Name</label>
             <input type="text" name="cusName" id="cusName" placeholder="Enter Name" />
@@ -51,8 +55,8 @@ const NewSales = () => {
             <textarea name="note" id="note" placeholder="Note and Warranty" cols="30" rows="3"></textarea>
           </div>
           <div className="product-details">
-            <input type="checkbox" id="emi" name="emi" value="EMI"/>
-              <label for="emi">EMI</label>
+            <input type="checkbox" id="emi" name="emi" value="EMI" />
+            <label for="emi">EMI</label>
           </div>
           <div className="product-details">
             <input type="text" name="emiNo" id="emiNo" placeholder="EMI/Serial Number" />
@@ -62,7 +66,7 @@ const NewSales = () => {
       </form>
 
       <div className="product-table">
-        <h2>New Sale</h2>
+
         <Table
           data={data}
           columns={columns}
