@@ -8,6 +8,7 @@ import Customer from './Pages/Customer/Customer';
 import Product from './Pages/Product/Product';
 import GRN from './Pages/GRN/GRN';
 import Stock from './Pages/Stock/Stock';
+import Staff from './Pages/Staff/Staff';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/product/*" element={<Product />} />
         <Route path="/grn/*" element={<GRN />} />
         <Route path="/stock/*" element={<Stock />} />
+        <Route path="/staff" element={<Staff />} />
         </Routes>
         </main>
       </div>

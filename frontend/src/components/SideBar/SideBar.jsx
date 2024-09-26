@@ -92,15 +92,6 @@ const Sidebar = () => {
                 { title: 'Financial stock-reports', path: '/stock-reports/financial' },
                 { title: 'Product Performance', path: '/stock-reports/product' }
             ]
-        }, {
-            title: 'Staff',
-            icon: <User size={20} />,
-            path: '/staff',
-            submenus: [
-                { title: 'Daily Summary', path: '/staff/daily' },
-                { title: 'Financial staff', path: '/staff/financial' },
-                { title: 'Product Performance', path: '/staff/product' }
-            ]
         },
     ];
 
@@ -136,6 +127,12 @@ const Sidebar = () => {
                             )}
                         </li>
                     ))}
+                    <li className="nav-item">
+                        <Link to={'/staff'} className="nav-link d-flex align-items-center ">
+                            <span className="me-2"><User size={20} /></span>
+                            <span className="fs-8 p-2 menu-link d-md-inline">Staff</span>
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </nav>
