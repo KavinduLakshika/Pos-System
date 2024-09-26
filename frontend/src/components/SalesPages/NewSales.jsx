@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Table from '../Table/Table'
+import { File, PlusCircle } from 'lucide-react';
 
 const NewSales = () => {
 
@@ -15,13 +16,13 @@ const NewSales = () => {
     <div>
       <h2>New Sale</h2>
       <form action="">
-        
+
         <div className="customer">
           <div className="subCaption">
-            <h3>Customer Details</h3>
-            
+            <p>Customer Details</p>
+            <PlusCircle />
           </div>
-          
+
           <div className="customer-details">
             <label htmlFor="">Customer Name</label>
             <input type="text" name="cusName" id="cusName" placeholder="Enter Name" />
@@ -33,6 +34,10 @@ const NewSales = () => {
         </div>
 
         <div className="product">
+          <div className="subCaption">
+            <p>Product Details</p>
+          </div>
+
           <div className="product-details">
             <input type="text" name="productNo" id="productNo" placeholder="Product No" />
           </div>
