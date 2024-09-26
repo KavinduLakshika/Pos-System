@@ -35,6 +35,7 @@
 .form-group input,
 .form-group select {
   width: 100%;
+  font-size: 15px;
   padding: 8px 10px;
   box-sizing: border-box;
   border-radius: 5px;
