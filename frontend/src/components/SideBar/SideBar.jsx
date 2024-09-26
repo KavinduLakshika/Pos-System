@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { File, LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, BadgeDollarSignIcon, FileText, User } from 'lucide-react';
 import './SideBar.css';
 
@@ -109,44 +108,41 @@ const Sidebar = () => {
 
     return (
         <nav className="col-md-3 col-lg-2 d-md-block bg-color sidebar" style={{ height: '100vh' }}>
-            <div className='text-center'>
-                <h1>Logo</h1>
-            </div>
+                <div className="text-center p-3">
+                    <h1>Logo</h1>
+                </div>
             <div className="position-sticky pt-3">
                 <ul className="nav flex-column">
                     <li className="nav-item">
 
                         <Link to={'/'} className="nav-link d-flex align-items-center ">
                             <span className="me-2"><LayoutDashboard size={30} /></span>
-                            <span className="fs-5 p-2 d-md-inline">Dashboard</span> {/* remove d-none for responsive */}
+                            <span className="fs-5 p-2 menu-link d-md-inline">Dashboard</span> {/* remove d-none for responsive */}
                         </Link>
                         </li>
                         {menuItems.map((item, index) => (
                             <li key={index} className="nav-item">
-
-                                <Link to={item.path} className="nav-link d-flex align-items-center " data-bs-toggle="collapse" data-bs-target={`#submenu-${index}`}>
+                                <Link to={item.path} className="nav-link d-flex align-items-center" data-bs-toggle={item.submenus && item.submenus.length > 0 ? "collapse" : ""} data-bs-target={`#submenu-${index}`}>
                                     <span className="me-2">{item.icon}</span>
-                                    <span className="fs-5 p-2 d-md-inline">{item.title}</span> {/* remove d-none for responsive */}
+                                    <span className="fs-5 p-2 menu-link d-md-inline">{item.title}</span>
                                 </Link>
-
-                                {item.submenus.length > 0 && (
+                                {/* Submenus */}
+                                {item.submenus && item.submenus.length > 0 && (
                                     <div className="collapse" id={`submenu-${index}`}>
                                         <ul className="nav flex-column ms-3">
-
                                             {item.submenus.map((submenu, subIndex) => (
                                                 <li key={subIndex} className="nav-item">
-                                                    <Link to={submenu.path} className="nav-link d-none d-md-block">{submenu.title}</Link>
+                                                    <Link to={submenu.path} className="nav-link">{submenu.title}</Link>
                                                 </li>
                                             ))}
-
                                         </ul>
                                     </div>
                                 )}
                             </li>
                         ))}
-                </ul>
-            </div>
-        </nav>
+                    </ul>
+                </div>
+            </nav>
     );
 };
 

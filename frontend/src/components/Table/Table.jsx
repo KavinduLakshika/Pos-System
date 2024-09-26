@@ -25,15 +25,15 @@ const Table = ({ data, columns, onAdd, btnName, onEdit, onDelete }) => {
         });
     });
 
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+    // const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const currentItems = filteredData.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
 
-    const handlePageChange = (page) => {
+    /*const handlePageChange = (page) => {
         setCurrentPage(page);
-    };
+    };*/
 
     return (
         <div className="container-fluid p-2">

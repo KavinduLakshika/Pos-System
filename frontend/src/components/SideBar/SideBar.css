@@ -1,12 +1,13 @@
 .bg-color {
-  background: linear-gradient( rgb(255, 216, 126), rgb(255, 255, 255) );
+  background: linear-gradient(rgb(255, 216, 126), rgb(255, 255, 255));
 }
-.nav-link{
+
+.nav-link {
   font-weight: 500;
   color: #222;
 }
 
-.nav-link:hover{
+.nav-link:hover {
   font-weight: 500;
   color: rgb(64, 64, 64);
 }
@@ -16,7 +17,14 @@
   /* .sidebar {
       width: 100px !important;
     } */
-  .sidebar .nav-link {
+  .menu-link {
+    display: none;
+  }
+
+  .nav-item{
+    font-size: 10px;
+  }
+   .nav-link {
     padding: 0.5rem 1rem;
     text-align: center;
   }
