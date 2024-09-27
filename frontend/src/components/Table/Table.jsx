@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
+
 const Table = ({
     data,
     columns,
@@ -12,6 +13,7 @@ const Table = ({
     showSearch = true,
     showButton = true
 }) => {
+    
     const [tableData, setTableData] = useState(data);
     const [tableColumns, setTableColumns] = useState(columns);
     const [searchQuery, setSearchQuery] = useState("");
