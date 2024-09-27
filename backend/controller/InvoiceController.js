@@ -1,48 +1,76 @@
 const Invoice = require("../model/Invoice");
-const Product = require("../model/Products");
-const Stock = require("../model/Stock"); // Ensure you have this imported
+const Customer = require("../model/Customers");
+const Stock = require("../model/Stock");
 
 // Create invoice
 const createInvoice = async (req, res) => {
     try {
         const {
-            invoiceId,
             invoiceDate,
-            invoiceAmount,
+            invoiceDueDate,
+            paidAmount,
+            payableAmount,
+            dueAmount,
+            totalAmount,
             discount,
-            productId,
+            invoiceNote,
             stockId,
+            cusId,
         } = req.body;
 
         // Validate required fields
-        if (!invoiceDate || !invoiceAmount || !discount || !productId || !stockId) {
+        if (!invoiceDate ||
+            !invoiceDueDate ||
+            !paidAmount ||
+            !payableAmount ||
+            !dueAmount ||
+            !totalAmount ||
+            !discount ||
+            !invoiceNote ||
+            !stockId ||
+            !cusId) {
             return res.status(400).json({ error: "All fields are required." });
         }
 
-        // Check if invoice already exists
-        if (invoiceId) {
-            const existingInvoice = await Invoice.findOne({ where: { invoiceId } });
-            if (existingInvoice) {
-                return res.status(400).json({ error: "Invoice already exists." });
-            }
+        // Check if stock exists
+        const stock = await Stock.findByPk(stockId);
+        if (!stock) {
+            return res.status(400).json({ message: 'Invalid stock ID' });
+        }
+
+        // Check if customer exists (fixed issue here)
+        const customer = await Customer.findByPk(cusId);
+        if (!customer) {
+            return res.status(400).json({ message: 'Invalid customer ID' });
         }
 
         // Create a new invoice
         const newInvoice = await Invoice.create({
             invoiceDate,
-            invoiceAmount,
+            invoiceDueDate,
+            paidAmount,
+            payableAmount,
+            dueAmount,
+            totalAmount,
             discount,
-            products_productId: productId,
+            invoiceNote,
             stock_stockId: stockId,
+            customer_cusId: cusId,
         });
 
-        res.status(201).json(newInvoice);
+        // Fetch newly created invoice with stock, and customer information
+        const invoiceWithStockAndCustomer = await Invoice.findByPk(newInvoice.invoiceId, {
+            include: [
+                { model: Stock, as: 'stock' },
+                { model: Customer, as: 'customer' },
+            ],
+        });
+
+        res.status(201).json(invoiceWithStockAndCustomer);
     } catch (error) {
-        // Check for validation errors
         if (error.name === "SequelizeValidationError") {
             return res.status(400).json({ error: "Validation error: Please check the provided data." });
         }
-        // Handle internal server errors
         return res.status(500).json({ error: `An internal error occurred: ${error.message}` });
     }
 };
@@ -79,19 +107,22 @@ const updateInvoice = async (req, res) => {
     try {
         const { id } = req.params;
         const {
-            invoiceId,
             invoiceDate,
-            invoiceAmount,
+            invoiceDueDate,
+            paidAmount,
+            payableAmount,
+            dueAmount,
+            totalAmount,
             discount,
-            productId,
+            invoiceNote,
             stockId,
+            cusId,
         } = req.body;
 
-        if (productId) {
-            const product = await Product.findByPk(productId);
-            if (!product) {
-                return res.status(400).json({ message: "Invalid product ID" });
-            }
+        // Check if customer exists (fixed issue here)
+        const customer = await Customer.findByPk(cusId);
+        if (!customer) {
+            return res.status(400).json({ message: 'Invalid customer ID' });
         }
 
         if (stockId) {
@@ -105,26 +136,17 @@ const updateInvoice = async (req, res) => {
         if (invoice) {
             await invoice.update({
                 invoiceDate,
-                invoiceAmount,
+                invoiceDueDate,
+                paidAmount,
+                payableAmount,
+                dueAmount,
+                totalAmount,
                 discount,
-                products_productId: productId,
+                invoiceNote,
                 stock_stockId: stockId,
+                customer_cusId: cusId,
             });
-
-            const updatedInvoiceWithProductAndStock = await Invoice.findByPk(id, {
-                include: [
-                    {
-                        model: Product,
-                        as: 'product'
-                    },
-                    {
-                        model: Stock,
-                        as: 'stock'
-                    },
-                ],
-            });
-
-            res.status(200).json(updatedInvoiceWithProductAndStock);
+            res.status(200).json(invoice);
         } else {
             res.status(404).json({ message: "Invoice not found" });
         }

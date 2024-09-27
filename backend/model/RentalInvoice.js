@@ -41,13 +41,6 @@ const RentalInvoice = sequelize.define(
                 key: "productId",
             },
         },
-        category_categoryId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "category",
-                key: "categoryId",
-            },
-        },
     },
     {
         tableName: "rentalInvoice",
@@ -63,9 +56,4 @@ RentalInvoice.belongsTo(Product, {
     foreignKey: "products_productId",
     as: "product",
 });
-RentalInvoice.belongsTo(Category, {
-    foreignKey: "category_categoryId",
-    as: "category",
-});
-
 module.exports = RentalInvoice;

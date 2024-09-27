@@ -1,5 +1,7 @@
 const Stock = require("../model/Stock");
 const Supplier = require("../model/Supplier");
+const Product = require("../model/Products");
+const Store = require("../model/Store");
 
 const createStock = async (req, res) => {
     try {
@@ -7,51 +9,72 @@ const createStock = async (req, res) => {
             stockName,
             stockQty,
             stockDate,
+            productId,
             supplierId,
+            storeId,
         } = req.body;
 
+        // Check if all required fields are present
+        if (!stockName || !stockQty || !stockDate || !productId || !supplierId || !storeId) {
+            return res.status(400).json({ error: "All fields are required." });
+        }
 
+        // Check if supplier exists
         const supplier = await Supplier.findByPk(supplierId);
         if (!supplier) {
             return res.status(400).json({ message: 'Invalid supplier ID' });
         }
 
-
-        if (!stockName || !stockQty || !stockDate || !supplierId) {
-            return res.status(400).json({ error: "All fields are required." });
+        // Check if product exists
+        const product = await Product.findByPk(productId);
+        if (!product) {
+            return res.status(400).json({ message: 'Invalid product ID' });
         }
 
+        // Check if store exists
+        const store = await Store.findByPk(storeId);
+        if (!store) {
+            return res.status(400).json({ message: 'Invalid store ID' });
+        }
 
+        // Create new stock
         const newStock = await Stock.create({
             stockName,
             stockQty,
             stockDate,
             stockStatus: "In stock",
+            products_productId: productId,
             supplier_supplierId: supplierId,
+            store_storeId: storeId,
         });
 
-        const stockWithSupplier = await Stock.findByPk(newStock.stockId, {
-            include: [{
-                model: Supplier,
-                as: 'supplier'
-            }]
+        // Fetch newly created stock with supplier, product, and store information
+        const stockWithSupplierAndProduct = await Stock.findByPk(newStock.stockId, {
+            include: [
+                { model: Supplier, as: 'supplier' },
+                { model: Product, as: 'product' },
+                { model: Store, as: 'store' }, // This alias must match the defined association
+            ],
         });
 
-        res.status(201).json(stockWithSupplier);
+        res.status(201).json(stockWithSupplierAndProduct);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        return res.status(500).json({ message: `An internal error occurred: ${error.message}` });
     }
-}
-// Get all stock
+};
+
+// Get all stocks
 const getAllStocks = async (req, res) => {
     try {
-        const stock = await Stock.findAll({
-            include: [{
-                model: Supplier,
-                as: 'supplier'
-            }]
+        const stocks = await Stock.findAll({
+            include: [
+                {
+                    model: Supplier,
+                    as: 'supplier'
+                }
+            ]
         });
-        res.status(200).json(stock);
+        res.status(200).json(stocks);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -62,10 +85,12 @@ const getStockById = async (req, res) => {
     try {
         const { id } = req.params;
         const stock = await Stock.findByPk(id, {
-            include: [{
-                model: Supplier,
-                as: 'supplier'
-            }]
+            include: [
+                {
+                    model: Supplier,
+                    as: 'supplier'
+                }
+            ]
         });
 
         if (!stock) {
@@ -76,16 +101,18 @@ const getStockById = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-// Update a stock
-const updateCategory = async (req, res) => {
+// Update a Stock
+const updateStock = async (req, res) => {
     try {
         const { id } = req.params;
         const {
             stockName,
             stockQty,
             stockDate,
+            stockStatus,
+            productId,
             supplierId,
+            storeId,
         } = req.body;
 
         const stock = await Stock.findByPk(id);
@@ -97,8 +124,10 @@ const updateCategory = async (req, res) => {
             stockName,
             stockQty,
             stockDate,
-            stockStatus: "In stock",
+            stockStatus,
+            products_productId: productId,
             supplier_supplierId: supplierId,
+            store_storeId: storeId,
         });
 
         res.status(200).json(stock);
@@ -107,7 +136,7 @@ const updateCategory = async (req, res) => {
     }
 };
 
-// Delete a category
+// Delete a stock
 const deleteStock = async (req, res) => {
     try {
         const { id } = req.params;
@@ -126,6 +155,6 @@ module.exports = {
     createStock,
     getAllStocks,
     getStockById,
-    updateCategory,
+    updateStock,
     deleteStock,
 }

@@ -4,11 +4,14 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-
-//Image function
+// Image upload setup
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+        const uploadDir = path.join(__dirname, '..', 'uploads', 'products');
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
         const timestamp = Date.now();
@@ -19,11 +22,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single('productImage');
 
-// Create product
+// Create a new product
 const createProduct = async (req, res) => {
     upload(req, res, async function (err) {
-        if (err) {
+        if (err instanceof multer.MulterError) {
             return res.status(500).json({ error: 'Image upload failed' });
+        } else if (err) {
+            return res.status(500).json({ error: 'Unknown error: Image upload failed' });
         }
 
         try {
@@ -39,27 +44,21 @@ const createProduct = async (req, res) => {
                 categoryId
             } = req.body;
 
+            // Validate category
             const category = await Category.findByPk(categoryId);
-
             if (!category) {
                 return res.status(400).json({ message: 'Invalid category ID' });
             }
 
-            if (!productName ||
-                !productCode ||
-                !productWeight ||
-                !productBuyingPrice ||
-                !productSellingPrice ||
-                !productWarranty ||
-                !productQty ||
-                !productDescription ||
-                !categoryId) {
+            // Validate required fields
+            if (!productName || !productCode || !productWeight || !productBuyingPrice ||
+                !productSellingPrice || !productWarranty || !productQty || !productDescription) {
                 return res.status(400).json({ error: "All fields are required." });
             }
 
             let productImage = null;
             if (req.file) {
-                productImage = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+                productImage = `${req.protocol}://${req.get('host')}/uploads/products/${req.file.filename}`;
             }
 
             const newProduct = await Product.create({
@@ -85,17 +84,7 @@ const createProduct = async (req, res) => {
 
             res.status(201).json(productWithCategory);
         } catch (error) {
-            if (error.name === "SequelizeValidationError") {
-                return res.status(400).json({ error: "Validation error: Please check the provided data." });
-            }
-
-            if (error.name === "SequelizeUniqueConstraintError") {
-                return res.status(400).json({
-                    error: "Duplicate field value: A product name already exists."
-                });
-            }
-
-            res.status(400).json({ error: `An error occurred: ${error.message}` });
+            res.status(500).json({ error: `An error occurred: ${error.message}` });
         }
     });
 };
@@ -111,11 +100,11 @@ const getAllProducts = async (req, res) => {
         });
         res.status(200).json(products);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ error: `An error occurred: ${error.message}` });
     }
 };
 
-// Get a product by ID
+// Get product by ID
 const getProductById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -126,21 +115,23 @@ const getProductById = async (req, res) => {
             }]
         });
 
-        if (product) {
-            res.status(200).json(product);
-        } else {
-            res.status(404).json({ message: 'Product not found' });
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
         }
+
+        res.status(200).json(product);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ error: `An error occurred: ${error.message}` });
     }
 };
 
-// Update product
+// Update a product
 const updateProduct = async (req, res) => {
     upload(req, res, async function (err) {
-        if (err) {
-            return res.status(500).json({ error: 'Image upload failed' });
+        if (err instanceof multer.MulterError) {
+            return res.status(500).json({ error: 'Multer error: Image upload failed' });
+        } else if (err) {
+            return res.status(500).json({ error: 'Unknown error: Image upload failed' });
         }
 
         try {
@@ -157,6 +148,7 @@ const updateProduct = async (req, res) => {
                 categoryId
             } = req.body;
 
+            // Validate category
             if (categoryId) {
                 const category = await Category.findByPk(categoryId);
                 if (!category) {
@@ -164,40 +156,39 @@ const updateProduct = async (req, res) => {
                 }
             }
 
+            // Find the product
             const product = await Product.findByPk(id);
-
-            if (product) {
-                let productImage = product.productImage;
-                if (req.file) {
-                    productImage = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-                }
-
-                await product.update({
-                    productName,
-                    productCode,
-                    productWeight,
-                    productBuyingPrice,
-                    productSellingPrice,
-                    productWarranty,
-                    productQty,
-                    productStatus,
-                    category_categoryId: categoryId,
-                    productImage
-                });
-
-                const updatedProductWithCategory = await Product.findByPk(id, {
-                    include: [{
-                        model: Category,
-                        as: 'category'
-                    }]
-                });
-
-                res.status(200).json(updatedProductWithCategory);
-            } else {
-                res.status(404).json({ message: 'Product not found' });
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
             }
+
+            // Handle product image update
+            let productImage = product.productImage;
+            if (req.file) {
+                productImage = `${req.protocol}://${req.get('host')}/uploads/products/${req.file.filename}`;
+            }
+
+            // Update the product
+            await product.update({
+                productName,
+                productCode,
+                productWeight,
+                productBuyingPrice,
+                productSellingPrice,
+                productWarranty,
+                productQty,
+                productStatus,
+                category_categoryId: categoryId,
+                productImage
+            });
+
+            const updatedProduct = await Product.findByPk(id, {
+                include: [{ model: Category, as: 'category' }]
+            });
+
+            res.status(200).json(updatedProduct);
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            res.status(500).json({ error: `An error occurred: ${error.message}` });
         }
     });
 };
@@ -209,26 +200,23 @@ const deleteProduct = async (req, res) => {
         const product = await Product.findByPk(id);
 
         if (!product) {
-            return res.status(404).json({ message: "Product not found" });
+            return res.status(404).json({ message: 'Product not found' });
         }
 
+        // Delete product image if exists
         const productImagePath = product.productImage
-            ? path.join(__dirname, '..', 'uploads', path.basename(product.productImage))
+            ? path.join(__dirname, '..', 'uploads', 'products', path.basename(product.productImage))
             : null;
 
-        await product.destroy();
-
         if (productImagePath && fs.existsSync(productImagePath)) {
-            fs.unlink(productImagePath, (err) => {
-                if (err) {
-                    console.error(`Failed to delete image file: ${err.message}`);
-                }
-            });
+            fs.unlinkSync(productImagePath); // Synchronously remove the image
         }
 
-        res.status(200).json({ message: "Product deleted successfully" });
+        // Delete the product
+        await product.destroy();
+        res.status(200).json({ message: 'Product deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: `An error occurred: ${error.message}` });
     }
 };
 

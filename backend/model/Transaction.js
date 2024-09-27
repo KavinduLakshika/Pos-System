@@ -24,14 +24,6 @@ const Transaction = sequelize.define(
             type: DataTypes.DATE,
             allowNull: false,
         },
-        customer_cusId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Customer,
-                key: "cusId",
-            },
-            allowNull: false,
-        },
         invoice_invoiceId: {
             type: DataTypes.INTEGER,
             references: {
@@ -46,11 +38,6 @@ const Transaction = sequelize.define(
         timestamps: false,
     }
 );
-
-Transaction.belongsTo(Customer, {
-    foreignKey: "customer_cusId",
-    as: "customer",
-});
 Transaction.belongsTo(Invoice, {
     foreignKey: "invoice_invoiceId",
     as: "invoice",

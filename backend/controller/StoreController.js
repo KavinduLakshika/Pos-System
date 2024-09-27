@@ -29,7 +29,77 @@ const createStore = async (req, res) => {
         res.status(400).json({ error: `An error occurred: ${error.message}` });
     }
 };
+// Get all store
+const getAllStores = async (req, res) => {
+    try {
+        const store = await Store.findAll();
+        res.status(200).json(store);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
+// Get a store by ID
+const getStoreById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const store = await Store.findByPk(id);
+
+        if (store) {
+            res.status(200).json(store);
+        } else {
+            res.status(404).json({ message: 'Store not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Update a Store
+const updateStore = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            storeName,
+            storeAddress,
+            storeStatus,
+        } = req.body;
+
+        const store = await Store.findByPk(id);
+        if (!store) {
+            return res.status(404).json({ message: "Store not found" });
+        }
+
+        await store.update({
+            storeName,
+            storeAddress,
+            storeStatus,
+        });
+
+        res.status(200).json(store);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+// Delete a Store
+const deleteStore = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const store = await Store.findByPk(id);
+        if (!store) {
+            return res.status(404).json({ message: "Store not found" });
+        }
+        await store.destroy();
+        res.status(200).json({ message: "Store deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 module.exports = {
     createStore,
+    getAllStores,
+    getStoreById,
+    updateStore,
+    deleteStore,
 };
