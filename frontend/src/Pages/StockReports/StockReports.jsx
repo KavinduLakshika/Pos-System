@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route,Routes } from 'react-router-dom'
-import CurrentStock from '../../components/StockPages/CurrentStock'
+import CurrentStock from './CurrentStock'
+
 
 function StockReports() {
   return (
