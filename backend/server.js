@@ -61,7 +61,7 @@ app.delete("/product/:id", ProductController.deleteProduct);
 app.post("/stock", StockController.createStock);
 app.get("/stocks", StockController.getAllStocks);
 app.get("/stock/:id", StockController.getStockById);
-app.put("/stock/:id", StockController.updateCategory);
+app.put("/stock/:id", StockController.updateStock);
 app.delete("/stock/:id", StockController.deleteStock);
 
 //invoice routes
@@ -69,13 +69,19 @@ app.post("/invoice", InvoiceController.createInvoice);
 app.get("/invoice", InvoiceController.getAllInvoice);
 app.get("/invoice/:id", InvoiceController.getInvoiceById);
 app.put("/invoice/:id", InvoiceController.updateInvoice);
-app.put("/invoice/:id", InvoiceController.deleteInvoice);
+app.delete("/invoice/:id", InvoiceController.deleteInvoice);
 
 //transaction routes
 app.post("/transaction", TransactionController.createTransaction);
+app.get("/transactions", TransactionController.getAllTransactions);
+app.get("/transaction/:id", TransactionController.getTransactionById);
 
 //store routes
 app.post("/store", StoreController.createStore);
+app.get("/stores", StoreController.getAllStores);
+app.get("/store/:id", StoreController.getStoreById);
+app.put("/store/:id", StoreController.updateStore);
+app.delete("/store/:id", StoreController.deleteStore);
 
 // Sync the database
 sequelize

@@ -21,27 +21,11 @@ const Return = sequelize.define(
             type: DataTypes.DATE,
             allowNull: false,
         },
-        invoice_invoiceId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Invoice,
-                key: "invoiceId",
-            },
-            allowNull: false,
-        },
         products_productId: {
             type: DataTypes.INTEGER,
             references: {
                 model: Product,
                 key: "productId",
-            },
-            allowNull: false,
-        },
-        customer_cusId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Customer,
-                key: "cusId",
             },
             allowNull: false,
         },
@@ -61,11 +45,11 @@ const Return = sequelize.define(
             },
             allowNull: false,
         },
-        category_categoryId: {
+        invoice_invoiceId: {
             type: DataTypes.INTEGER,
             references: {
-                model: Category,
-                key: "categoryId",
+                model: Invoice,
+                key: "invoiceId",
             },
             allowNull: false,
         },
@@ -75,18 +59,9 @@ const Return = sequelize.define(
         timestamps: false,
     }
 );
-
-Return.belongsTo(Invoice, {
-    foreignKey: "invoice_invoiceId",
-    as: "invoice",
-});
 Return.belongsTo(Product, {
     foreignKey: "products_productId",
     as: "products",
-});
-Return.belongsTo(Customer, {
-    foreignKey: "customer_cusId",
-    as: "customer",
 });
 Return.belongsTo(Store, {
     foreignKey: "store_storeId",
@@ -96,9 +71,8 @@ Return.belongsTo(User, {
     foreignKey: "user_userId",
     as: "user",
 });
-Return.belongsTo(Category, {
-    foreignKey: "category_categoryId",
-    as: "category",
+Return.belongsTo(Invoice, {
+    foreignKey: "invoice_invoiceId",
+    as: "invoice",
 });
-
 module.exports = Return;
