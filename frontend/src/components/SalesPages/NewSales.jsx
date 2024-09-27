@@ -3,10 +3,11 @@ import { PlusCircle } from 'lucide-react';
 import './NewSales.css';
 import Form from '../../Models/Form/Form';
 import Modal from 'react-modal';
+import Table from '../Table/Table'
 
 const NewSales = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  
+
   const openModal = () => {
     setModalIsOpen(true);
   };
@@ -14,6 +15,11 @@ const NewSales = () => {
   const closeModal = () => {
     setModalIsOpen(false);
   };
+
+  const [data,] = useState([
+    ["MaleeshaPa", "MaleeshaBalla@gmail.com"],
+  ]);
+  const Columns = ["Name", "Email"];
 
   return (
     <div>
@@ -85,6 +91,12 @@ const NewSales = () => {
       </form>
 
       <div className="product-table">
+        <Table
+          data={data}
+          columns={Columns}
+          showSearch={false}
+          showButton={false}
+        />
 
       </div>
     </div>
