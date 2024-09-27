@@ -2,8 +2,16 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
-
-const Table = ({ data, columns, onAdd, btnName, onEdit, onDelete }) => {
+const Table = ({
+    data,
+    columns,
+    onAdd,
+    btnName,
+    onEdit,
+    onDelete,
+    showSearch = true,
+    showButton = true
+}) => {
     const [tableData, setTableData] = useState(data);
     const [tableColumns, setTableColumns] = useState(columns);
     const [searchQuery, setSearchQuery] = useState("");
@@ -25,37 +33,36 @@ const Table = ({ data, columns, onAdd, btnName, onEdit, onDelete }) => {
         });
     });
 
-    // const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const currentItems = filteredData.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
 
-    /*const handlePageChange = (page) => {
-        setCurrentPage(page);
-    };*/
-
     return (
         <div className="container-fluid p-2">
             <div className="row mb-2">
-                <div className="col-md-6">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Search"
-                        value={searchQuery}
-                        onChange={(e) => {
-                            setSearchQuery(e.target.value);
-                            setCurrentPage(1);
-                        }}
-                    />
-                </div>
+                {showSearch && (
+                    <div className="col-md-6">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search"
+                            value={searchQuery}
+                            onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                        />
+                    </div>
+                )}
 
-                <div className="col-md-6 d-flex justify-content-end">
-                    <button className="btn btn-primary" onClick={onAdd}>
-                        {btnName}
-                    </button>
-                </div>
+                {showButton && (
+                    <div className="col-md-6 d-flex justify-content-end">
+                        <button className="btn btn-primary" onClick={onAdd}>
+                            {btnName}
+                        </button>
+                    </div>
+                )}
             </div>
 
             <div className="mt-2">
@@ -95,27 +102,6 @@ const Table = ({ data, columns, onAdd, btnName, onEdit, onDelete }) => {
                     </table>
                 </div>
             </div>
-
-            {/* <div className="row mt-2 justify-content-center">
-                <div className="col-md-12">
-                    <ul className="pagination justify-content-center custom-pagination">
-                        {[...Array(totalPages)].map((_, index) => (
-                            <li
-                                key={index}
-                                className={`page-item ${index + 1 === currentPage ? "active" : ""
-                                    }`}
-                            >
-                                <button
-                                    className="page-link"
-                                    onClick={() => handlePageChange(index + 1)}
-                                >
-                                    {index + 1}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div> */}
         </div>
     );
 };
