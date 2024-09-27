@@ -3,19 +3,33 @@ const Customer = require("../model/Customers");
 const createCustomer = async (req, res) => {
     try {
         const {
+            cusTitle,
             cusName,
+            cusCode,
             cusAddress,
             cusPhone,
             cusEmail,
             cusNIC,
+            cusCity,
+            cusJob,
+            cusCompany,
+            cusWorkPlaceTP,
+            cusWorkPlaceAddress
         } = req.body;
 
         if (
+            !cusTitle ||
             !cusName ||
+            !cusCode ||
             !cusAddress ||
             !cusPhone ||
             !cusEmail ||
-            !cusNIC
+            !cusNIC ||
+            !cusCity ||
+            !cusJob ||
+            !cusCompany ||
+            !cusWorkPlaceTP ||
+            !cusWorkPlaceAddress
         ) {
             return res.status(400).json({ error: "All fields are required." });
         }
@@ -26,11 +40,18 @@ const createCustomer = async (req, res) => {
                 .json({ error: "A Customer with this NIC already exists." });
         }
         const newCustomer = await Customer.create({
+            cusTitle,
             cusName,
+            cusCode,
             cusAddress,
             cusPhone,
             cusEmail,
             cusNIC,
+            cusCity,
+            cusJob,
+            cusCompany,
+            cusWorkPlaceTP,
+            cusWorkPlaceAddress,
             cusPoints: "10",
             cusStatus: "Active",
         });
@@ -82,11 +103,18 @@ const updateCustomer = async (req, res) => {
     try {
         const { id } = req.params;
         const {
+            cusTitle,
             cusName,
+            cusCode,
             cusAddress,
             cusPhone,
             cusEmail,
             cusNIC,
+            cusCity,
+            cusJob,
+            cusCompany,
+            cusWorkPlaceTP,
+            cusWorkPlaceAddress,
             cusPoints,
             cusStatus,
         } = req.body;
@@ -97,11 +125,18 @@ const updateCustomer = async (req, res) => {
         }
 
         await customer.update({
+            cusTitle,
             cusName,
+            cusCode,
             cusAddress,
             cusPhone,
             cusEmail,
             cusNIC,
+            cusCity,
+            cusJob,
+            cusCompany,
+            cusWorkPlaceTP,
+            cusWorkPlaceAddress,
             cusPoints,
             cusStatus,
         });

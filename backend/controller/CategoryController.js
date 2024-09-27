@@ -4,9 +4,10 @@ const Category = require("../model/Category");
 const createCategory = async (req, res) => {
     try {
         const {
-            categoryName
+            categoryName,
+            categoryType
         } = req.body;
-        if (!categoryName) {
+        if (!categoryName || !categoryType) {
             return res.status(400).json({ error: "All fields are required." });
         }
         const existingCategory = await Category.findOne({ where: { categoryName } });
@@ -17,6 +18,7 @@ const createCategory = async (req, res) => {
         }
         const newCategory = await Category.create({
             categoryName,
+            categoryType,
             categoryStatus: "In stock"
         });
         res.status(201).json(newCategory);
@@ -67,6 +69,7 @@ const updateCategory = async (req, res) => {
         const { id } = req.params;
         const {
             categoryName,
+            categoryType,
             categoryStatus
         } = req.body;
 
@@ -77,6 +80,7 @@ const updateCategory = async (req, res) => {
 
         await category.update({
             categoryName,
+            categoryType,
             categoryStatus
         });
 

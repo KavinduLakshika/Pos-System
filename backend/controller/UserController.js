@@ -1,4 +1,5 @@
 const User = require("../model/User");
+const Store = require("../model/Store");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -31,9 +32,15 @@ const createUser = async (req, res) => {
             !userEmail ||
             !userNIC ||
             !userTP ||
-            !userAddress
+            !userAddress ||
+            !storeId
         ) {
-            return res.status(400).json({ error: "All fields are required." });
+            return res.status(400).json({ error: "All fields are required, including storeId." });
+        }
+
+        const store = await Store.findByPk(storeId);
+        if (!store) {
+            return res.status(400).json({ error: "Invalid store ID." });
         }
 
         const existingUser = await User.findOne({ where: { userNIC } });
@@ -58,7 +65,7 @@ const createUser = async (req, res) => {
             store_storeId: storeId,
         });
 
-        // Optional: Generate JWT token on user creation
+        // Generate JWT token
         const token = jwt.sign(
             {
                 id: newUser.id,
@@ -70,15 +77,23 @@ const createUser = async (req, res) => {
         );
 
         res.status(201).json({ newUser, token });
-
     } catch (error) {
         if (error.name === "SequelizeValidationError") {
-            return res.status(400).json({ error: "Validation error: Please check the provided data." });
+
+            console.error("Validation Errors: ", error.errors);
+
+            const validationErrors = error.errors.map(err => ({
+                field: err.path,
+                message: err.message
+            }));
+            return res.status(400).json({ error: "Validation error", details: validationErrors });
         }
         if (error.name === "SequelizeUniqueConstraintError") {
             return res.status(400).json({ error: "A user with this email or NIC already exists." });
         }
-        res.status(400).json({ error: `An error occurred: ${error.message}` });
+
+        console.error(error);
+        res.status(500).json({ error: `An internal error occurred: ${error.message}` });
     }
 };
 
@@ -120,8 +135,8 @@ const updateUser = async (req, res) => {
             userNIC,
             userTP,
             userAddress,
-            userStatus,
             userImage,
+            storeId,
         } = req.body;
 
         const user = await User.findByPk(id);
@@ -138,14 +153,14 @@ const updateUser = async (req, res) => {
             userTitle,
             userFullName,
             userName,
-            userPassword: user.userPassword,
+            userPassword,
             userType,
             userEmail,
             userNIC,
             userTP,
             userAddress,
-            userStatus,
             userImage,
+            storeId,
         });
 
         res.status(200).json(user);

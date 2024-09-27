@@ -61,6 +61,7 @@ const User = sequelize.define(
                 model: "store",
                 key: "storeId",
             },
+            allowNull: false,
         },
     },
     {
@@ -69,7 +70,7 @@ const User = sequelize.define(
     }
 );
 User.belongsTo(Store, {
-    foreignKey: "store_storeId",
-    as: "store",
+    foreignKey: 'store_storeId',
+    as: 'store',
 });
 module.exports = User;
