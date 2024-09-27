@@ -107,7 +107,7 @@ const Sidebar = () => {
             path: '/stock-reports',
             submenus: [
                 { title: 'Current Stock', path: '/stock-reports/current-stock' },
-                
+                { title: 'Stock History', path: '/stock-reports/stock-history' },
             ]
         },
     ];

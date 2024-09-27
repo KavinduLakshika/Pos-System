@@ -4,6 +4,7 @@ import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 
 const Table = ({
+    search,
     data,
     columns,
     onAdd,
@@ -48,7 +49,7 @@ const Table = ({
                         <input
                             type="text"
                             className="form-control"
-                            placeholder="Search"
+                            placeholder={search}
                             value={searchQuery}
                             onChange={(e) => {
                                 setSearchQuery(e.target.value);
