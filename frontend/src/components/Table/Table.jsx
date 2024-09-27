@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 
-const Table = ({ data, columns, onAdd, btnName, onEdit, onDelete }) => {
+const Table = ({ data, columns, onAdd, btnName, onEdit, onDelete,search }) => {
     const [tableData, setTableData] = useState(data);
     const [tableColumns, setTableColumns] = useState(columns);
     const [searchQuery, setSearchQuery] = useState("");
@@ -42,7 +42,7 @@ const Table = ({ data, columns, onAdd, btnName, onEdit, onDelete }) => {
                     <input
                         type="text"
                         className="form-control"
-                        placeholder="Search"
+                        placeholder={search}
                         value={searchQuery}
                         onChange={(e) => {
                             setSearchQuery(e.target.value);

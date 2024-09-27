@@ -9,7 +9,7 @@ const Staff = () => {
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
   const columns = ["#", "Department / Job Position", "Full Name", "Contact 1", "Contact 2", "Address", "Nic"];
-  const btnName = 'Add New Staff Member';
+  const btnName = '+ New Staff Member';
 
   const handleAddNewStaff = () => {
     setEditIndex(null);
@@ -68,7 +68,9 @@ const Staff = () => {
     <div>
       <div>
         <h2>Staff</h2>
+        
         <Table
+          search={'Search by Name'}
           data={data}
           columns={columns}
           btnName={btnName}
@@ -83,6 +85,7 @@ const Staff = () => {
         editData={editIndex !== null ? data[editIndex] : null}  
       />
       </div>
+      
     </div>
   )
 }
