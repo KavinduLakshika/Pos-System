@@ -106,9 +106,8 @@ const Sidebar = () => {
             icon: <FileText size={20} />,
             path: '/stock-reports',
             submenus: [
-                { title: 'Daily Summary', path: '/stock-reports/daily' },
-                { title: 'Financial stock-reports', path: '/stock-reports/financial' },
-                { title: 'Product Performance', path: '/stock-reports/product' }
+                { title: 'Current Stock', path: '/stock-reports/current-stock' },
+                { title: 'Stock History', path: '/stock-reports/stock-history' },
             ]
         },
     ];
