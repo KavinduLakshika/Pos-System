@@ -1,9 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { File, LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, BadgeDollarSignIcon, FileText, User } from 'lucide-react';
+import { File, LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, BadgeDollarSignIcon, FileText, User, Menu } from 'lucide-react';
 import './SideBar.css';
 
 const Sidebar = () => {
+    const [isCollapsed, setIsCollapsed] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsCollapsed(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const toggleSidebar = () => {
+        setIsCollapsed(!isCollapsed);
+    };
+
+
     const menuItems = [
         {
             title: 'Sales',
@@ -96,12 +114,33 @@ const Sidebar = () => {
     ];
 
     return (
-        <nav className="col-md-3 col-lg-2 d-md-block bg-color sidebar">
-            <div className="text-center p-3">
-                <h1>Logo</h1>
-            </div>
-            <div className="position-sticky pt-3">
-                <ul className="nav flex-column">
+      <>
+                <button 
+                    className="toggle-btn d-md-none" 
+                    onClick={toggleSidebar}
+                    style={{
+                        position: 'fixed',
+                        top: '10px',
+                        left: '10px',
+                        zIndex: 1030,
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <Menu size={24} />
+                </button>
+                <nav className={`col-md-3 col-lg-2 d-md-block bg-color sidebar ${isCollapsed ? 'collapsed' : ''}`}
+                     style={{
+                         transform: isCollapsed ? 'translateX(-100%)' : 'translateX(0)',
+                         transition: 'transform 0.3s ease-in-out'
+                     }}
+                >
+                    <div className="text-center mt-5 p-3">
+                        <h1>Logo</h1>
+                    </div>
+                    <div className="position-sticky pt-3">
+                        <ul className="nav flex-column">
                     <li className="nav-item">
                         <Link to={'/'} className="nav-link d-flex align-items-center ">
                             <span className="me-2"><LayoutDashboard size={20} /></span>
@@ -136,6 +175,7 @@ const Sidebar = () => {
                 </ul>
             </div>
         </nav>
+        </>
     );
 };
 

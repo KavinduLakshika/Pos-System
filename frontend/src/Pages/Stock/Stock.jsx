@@ -9,12 +9,7 @@ const Stock = () => {
   return (
     <div>
         <h1>Stock</h1>
-        <Routes>
-            <Route path='daily-sum' element={<StockSummary/>}/>
-            <Route path='financial' element={<FinancialStock/>}/>
-            <Route path='product' element={<ProductPerformance/>}/>
-            <Route path='stock-report' element={<StockReport/>}/>
-        </Routes>
+        <StockSummary/>
     </div>
   )
 }
