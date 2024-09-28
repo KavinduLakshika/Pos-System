@@ -78,7 +78,8 @@ const Sidebar = () => {
             icon: <Truck size={20} />,
             path: '/Supplier',
             submenus: [
-                { title: 'Supplier', path: '/supplier/supplier' },
+                { title: 'Supplier Details', path: '/supplier/supplier' },
+                { title: 'New Stock Supply', path: '/supplier/new-stock' },
                 { title: 'Supplier Payment', path: '/supplier/supplier-payments' },
             ]
         },
