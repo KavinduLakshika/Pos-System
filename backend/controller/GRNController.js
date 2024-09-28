@@ -4,7 +4,7 @@ const Stock = require("../model/Stock");
 const Store = require("../model/Store");
 
 //create grn
-const createGRN = async (req, res) => {
+const createGrn = async (req, res) => {
     try {
         const {
             grnDate,
@@ -124,8 +124,72 @@ const getGrnById = async (req, res) => {
     }
 };
 
+// Update a Grn
+const updateGrn = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            grnDate,
+            grnRef,
+            grnCashAmount,
+            grnChequeAmount,
+            grnChequeNumber,
+            grnDueAmount,
+            grnVat,
+            grnDiscount,
+            grnTotal,
+            grnGrandTotal,
+            productId,
+            stockId,
+            storeId,
+        } = req.body;
+
+        const grn = await GRN.findByPk(id);
+        if (!grn) {
+            return res.status(404).json({ message: "GRN not found" });
+        }
+
+        await grn.update({
+            grnDate,
+            grnRef,
+            grnCashAmount,
+            grnChequeAmount,
+            grnChequeNumber,
+            grnDueAmount,
+            grnVat,
+            grnDiscount,
+            grnTotal,
+            grnGrandTotal,
+            products_productId: productId,
+            stock_stockId: stockId,
+            store_storeId: storeId,
+        });
+
+        res.status(200).json(grn);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+// Delete a grn
+const deleteGrn = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const grn = await GRN.findByPk(id);
+        if (!grn) {
+            return res.status(404).json({ message: "GRN not found" });
+        }
+        await grn.destroy();
+        res.status(200).json({ message: "GRN deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
-    createGRN,
+    createGrn,
     getAllGrn,
     getGrnById,
+    updateGrn,
+    deleteGrn,
 }
