@@ -13,7 +13,9 @@ const Table = ({
     onDelete,
     showSearch = true,
     showButton = true,
-    showActions = true
+    showActions = true,
+    showEdit=true,
+    showDelete=true
 }) => {
 
     const [tableData, setTableData] = useState(data);
@@ -94,18 +96,23 @@ const Table = ({
                                     {showActions && (
 
                                         <td>
+                                    {showEdit && (
                                             <button
                                                 className="btn btn-warning btn-sm mr-3"
                                                 onClick={() => onEdit(rowIndex)}
                                             >
                                                 <FontAwesomeIcon icon={faPen} />
-                                            </button>{' '}
+                                            </button>
+                                    )}
+                                            {' '}
+                                    {showDelete && (
                                             <button
                                                 className="btn btn-danger btn-sm"
                                                 onClick={() => onDelete(rowIndex)}
                                             >
                                                 <FontAwesomeIcon icon={faTrash} />
                                             </button>
+                                    )}
                                         </td>
                                     )}
                                 </tr>
