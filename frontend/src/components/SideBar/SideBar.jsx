@@ -79,6 +79,7 @@ const Sidebar = () => {
             path: '/Supplier',
             submenus: [
                 { title: 'Supplier', path: '/supplier/supplier' },
+                { title: 'Supplier Payment', path: '/supplier/supplier-payments' },
             ]
         },
         // {
