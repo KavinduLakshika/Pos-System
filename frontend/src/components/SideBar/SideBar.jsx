@@ -83,16 +83,17 @@ const Sidebar = () => {
                 { title: 'System Preferences', path: '/Supplier/system' }
             ]
         },
+        // {
+        //     title: 'Finance',
+        //     icon: <BadgeDollarSignIcon size={20} />,
+        //     path: '/finance',
+        //     submenus: [
+        //         { title: 'Daily Summary', path: '/finance/daily' },
+        //         { title: 'Financial finance', path: '/finance/financial' },
+        //         { title: 'Product Performance', path: '/finance/product' }
+        //     ]
+        // }, 
         {
-            title: 'Finance',
-            icon: <BadgeDollarSignIcon size={20} />,
-            path: '/finance',
-            submenus: [
-                { title: 'Daily Summary', path: '/finance/daily' },
-                { title: 'Financial finance', path: '/finance/financial' },
-                { title: 'Product Performance', path: '/finance/product' }
-            ]
-        }, {
             title: 'Sales Reports',
             icon: <FileText size={20} />,
             path: '/sales-reports',
