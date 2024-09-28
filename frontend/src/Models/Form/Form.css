@@ -146,10 +146,15 @@
   }
 }
 
-@media (max-width: 1340px) {
+@media (max-width: 1370px) {
   .form-group-2 {
     width: 400px;
   }
+  .ReactModal__Content {
+    width: 80% !important;
+    height: 70% !important;
+  }
+  
 }
 @media (max-width: 1100px) {
   .ReactModal__Content {

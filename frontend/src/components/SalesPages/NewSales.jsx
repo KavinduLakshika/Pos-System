@@ -100,6 +100,10 @@ const NewSales = () => {
         />
 
       </div>
+
+      <form action="">
+        
+      </form>
     </div>
 
   )
