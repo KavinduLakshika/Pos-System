@@ -10,6 +10,7 @@ import GRN from './Pages/GRN/GRN';
 import Stock from './Pages/Stock/Stock';
 import Staff from './Pages/Staff/Staff';
 import StockReports from './Pages/StockReports/StockReports';
+import SalesReports from './Pages/SalesReport/SalesReports';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/product/*" element={<Product />} />
         <Route path="/grn/*" element={<GRN />} />
         <Route path="/stock/*" element={<Stock />} />
+        <Route path="/sales-reports/*" element={<SalesReports />} />
         <Route path="/stock-reports/*" element={<StockReports />} />
         <Route path="/staff" element={<Staff />} />
 

@@ -97,9 +97,8 @@ const Sidebar = () => {
             icon: <FileText size={20} />,
             path: '/sales-reports',
             submenus: [
-                { title: 'Daily Summary', path: '/sales-reports/daily' },
-                { title: 'Financial sales-reports', path: '/sales-reports/financial' },
-                { title: 'Product Performance', path: '/sales-reports/product' }
+                { title: 'Daily Summary', path: '/sales-reports/daily-summary' },
+                
             ]
         }, {
             title: 'Stock Reports',
