@@ -1,6 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../dbConfig");
-const Store = require("./Store")
+const Product = require("./Products");
+const Stock = require("./Stock");
+const Store = require("./Store");
 
 const GRN = sequelize.define(
     "GRN",
@@ -19,31 +21,35 @@ const GRN = sequelize.define(
             allowNull: false,
         },
         grnCashAmount: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         grnChequeAmount: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        grnChequeNumber: {
             type: DataTypes.STRING,
             allowNull: false,
         },
         grnDueAmount: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         grnVat: {
-            type: DataTypes.STRING,
+            type: DataTypes.FLOAT,
             allowNull: false,
         },
         grnDiscount: {
-            type: DataTypes.STRING,
+            type: DataTypes.FLOAT,
             allowNull: false,
         },
         grnTotal: {
-            type: DataTypes.STRING,
+            type: DataTypes.FLOAT,
             allowNull: false,
         },
         grnGrandTotal: {
-            type: DataTypes.STRING,
+            type: DataTypes.FLOAT,
             allowNull: false,
         },
         products_productId: {
@@ -52,6 +58,7 @@ const GRN = sequelize.define(
                 model: "product",
                 key: "productId",
             },
+            allowNull: false,
         },
         stock_stockId: {
             type: DataTypes.INTEGER,
@@ -59,6 +66,7 @@ const GRN = sequelize.define(
                 model: "stock",
                 key: "stockId",
             },
+            allowNull: false,
         },
         store_storeId: {
             type: DataTypes.INTEGER,
@@ -66,15 +74,20 @@ const GRN = sequelize.define(
                 model: "store",
                 key: "storeId",
             },
+            allowNull: false,
         },
     },
+    {
+        tableName: "grn",
+        timestamps: false,
+    }
 );
 
 GRN.belongsTo(Product, {
     foreignKey: "products_productId",
     as: "product",
 });
-GRN.belongsTo(stock, {
+GRN.belongsTo(Stock, {
     foreignKey: "stock_stockId",
     as: "stock",
 });

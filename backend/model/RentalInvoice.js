@@ -2,6 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../dbConfig");
 const Customer = require("./Customers");
 const Category = require("./Category");
+const Product = require("./Products");
 
 const RentalInvoice = sequelize.define(
     "RentalInvoice",
@@ -33,6 +34,7 @@ const RentalInvoice = sequelize.define(
                 model: "customer",
                 key: "cusId",
             },
+            allowNull: false,
         },
         products_productId: {
             type: DataTypes.INTEGER,
@@ -40,6 +42,7 @@ const RentalInvoice = sequelize.define(
                 model: "product",
                 key: "productId",
             },
+            allowNull: false,
         },
     },
     {

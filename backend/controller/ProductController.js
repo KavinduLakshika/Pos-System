@@ -14,9 +14,13 @@ const storage = multer.diskStorage({
         cb(null, uploadDir);
     },
     filename: function (req, file, cb) {
+        const productName = req.body.productName || 'product';
         const timestamp = Date.now();
         const ext = path.extname(file.originalname);
-        cb(null, `${timestamp}${ext}`);
+
+        const safeProductName = productName.replace(/[^a-zA-Z0-9]/g, '_');
+
+        cb(null, `${safeProductName}_${timestamp}${ext}`);
     }
 });
 
@@ -162,13 +166,23 @@ const updateProduct = async (req, res) => {
                 return res.status(404).json({ message: 'Product not found' });
             }
 
-            // Handle product image update
+            // Check if a new image is uploaded and delete the old one
             let productImage = product.productImage;
             if (req.file) {
+                // If an old image exists, delete it
+                const oldImagePath = productImage
+                    ? path.join(__dirname, '..', 'uploads', 'products', path.basename(productImage))
+                    : null;
+
+                if (oldImagePath && fs.existsSync(oldImagePath)) {
+                    fs.unlinkSync(oldImagePath); // Remove old image from server
+                }
+
+                // Update the product image with the new one
                 productImage = `${req.protocol}://${req.get('host')}/uploads/products/${req.file.filename}`;
             }
 
-            // Update the product
+            // Update the product details
             await product.update({
                 productName,
                 productCode,
@@ -192,6 +206,7 @@ const updateProduct = async (req, res) => {
         }
     });
 };
+
 
 // Delete a product
 const deleteProduct = async (req, res) => {

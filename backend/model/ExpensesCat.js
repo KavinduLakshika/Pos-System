@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../dbConfig");
 
-const Expenses = sequelize.define(
-    "Expenses",
+const ExpensesCat = sequelize.define(
+    "ExpensesCat",
     {
         expensesCatId: {
             type: DataTypes.INTEGER,
@@ -18,5 +18,9 @@ const Expenses = sequelize.define(
             allowNull: false,
         },
     },
+    {
+        tableName: "expensesCat",
+        timestamps: false,
+    }
 );
-module.exports = Expenses;
+module.exports = ExpensesCat;

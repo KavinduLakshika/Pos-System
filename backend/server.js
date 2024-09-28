@@ -13,6 +13,12 @@ const StockController = require("./controller/StockController");
 const InvoiceController = require("./controller/InvoiceController");
 const TransactionController = require("./controller/TransactionController");
 const StoreController = require("./controller/StoreController");
+const ReturnController = require("./controller/ReturnController");
+const ExpenseController = require("./controller/ExpensesController");
+const ExpensesCatController = require("./controller/ExpensesCatController");
+const GRNController = require("./controller/GRNController");
+const RentalInvoiceController = require("./controller/RentalInvoiceController");
+const ReportController = require("./controller/ReportController");
 
 const app = express();
 const PORT = process.env.PORT;
@@ -71,6 +77,13 @@ app.get("/invoice/:id", InvoiceController.getInvoiceById);
 app.put("/invoice/:id", InvoiceController.updateInvoice);
 app.delete("/invoice/:id", InvoiceController.deleteInvoice);
 
+//rental invoice routes
+app.post("/rentalInvoice", RentalInvoiceController.createRentalInvoice);
+app.get("/rentalInvoices", RentalInvoiceController.getAllRentalInvoices);
+app.get("/rentalInvoice/:id", RentalInvoiceController.getRentalInvoiceById);
+app.put("/rentalInvoice/:id", RentalInvoiceController.updateRentalInvoice);
+app.delete("/rentalInvoice/:id", RentalInvoiceController.deleteRentalInvoice);
+
 //transaction routes
 app.post("/transaction", TransactionController.createTransaction);
 app.get("/transactions", TransactionController.getAllTransactions);
@@ -83,6 +96,34 @@ app.get("/store/:id", StoreController.getStoreById);
 app.put("/store/:id", StoreController.updateStore);
 app.delete("/store/:id", StoreController.deleteStore);
 
+//return routes
+app.post("/return", ReturnController.createReturn);
+app.get("/returns", ReturnController.getAllReturns);
+app.get("/return/:id", ReturnController.getReturnById);
+
+//expenses routes
+app.post("/expense", ExpenseController.createExpense);
+app.get("/expenses", ExpenseController.getAllExpenses);
+app.get("/expense/:id", ExpenseController.getExpenseById);
+app.put("/expense/:id", ExpenseController.updateExpense);
+app.delete("/expense/:id", ExpenseController.deleteExpense);
+
+//expenses category routes
+app.post("/expensesCat", ExpensesCatController.createExpensesCategory);
+app.get("/expensesCats", ExpensesCatController.getAllExpensesCats);
+app.get("/expensesCat/:id", ExpensesCatController.getExpensesCatById);
+app.put("/expensesCat/:id", ExpensesCatController.updateExpensesCat);
+app.delete("/expensesCat/:id", ExpensesCatController.deleteExpensesCat);
+
+//GRN routes
+app.post("/grn", GRNController.createGrn);
+app.get("/grn", GRNController.getAllGrn);
+app.get("/grn/:id", GRNController.getGrnById);
+app.put("/grn/:id", GRNController.updateGrn);
+app.delete("/grn/:id", GRNController.deleteGrn);
+
+//get reports
+app.get("/getReports", ReportController.getReports);
 // Sync the database
 sequelize
     .sync()
