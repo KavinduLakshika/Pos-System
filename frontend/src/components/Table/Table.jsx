@@ -12,9 +12,10 @@ const Table = ({
     onEdit,
     onDelete,
     showSearch = true,
-    showButton = true
+    showButton = true,
+    showActions = true
 }) => {
-    
+
     const [tableData, setTableData] = useState(data);
     const [tableColumns, setTableColumns] = useState(columns);
     const [searchQuery, setSearchQuery] = useState("");
@@ -72,11 +73,16 @@ const Table = ({
                 <div className="col-md-12">
                     <table className="table table-hover table-responsive">
                         <thead>
+                            
                             <tr>
                                 {tableColumns.map((item, index) => (
                                     <th key={index}>{item}</th>
                                 ))}
+                                                    {showActions && (
+
                                 <th>Actions</th>
+                                )}
+
                             </tr>
                         </thead>
                         <tbody>
@@ -85,20 +91,23 @@ const Table = ({
                                     {datum.map((item, colIndex) => (
                                         <td key={colIndex}>{item}</td>
                                     ))}
-                                    <td>
-                                        <button
-                                            className="btn btn-warning btn-sm mr-3"
-                                            onClick={() => onEdit(rowIndex)}
-                                        >
-                                            <FontAwesomeIcon icon={faPen} />
-                                        </button>{' '}
-                                        <button
-                                            className="btn btn-danger btn-sm"
-                                            onClick={() => onDelete(rowIndex)}
-                                        >
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </button>
-                                    </td>
+                                    {showActions && (
+
+                                        <td>
+                                            <button
+                                                className="btn btn-warning btn-sm mr-3"
+                                                onClick={() => onEdit(rowIndex)}
+                                            >
+                                                <FontAwesomeIcon icon={faPen} />
+                                            </button>{' '}
+                                            <button
+                                                className="btn btn-danger btn-sm"
+                                                onClick={() => onDelete(rowIndex)}
+                                            >
+                                                <FontAwesomeIcon icon={faTrash} />
+                                            </button>
+                                        </td>
+                                    )}
                                 </tr>
                             ))}
                         </tbody>

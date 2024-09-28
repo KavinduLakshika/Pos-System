@@ -17,9 +17,9 @@ const NewSales = () => {
   };
 
   const [data,] = useState([
-    ["MaleeshaPa", "MaleeshaBalla@gmail.com"],
+    ['1',"MaleeshaPa", "5",'1'],
   ]);
-  const Columns = ["Name", "Email"];
+  const Columns = ["id",'product','qty','price'];
 
   return (
     <div>
@@ -96,6 +96,7 @@ const NewSales = () => {
           columns={Columns}
           showSearch={false}
           showButton={false}
+          showActions={false}
         />
 
       </div>
