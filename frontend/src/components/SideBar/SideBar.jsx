@@ -78,9 +78,7 @@ const Sidebar = () => {
             icon: <Truck size={20} />,
             path: '/Supplier',
             submenus: [
-                { title: 'User Management', path: '/Supplier/users' },
-                { title: 'Store Information', path: '/Supplier/store' },
-                { title: 'System Preferences', path: '/Supplier/system' }
+                { title: 'Supplier', path: '/supplier/supplier' },
             ]
         },
         // {
