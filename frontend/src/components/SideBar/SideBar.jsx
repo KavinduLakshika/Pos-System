@@ -98,6 +98,7 @@ const Sidebar = () => {
             path: '/sales-reports',
             submenus: [
                 { title: 'Daily Summary', path: '/sales-reports/daily-summary' },
+                { title: 'Sales History', path: '/sales-reports/sales-history' },
                 
             ]
         }, {
