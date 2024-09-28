@@ -102,7 +102,13 @@ const createExpense = async (req, res) => {
 
             res.status(201).json(expensesWithDetails);
         } catch (error) {
-            res.status(500).json({ error: `An error occurred: ${error.message}` });
+            if (error.name === "SequelizeValidationError") {
+                return res.status(400).json({ error: "Validation error: Please check the provided data." });
+            }
+            if (error.name === "SequelizeUniqueConstraintError") {
+                return res.status(409).json({ error: "Expense already exists." });
+            }
+            return res.status(500).json({ error: `An internal server error occurred: ${error.message}` });
         }
     });
 };
