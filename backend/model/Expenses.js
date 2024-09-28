@@ -46,13 +46,18 @@ const Expenses = sequelize.define(
             },
         },
     },
+    {
+        tableName: "expenses",
+        timestamps: false,
+    }
 );
 Expenses.belongsTo(ExpensesCat, {
-    foreignKey: "expensesCat_expensesCatId",
-    as: "expensesCat",
+    foreignKey: 'expensesCat_expensesCatId',
+    as: 'expensesCat'
 });
 Expenses.belongsTo(User, {
-    foreignKey: "user_userId",
-    as: "user",
+    foreignKey: 'user_userId',
+    as: 'user'
 });
+
 module.exports = Expenses;

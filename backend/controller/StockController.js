@@ -53,7 +53,7 @@ const createStock = async (req, res) => {
             include: [
                 { model: Supplier, as: 'supplier' },
                 { model: Product, as: 'product' },
-                { model: Store, as: 'store' }, // This alias must match the defined association
+                { model: Store, as: 'store' },
             ],
         });
 

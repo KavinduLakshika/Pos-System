@@ -1,23 +1,23 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../dbConfig");
 const Product = require("./Products");
-const Category = require("./Category");
+const Store = require("./Store");
+const User = require("./User");
 const Invoice = require("./Invoice");
-const Customer = require("./Customers");
 
 const Return = sequelize.define(
     "Return",
     {
-        returnId: {
+        returnItemId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        returnType: {
+        returnItemType: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        returnDate: {
+        returnItemDate: {
             type: DataTypes.DATE,
             allowNull: false,
         },
@@ -55,7 +55,7 @@ const Return = sequelize.define(
         },
     },
     {
-        tableName: "return",
+        tableName: "returnItems",
         timestamps: false,
     }
 );

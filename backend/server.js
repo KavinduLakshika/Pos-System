@@ -13,6 +13,9 @@ const StockController = require("./controller/StockController");
 const InvoiceController = require("./controller/InvoiceController");
 const TransactionController = require("./controller/TransactionController");
 const StoreController = require("./controller/StoreController");
+const ReturnController = require("./controller/ReturnController");
+const ExpenseController = require("./controller/ExpensesController");
+const ExpensesCatController = require("./controller/ExpensesCatController");
 
 const app = express();
 const PORT = process.env.PORT;
@@ -82,6 +85,25 @@ app.get("/stores", StoreController.getAllStores);
 app.get("/store/:id", StoreController.getStoreById);
 app.put("/store/:id", StoreController.updateStore);
 app.delete("/store/:id", StoreController.deleteStore);
+
+//return routes
+app.post("/return", ReturnController.createReturn);
+app.get("/returns", ReturnController.getAllReturns);
+app.get("/return/:id", ReturnController.getReturnById);
+
+//expenses routes
+app.post("/expense", ExpenseController.createExpense);
+app.get("/expenses", ExpenseController.getAllExpenses);
+app.get("/expense/:id", ExpenseController.getExpenseById);
+app.put("/expense/:id", ExpenseController.updateExpense);
+app.delete("/expense/:id", ExpenseController.deleteExpense);
+
+//expenses category routes
+app.post("/expensesCat", ExpensesCatController.createExpensesCategory);
+app.get("/expensesCats", ExpensesCatController.getAllExpensesCats);
+app.get("/expensesCat/:id", ExpensesCatController.getExpensesCatById);
+app.put("/expensesCat/:id", ExpensesCatController.updateExpensesCat);
+app.delete("/expensesCat/:id", ExpensesCatController.deleteExpensesCat);
 
 // Sync the database
 sequelize
