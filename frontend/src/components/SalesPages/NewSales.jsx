@@ -46,7 +46,7 @@ const NewSales = () => {
 
   return (
     <div>
-      <h2>New Sale</h2>
+      <h2>Sales Invoice</h2>
       <form action="" className='customer-form' >
         <div className="sales-add-form">
           <div className="customer">
