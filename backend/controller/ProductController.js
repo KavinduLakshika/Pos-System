@@ -44,6 +44,7 @@ const createProduct = async (req, res) => {
                 productSellingPrice,
                 productWarranty,
                 productQty,
+                productEmi,
                 productDescription,
                 categoryId
             } = req.body;
@@ -83,6 +84,7 @@ const createProduct = async (req, res) => {
                 productWarranty,
                 productQty,
                 productProfit,
+                productEmi,
                 productDescription,
                 productImage,
                 productStatus: "In stock",
@@ -158,6 +160,8 @@ const updateProduct = async (req, res) => {
                 productSellingPrice,
                 productWarranty,
                 productQty,
+                productProfit,
+                productEmi,
                 productStatus,
                 categoryId
             } = req.body;
@@ -201,6 +205,8 @@ const updateProduct = async (req, res) => {
                 productSellingPrice,
                 productWarranty,
                 productQty,
+                productProfit,
+                productEmi,
                 productStatus,
                 category_categoryId: categoryId,
                 productImage

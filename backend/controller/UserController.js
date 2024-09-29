@@ -207,6 +207,7 @@ const updateUser = async (req, res) => {
                 userTP,
                 userSecondTP,
                 userAddress,
+                userStatus,
                 storeId
             } = req.body;
 
@@ -245,6 +246,7 @@ const updateUser = async (req, res) => {
                 userTP,
                 userSecondTP,
                 userAddress,
+                userStatus,
                 userImage,
                 store_storeId: storeId
             });
