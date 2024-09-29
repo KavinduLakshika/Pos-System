@@ -1,5 +1,5 @@
 import React from 'react';
-import Table from '../../components/Table/Table';
+import Table from '../Table/Table';
 
 const columns = ['#', 'Store Name', 'Supplier Name/Position', 'Category', 'Product Name','Supplied Date & TIme','Supplied Quantity','Amount Per Item','Total Amount' ];
 
