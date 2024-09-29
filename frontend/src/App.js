@@ -12,6 +12,7 @@ import Staff from './Pages/Staff/Staff';
 import StockReports from './Pages/StockReports/StockReports';
 import SalesReports from './Pages/SalesReport/SalesReports';
 import Supplier from './Pages/Supplier/Supplier';
+import Rental from './Pages/Rental/Rental';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/sales/*" element={<Sales />} />
+        <Route path="/rental/*" element={<Rental />} />
         <Route path="/customer/*" element={<Customer />} />
         <Route path="/product/*" element={<Product />} />
         <Route path="/grn/*" element={<GRN />} />
