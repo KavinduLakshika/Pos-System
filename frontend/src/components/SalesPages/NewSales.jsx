@@ -4,33 +4,85 @@ import './NewSales.css';
 import Form from '../../Models/Form/Form';
 import Modal from 'react-modal';
 import Table from '../Table/Table'
+import config from '../../config';
 
 const NewSales = () => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    refNo:'',
-    productNo:'',
-    productName:'',
-    productPrice:'',
-    qty:'',
-    discount:'',
-    totalPrice:'',
-    productNote:'',
-    emi:'',
+    cusName: '',
+    refNo: '',
+    productNo: '',
+    productName: '',
+    productPrice: '',
+    qty: '',
+    discount: '',
+    totalPrice: '',
+    productNote: '',
+    emi: '',
   });
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    closeModal(); // Close the modal on submit
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Fetch the customer based on cusName or refNo
+      const customerResponse = await fetch(`${config.BASE_URL}/customer?name=${formData.cusName}&code=${formData.refNo}`);
+      if (!customerResponse.ok) {
+        const customerError = await customerResponse.json();
+        throw new Error(customerError.message || 'Failed to fetch customer.');
+      }
+      const customerData = await customerResponse.json();
+
+      // Fetch the product based on productNo or productName
+      const productResponse = await fetch(`${config.BASE_URL}/product?code=${formData.productNo}&name=${formData.productName}`);
+      if (!productResponse.ok) {
+        const productError = await productResponse.json();
+        throw new Error(productError.message || 'Failed to fetch product.');
+      }
+      const productData = await productResponse.json();
+
+      const invoiceData = {
+        cusId: customerData.customerId,
+        productId: productData.productId,
+        invoiceDate: new Date().toISOString(),
+        cusCode: formData.refNo,
+        productCode: formData.productNo,
+        productName: formData.productName,
+        productSellingPrice: formData.productPrice,
+        productQty: formData.qty,
+        discount: formData.discount,
+        totalAmount: formData.totalPrice,
+        invoiceNote: formData.productNote,
+        productEmi: formData.emi,
+      };
+
+      const response = await fetch(`${config.BASE_URL}/invoice`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(invoiceData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Invoice created:', data);
+        closeModal();
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to create Invoice:', errorData);
+        alert(errorData.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while creating the invoice.');
+    }
+  };
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -88,11 +140,11 @@ const NewSales = () => {
 
             <div className="customer-details">
               <label htmlFor="">Customer Name</label>
-              <input value={formData.name} type="text" className="form-control" name="cusName" id="cusName" placeholder="Enter Name"  />
+              <input value={formData.name} onChange={handleChange} type="text" className="form-control" name="cusName" id="cusName" placeholder="Enter Name" />
             </div>
             <div className="customer-details">
               <label htmlFor="">Reference No</label>
-              <input value={formData.refNo} type="text" className="form-control" name="refNo" id="refNo" placeholder="Enter No" />
+              <input value={formData.refNo} onChange={handleChange} type="text" className="form-control" name="refNo" id="refNo" placeholder="Enter No" />
             </div>
           </div>
 
@@ -102,40 +154,40 @@ const NewSales = () => {
             </div>
             <div className="row">
               <div className="product-details col-md-4 mb-2">
-                <input value={formData.productNo} type="text" name="productNo" className="form-control" id="productNo" placeholder="Product No" />
+                <input value={formData.productNo} onChange={handleChange} type="text" name="productNo" className="form-control" id="productNo" placeholder="Product No" />
               </div>
               <div className="product-details col-md-8 mb-2">
-                <input value={formData.productName} type="text" name="productName" className="form-control" id="productName" placeholder="Product Name" />
+                <input value={formData.productName} onChange={handleChange} type="text" name="productName" className="form-control" id="productName" placeholder="Product Name" />
               </div>
               <div className="product-details col-md-3 mb-2">
-                <input value={formData.productPrice} type="number" name="price" className="form-control" id="price" placeholder="Cash Price" onWheel={(e) => e.target.blur()} />
+                <input value={formData.productPrice} onChange={handleChange} type="number" name="price" className="form-control" id="price" placeholder="Cash Price" onWheel={(e) => e.target.blur()} />
               </div>
               <div className="product-details col-md-3 mb-2">
-                <input value={formData.qty} type="number" onWheel={(e) => e.target.blur()} name="qty" className="form-control" id="qty" placeholder="Enter Quantity" />
+                <input value={formData.qty} type="number" onWheel={(e) => e.target.blur()} onChange={handleChange} name="qty" className="form-control" id="qty" placeholder="Enter Quantity" />
               </div>
               <div className="product-details col-md-3 mb-2">
-                <input value={formData.discount} type="number" onWheel={(e) => e.target.blur()} name="discount" className="form-control" id="discount" placeholder="Product Discount" />
+                <input value={formData.discount} type="number" onWheel={(e) => e.target.blur()} onChange={handleChange} name="discount" className="form-control" id="discount" placeholder="Product Discount" />
               </div>
               <div className="product-details col-md-3 mb-2">
-                <input value={formData.totalPrice} type="number" onWheel={(e) => e.target.blur()} name="totalPrice" className="form-control" id="totalPrice" placeholder="Total Price" />
+                <input value={formData.totalPrice} type="number" onWheel={(e) => e.target.blur()} onChange={handleChange} name="totalPrice" className="form-control" id="totalPrice" placeholder="Total Price" />
               </div>
               <div className="product-details col-md-6 mb-2">
-                <textarea value={formData.productNote} name="note" className="form-control" id="note" placeholder="Note and Warranty" rows="3"></textarea>
+                <textarea value={formData.productNote} onChange={handleChange} name="note" className="form-control" id="note" placeholder="Note and Warranty" rows="3"></textarea>
               </div>
               <div className="product-details-checkbox col-md-1 mb-2">
-                <input  type="checkbox" id="emi" name="emi" value="EMI" onChange={handleEmi} />
+                <input type="checkbox" id="emi" name="emi" value="EMI" onChange={handleEmi} />
                 <label htmlFor="emi">EMI</label>
               </div>
               {Emi && (
                 <div className="product-details col-md-5">
-                  <input value={formData.emi} type="text" name="emiNo" className="form-control" id="emiNo" placeholder="EMI/Serial Number" />
+                  <input value={formData.emi} onChange={handleChange} type="text" name="emiNo" className="form-control" id="emiNo" placeholder="EMI/Serial Number" />
                 </div>
               )}
 
             </div>
           </div>
         </div>
-        <div className="sales-addbtn d-grid d-md-flex me-md-2 justify-content-end px-5">
+        <div className="sales-add btn d-grid d-md-flex me-md-2 justify-content-end px-5">
           <button className="btn btn-primary btn-md">Add Product</button>
         </div>
       </form>
@@ -176,7 +228,7 @@ const NewSales = () => {
           <div className="amount-box">
             <div className="amount-group">
               <label htmlFor="" id='label'>Total Amount</label>
-              <input  type="number" className="form-control" name="totalAmount" id="readOnly" readOnly />
+              <input type="number" className="form-control" name="totalAmount" id="readOnly" readOnly />
             </div>
             <div className="amount-group">
               <label htmlFor="" id='label'>Discount</label>
@@ -184,7 +236,7 @@ const NewSales = () => {
             </div>
             <div className="amount-group">
               <label htmlFor="" id='label'>Invoice Note</label>
-              <textarea name="invoiceNote" className="form-control" id="invoiceNote" rows={3}/>
+              <textarea name="invoiceNote" className="form-control" id="invoiceNote" rows={3} />
             </div>
           </div>
         </div>
@@ -193,11 +245,11 @@ const NewSales = () => {
           <div className="payment-details-box">
             <div className="payment-details">
               <label htmlFor="" id='label'>Payable Amount</label>
-              <input  type="number" className="form-control" id='readOnly' name='amount' readOnly />
+              <input type="number" className="form-control" id='readOnly' name='amount' readOnly />
             </div>
             <div className="payment-details">
               <div className="payment-details-amount">
-                <input  type="checkbox" name="" id="payment" onChange={handleCash} />
+                <input type="checkbox" name="" id="payment" onChange={handleCash} />
                 <label htmlFor="" id='label'>Cash Payment</label>
               </div>
 
@@ -207,29 +259,29 @@ const NewSales = () => {
             </div>
             <div className="payment-details">
               <div className="payment-details-amount">
-                <input  type="checkbox" name="" id="payment" onChange={handleCard} />
+                <input type="checkbox" name="" id="payment" onChange={handleCard} />
                 <label htmlFor="" id='label'>Card Payment</label>
               </div>
               {showCard && (
-                <input  type="number" className="form-control" id='' name='' placeholder='Card Payment' onWheel={(e) => e.target.blur()} />
+                <input type="number" className="form-control" id='' name='' placeholder='Card Payment' onWheel={(e) => e.target.blur()} />
               )}
             </div>
             <div className="payment-details">
               <div className="payment-details-amount">
-                <input  type="checkbox" name="" id="payment" onChange={handleCheque} />
+                <input type="checkbox" name="" id="payment" onChange={handleCheque} />
                 <label htmlFor="" id='label'>Cheque Payment</label>
               </div>
               {showCheque && (
-                <input  type="number" className="form-control" id='' name='' placeholder='Cheque Payment' onWheel={(e) => e.target.blur()} />
+                <input type="number" className="form-control" id='' name='' placeholder='Cheque Payment' onWheel={(e) => e.target.blur()} />
               )}
             </div>
             <div className="payment-details">
               <div className="payment-details-amount">
-                <input  type="checkbox" name="" id="payment" onChange={handleBank} />
+                <input type="checkbox" name="" id="payment" onChange={handleBank} />
                 <label htmlFor="" id='label'>Bank Payment</label>
               </div>
               {showBank && (
-                <input  type="number" className="form-control" id='' name='' placeholder='Bank Payment' onWheel={(e) => e.target.blur()} />
+                <input type="number" className="form-control" id='' name='' placeholder='Bank Payment' onWheel={(e) => e.target.blur()} />
               )}
             </div>
           </div>
@@ -237,11 +289,11 @@ const NewSales = () => {
           <div className="amount-box">
             <div className="amount-group">
               <label htmlFor="" id='label'>Paid Amount</label>
-              <input  className="form-control" type="number" name="totalAmount" id="readOnly" readOnly />
+              <input className="form-control" type="number" name="totalAmount" id="readOnly" readOnly />
             </div>
             <div className="amount-group">
               <label htmlFor="" id='label'>Due Amount</label>
-              <input  className="form-control" type="number" name="discount" id="readOnly" readOnly />
+              <input className="form-control" type="number" name="discount" id="readOnly" readOnly />
             </div>
             <div className="amount-group">
               <label htmlFor="" id='label'>If Credit Sale</label>
