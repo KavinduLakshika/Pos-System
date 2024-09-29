@@ -15,29 +15,6 @@ const NewRental = () => {
     setModalIsOpen(false);
   };
 
-  const [Emi, setEmi] = useState(false);
-  const handleEmi = (e) => {
-    setEmi(e.target.checked)
-  }
-
-  const [showCard, setCard] = useState(false);
-  const [showCash, setCash] = useState(false);
-  const [showCheque, setCheque] = useState(false);
-  const [showBank, setBank] = useState(false);
-
-  const handleCard = (e) => {
-    setCard(e.target.checked)
-  }
-  const handleCash = (e) => {
-    setCash(e.target.checked)
-  }
-  const handleCheque = (e) => {
-    setCheque(e.target.checked)
-  }
-  const handleBank = (e) => {
-    setBank(e.target.checked)
-  }
-
   const [data,] = useState([
     ['1', "MaleeshaPa", "5", '1'],
   ]);
