@@ -8,7 +8,6 @@ import ProductCategory from '../../components/ProductPages/ProductCategory'
 const Product = () => {
   return (
     <div>
-        <h1>Products</h1>
         <Routes>
             <Route path='create' element={<CreateProduct/>}/>
             <Route path='category' element={<ProductCategory/>}/>

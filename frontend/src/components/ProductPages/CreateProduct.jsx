@@ -7,7 +7,6 @@ const CreateProduct = () => {
     productCategory: 'select',
     productName: '',
     productCode: '',
-    productCode: '',
     sellingPrice: '',
     minPrice: '',
     warranty: '',

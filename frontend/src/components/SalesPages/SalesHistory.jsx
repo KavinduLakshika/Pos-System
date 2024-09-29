@@ -48,7 +48,6 @@ const SalesHistory = () => {
       <div className="new-sales-container">
         <h2>SalesHistory</h2>
         <div>
-          <h2>New Sale</h2>
           <Table
             data={data}
             columns={columns}

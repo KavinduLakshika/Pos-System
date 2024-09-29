@@ -2,7 +2,9 @@ import React from 'react'
 
 const CreateProductLable = () => {
   return (
-    <div><h1>CreateProductLable</h1></div>
+    <div>
+      <h4>CreateProductLable</h4>
+    </div>
   )
 }
 

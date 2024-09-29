@@ -11,6 +11,8 @@ const ProductList = () => {
 
   const columns = ['id', 'Product', 'Product Code', 'Weight(g)', "Buying Price", 'Selling Price', 'Warranty (moths)', 'Quantity', 'Profit', 'Description', 'Status'];
 
+  const btnName=['Add Product']
+
   useEffect(() => {
     fetchProductList();
   }, []);
@@ -49,6 +51,7 @@ const ProductList = () => {
       <Table
         data={data}
         columns={columns}
+        btnName={btnName}
       />
     </div>
   )

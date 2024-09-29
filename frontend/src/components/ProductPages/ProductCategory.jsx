@@ -1,8 +1,25 @@
 import React from 'react'
+import Table from '../Table/Table'
 
 const ProductCategory = () => {
+
+  const data=([])
+  const columns = ["ID", 'Category','SuperCategory','Status'];
+
+  const btnName = 'Add Category'
+
   return (
-    <div><h1>ProductCategory</h1></div>
+    <div>
+      <div className="scrolling-container">
+        <h4>ProductCategory</h4>
+        
+        <Table
+          data={data}
+          columns={columns}
+          btnName={btnName}
+        />
+      </div>
+    </div>
   )
 }
 

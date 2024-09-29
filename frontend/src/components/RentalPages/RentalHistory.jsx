@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Table from '../Table/Table';
 import config from '../../config'
 
-const SalesHistory = () => {
+const RentalHistory = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,9 +45,8 @@ const SalesHistory = () => {
 
   return (
     <div>
-      <h2>SalesHistory</h2>
+      <h2>Rental History</h2>
       <div>
-        <h2>New Sale</h2>
         <Table
           data={data}
           columns={columns}
@@ -59,4 +58,4 @@ const SalesHistory = () => {
   )
 }
 
-export default SalesHistory
+export default RentalHistory
