@@ -118,10 +118,10 @@ const NewSales = () => {
                 <input value={formData.qty} type="number" onWheel={(e) => e.target.blur()} name="qty" className="form-control" id="qty" placeholder="Enter Quantity" />
               </div>
               <div className="product-details col-md-3 mb-2">
-                <input value={formData} type="number" onWheel={(e) => e.target.blur()} name="discount" className="form-control" id="discount" placeholder="Product Discount" />
+                <input value={formData.discount} type="number" onWheel={(e) => e.target.blur()} name="discount" className="form-control" id="discount" placeholder="Product Discount" />
               </div>
               <div className="product-details col-md-3 mb-2">
-                <input value={formData.discount} type="number" onWheel={(e) => e.target.blur()} name="totalPrice" className="form-control" id="totalPrice" placeholder="Total Price" />
+                <input value={formData.totalPrice} type="number" onWheel={(e) => e.target.blur()} name="totalPrice" className="form-control" id="totalPrice" placeholder="Total Price" />
               </div>
               <div className="product-details col-md-6 mb-2">
                 <textarea value={formData.productNote} name="note" className="form-control" id="note" placeholder="Note and Warranty" rows="3"></textarea>
