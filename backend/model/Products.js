@@ -42,6 +42,10 @@ const Product = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: false,
     },
+    productEmi: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     productDescription: {
       type: DataTypes.STRING,
       allowNull: false,
