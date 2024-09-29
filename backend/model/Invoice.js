@@ -1,7 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../dbConfig");
 const Product = require("./Products");
-const Stock = require("./Stock");
 const Customer = require("./Customers");
 
 const Invoice = sequelize.define(
@@ -40,15 +39,15 @@ const Invoice = sequelize.define(
             type: DataTypes.FLOAT,
             allowNull: false,
         },
-        invoiceNote:{
+        invoiceNote: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        stock_stockId: {
+        products_productId: {
             type: DataTypes.INTEGER,
             references: {
-                model: Stock,
-                key: "stockId",
+                model: Product,
+                key: "product",
             },
             allowNull: false,
         },
@@ -67,9 +66,9 @@ const Invoice = sequelize.define(
     }
 );
 
-Invoice.belongsTo(Stock, {
-    foreignKey: "stock_stockId",
-    as: "stock",
+Invoice.belongsTo(Product, {
+    foreignKey: "products_productId",
+    as: "product",
 });
 Invoice.belongsTo(Customer, {
     foreignKey: "customer_cusId",

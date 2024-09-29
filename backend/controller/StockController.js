@@ -9,13 +9,15 @@ const createStock = async (req, res) => {
             stockName,
             stockQty,
             stockDate,
+            stockPrice,
+            stockDescription,
             productId,
             supplierId,
             storeId,
         } = req.body;
 
         // Check if all required fields are present
-        if (!stockName || !stockQty || !stockDate || !productId || !supplierId || !storeId) {
+        if (!stockName || !stockQty || !stockDate || !stockPrice || !productId || !supplierId || !storeId) {
             return res.status(400).json({ error: "All fields are required." });
         }
 
@@ -37,11 +39,19 @@ const createStock = async (req, res) => {
             return res.status(400).json({ message: 'Invalid store ID' });
         }
 
+        // Check if stock 
+        const existingStock = await Stock.findOne({ where: { stockName } });
+        if (existingStock) {
+            return res.status(400).json({ error: "A Stock with this Name already exists." });
+        }
+
         // Create new stock
         const newStock = await Stock.create({
             stockName,
             stockQty,
             stockDate,
+            stockPrice,
+            stockDescription,
             stockStatus: "In stock",
             products_productId: productId,
             supplier_supplierId: supplierId,
@@ -109,6 +119,8 @@ const updateStock = async (req, res) => {
             stockName,
             stockQty,
             stockDate,
+            stockPrice,
+            stockDescription,
             stockStatus,
             productId,
             supplierId,
@@ -124,6 +136,8 @@ const updateStock = async (req, res) => {
             stockName,
             stockQty,
             stockDate,
+            stockPrice,
+            stockDescription,
             stockStatus,
             products_productId: productId,
             supplier_supplierId: supplierId,

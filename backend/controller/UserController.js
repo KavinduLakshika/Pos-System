@@ -49,6 +49,7 @@ const createUser = async (req, res) => {
                 userEmail,
                 userNIC,
                 userTP,
+                userSecondTP,
                 userAddress,
                 storeId
             } = req.body;
@@ -100,6 +101,7 @@ const createUser = async (req, res) => {
                 userEmail,
                 userNIC,
                 userTP,
+                userSecondTP,
                 userAddress,
                 userImage,
                 userStatus: "Active",
@@ -181,6 +183,7 @@ const updateUser = async (req, res) => {
                 userEmail,
                 userNIC,
                 userTP,
+                userSecondTP,
                 userAddress,
                 storeId
             } = req.body;
@@ -218,6 +221,7 @@ const updateUser = async (req, res) => {
                 userEmail,
                 userNIC,
                 userTP,
+                userSecondTP,
                 userAddress,
                 userImage,
                 store_storeId: storeId
