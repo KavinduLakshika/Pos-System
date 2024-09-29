@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { File, LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, BadgeDollarSignIcon, FileText, User, Menu } from 'lucide-react';
+import { File, LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, FileText, User, Menu } from 'lucide-react';
 import './SideBar.css';
 
 const Sidebar = () => {
@@ -58,7 +58,6 @@ const Sidebar = () => {
             submenus: [
                 { title: 'Create Product', path: '/product/create' },
                 { title: 'Product Category', path: '/product/category' },
-                { title: 'Create Product Lable', path: '/product/product-lable' },
                 { title: 'Product List', path: '/product/product-list' }
             ]
         },
@@ -145,7 +144,7 @@ const Sidebar = () => {
                          transition: 'transform 0.3s ease-in-out'
                      }}
                 >
-                    <div className="text-center mt-5 p-3">
+                    <div className="text-center mt-2 p-2">
                         <h1>Logo</h1>
                     </div>
                     <div className="position-sticky pt-3">

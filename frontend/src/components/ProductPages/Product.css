@@ -1,0 +1,15 @@
+.product-details{
+    width: 45%;
+} 
+.product-form{
+    border-right: 1px solid #ececec;
+}
+.showProduct-group{
+    width: 100%;
+    background-color: #dbfff3;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 8px 15px;
+    border-radius:10px ;
+}
