@@ -21,16 +21,45 @@ const NewSales = () => {
     emi:'',
   });
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    closeModal(); // Close the modal on submit
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Fetch the customer based on cusName or refNo
+      const customerResponse = await fetch(`${config.BASE_URL}/customer?name=${formData.cusName}&code=${formData.refNo}`);
+      if (!customerResponse.ok) {
+        const customerError = await customerResponse.json();
+        throw new Error(customerError.message || 'Failed to fetch customer.');
+      }
+      const customerData = await customerResponse.json();
+
+      // Fetch the product based on productNo or productName
+      const productResponse = await fetch(`${config.BASE_URL}/product?code=${formData.productNo}&name=${formData.productName}`);
+      if (!productResponse.ok) {
+        const productError = await productResponse.json();
+        throw new Error(productError.message || 'Failed to fetch product.');
+      }
+      const productData = await productResponse.json();
+
+      const invoiceData = {
+        cusId: customerData.customerId,
+        productId: productData.productId,
+        invoiceDate: new Date().toISOString(),
+        cusCode: formData.refNo,
+        productCode: formData.productNo,
+        productName: formData.productName,
+        productSellingPrice: formData.productPrice,
+        productQty: formData.qty,
+        discount: formData.discount,
+        totalAmount: formData.totalPrice,
+        invoiceNote: formData.productNote,
+        productEmi: formData.emi,
+      };
 
       const response = await fetch(`${config.BASE_URL}/invoice`, {
         method: 'POST',
@@ -110,51 +139,51 @@ const NewSales = () => {
                 <Form closeModal={closeModal} />
               </Modal>
 
-              <div className="customer-details">
-                <label htmlFor="">Customer Name</label>
-                <input value={formData.name} type="text" className="form-control" name="cusName" id="cusName" placeholder="Enter Name" />
-              </div>
-              <div className="customer-details">
-                <label htmlFor="">Reference No</label>
-                <input value={formData.refNo} type="text" className="form-control" name="refNo" id="refNo" placeholder="Enter No" />
-              </div>
+            <div className="customer-details">
+              <label htmlFor="">Customer Name</label>
+              <input onChange={handleChange} value={formData.name} type="text" className="form-control" name="name" id="cusName" placeholder="Enter Name"  />
             </div>
+            <div className="customer-details">
+              <label htmlFor="">Reference No</label>
+              <input onChange={handleChange} value={formData.refNo} type="text" className="form-control" name="refNo" id="refNo" placeholder="Enter No" />
+            </div>
+          </div>
 
-            <div className="product">
-              <div className="subCaption">
-                <p>Product Details</p>
+          <div className="product">
+            <div className="subCaption">
+              <p>Product Details</p>
+            </div>
+            <div className="row">
+              <div className="product-details col-md-4 mb-2">
+                <input onChange={handleChange} value={formData.productNo} type="text" name="productNo" className="form-control" id="productNo" placeholder="Product No" />
               </div>
-              <div className="row">
-                <div className="product-details col-md-4 mb-2">
-                  <input value={formData.productNo} type="text" name="productNo" className="form-control" id="productNo" placeholder="Product No" />
+              <div className="product-details col-md-8 mb-2">
+                <input onChange={handleChange} value={formData.productName} type="text" name="productName" className="form-control" id="productName" placeholder="Product Name" />
+              </div>
+              <div className="product-details col-md-3 mb-2">
+                <input onChange={handleChange} value={formData.productPrice} type="number" name="productPrice" className="form-control" id="price" placeholder="Cash Price" onWheel={(e) => e.target.blur()} />
+              </div>
+              <div className="product-details col-md-3 mb-2">
+                <input onChange={handleChange} value={formData.qty} type="number" onWheel={(e) => e.target.blur()} name="qty" className="form-control" id="qty" placeholder="Enter Quantity" />
+              </div>
+              <div className="product-details col-md-3 mb-2">
+                <input onChange={handleChange} value={formData.discount} type="number" onWheel={(e) => e.target.blur()} name="discount" className="form-control" id="discount" placeholder="Product Discount" />
+              </div>
+              <div className="product-details col-md-3 mb-2">
+                <input onChange={handleChange} value={formData.totalPrice} type="number" onWheel={(e) => e.target.blur()} name="totalPrice" className="form-control" id="totalPrice" placeholder="Total Price" />
+              </div>
+              <div className="product-details col-md-6 mb-2">
+                <textarea value={formData.productNote} name="productNote" className="form-control" id="productNote" placeholder="Note and Warranty" rows="3"></textarea>
+              </div>
+              <div className="product-details-checkbox col-md-1 mb-2">
+                <input  type="checkbox" id="emi" name="emi" value="EMI" onChange={handleEmi} />
+                <label htmlFor="emi">EMI</label>
+              </div>
+              {Emi && (
+                <div className="product-details col-md-5">
+                  <input onChange={handleChange} value={formData.emi} type="text" name="emi" className="form-control" id="emi" placeholder="EMI/Serial Number" />
                 </div>
-                <div className="product-details col-md-8 mb-2">
-                  <input value={formData.productName} type="text" name="productName" className="form-control" id="productName" placeholder="Product Name" />
-                </div>
-                <div className="product-details col-md-3 mb-2">
-                  <input value={formData.productPrice} type="number" name="price" className="form-control" id="price" placeholder="Cash Price" onWheel={(e) => e.target.blur()} />
-                </div>
-                <div className="product-details col-md-3 mb-2">
-                  <input value={formData.qty} type="number" onWheel={(e) => e.target.blur()} name="qty" className="form-control" id="qty" placeholder="Enter Quantity" />
-                </div>
-                <div className="product-details col-md-3 mb-2">
-                  <input value={formData.discount} type="number" onWheel={(e) => e.target.blur()} name="discount" className="form-control" id="discount" placeholder="Product Discount" />
-                </div>
-                <div className="product-details col-md-3 mb-2">
-                  <input value={formData.totalPrice} type="number" onWheel={(e) => e.target.blur()} name="totalPrice" className="form-control" id="totalPrice" placeholder="Total Price" />
-                </div>
-                <div className="product-details col-md-6 mb-2">
-                  <textarea value={formData.productNote} name="note" className="form-control" id="note" placeholder="Note and Warranty" rows="3"></textarea>
-                </div>
-                <div className="product-details-checkbox col-md-1 mb-2">
-                  <input type="checkbox" id="emi" name="emi" value="EMI" onChange={handleEmi} />
-                  <label htmlFor="emi">EMI</label>
-                </div>
-                {Emi && (
-                  <div className="product-details col-md-5">
-                    <input value={formData.emi} type="text" name="emiNo" className="form-control" id="emiNo" placeholder="EMI/Serial Number" />
-                  </div>
-                )}
+              )}
 
             </div>
           </div>

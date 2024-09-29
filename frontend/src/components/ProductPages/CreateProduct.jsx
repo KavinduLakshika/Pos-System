@@ -99,7 +99,7 @@ const CreateProduct = () => {
             </div>
             <div className="product-details col-md-4 mb-2">
               <label htmlFor="">Description</label>
-              <textarea name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
+              <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
             </div>
           </div>
 
