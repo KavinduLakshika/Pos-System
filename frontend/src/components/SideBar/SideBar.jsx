@@ -24,12 +24,21 @@ const Sidebar = () => {
 
     const menuItems = [
         {
-            title: 'Sales',
+            title: 'Sales Invoice',
             icon: <ShoppingCart size={20} />,
             path: '/sales',
             submenus: [
-                { title: 'New Sale', path: '/sales/new' },
+                { title: 'Create Sale Invoice', path: '/sales/new' },
                 { title: 'Sales History', path: '/sales/history' },
+            ]
+        },
+        {
+            title: 'Rental Invoice',
+            icon: <ShoppingCart size={20} />,
+            path: '/sales',
+            submenus: [
+                { title: 'Create Rental Invoice', path: '/Rental/new' },
+                { title: 'Sales History', path: '/Rental/history' },
             ]
         },
         {
