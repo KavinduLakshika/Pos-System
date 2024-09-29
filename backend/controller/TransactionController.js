@@ -44,7 +44,14 @@ const createTransaction = async (req, res) => {
 // Get all transactions
 const getAllTransactions = async (req, res) => {
     try {
-        const transaction = await Transaction.findAll();
+        const transaction = await Transaction.findAll({
+            include: [
+                {
+                    model: Invoice,
+                    as: 'invoice',
+                },
+            ],
+        });
         res.status(200).json(transaction);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -55,7 +62,14 @@ const getAllTransactions = async (req, res) => {
 const getTransactionById = async (req, res) => {
     try {
         const { id } = req.params;
-        const transaction = await Transaction.findByPk(id);
+        const transaction = await Transaction.findByPk(id, {
+            include: [
+                {
+                    model: Invoice,
+                    as: 'invoice',
+                },
+            ],
+        });
         if (!transaction) {
             return res.status(404).json({ message: "Transaction not found" });
         }

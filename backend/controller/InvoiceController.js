@@ -75,32 +75,45 @@ const createInvoice = async (req, res) => {
     }
 };
 
-// Get all invoices
 const getAllInvoice = async (req, res) => {
     try {
-        const invoices = await Invoice.findAll();
+        const invoices = await Invoice.findAll({
+            include: [
+                { model: Product, as: 'product' },
+                { model: Customer, as: 'customer' },
+            ],
+        });
+
         if (invoices.length === 0) {
             return res.status(404).json({ message: "No invoices found" });
         }
+
         res.status(200).json(invoices);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-// Get invoice by id
+// Get invoice by id with customer and product details
 const getInvoiceById = async (req, res) => {
     try {
         const { id } = req.params;
-        const invoice = await Invoice.findByPk(id);
+        const invoice = await Invoice.findByPk(id, {
+            include: [
+                { model: Customer, as: 'customer' },
+                { model: Product, as: 'product' },
+            ],
+        });
+
         if (!invoice) {
             return res.status(404).json({ message: "Invoice not found" });
         }
+
         res.status(200).json(invoice);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-};
+}; 
 
 // Update invoice
 const updateInvoice = async (req, res) => {
