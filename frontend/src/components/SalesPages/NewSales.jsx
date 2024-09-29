@@ -173,7 +173,7 @@ const NewSales = () => {
                 <input onChange={handleChange} value={formData.totalPrice} type="number" onWheel={(e) => e.target.blur()} name="totalPrice" className="form-control" id="totalPrice" placeholder="Total Price" />
               </div>
               <div className="product-details col-md-6 mb-2">
-                <textarea value={formData.productNote} name="productNote" className="form-control" id="productNote" placeholder="Note and Warranty" rows="3"></textarea>
+                <textarea onChange={handleChange} value={formData.productNote} name="productNote" className="form-control" id="productNote" placeholder="Note and Warranty" rows="3"></textarea>
               </div>
               <div className="product-details-checkbox col-md-1 mb-2">
                 <input  type="checkbox" id="emi" name="emi" value="EMI" onChange={handleEmi} />
