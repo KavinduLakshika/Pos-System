@@ -58,6 +58,7 @@ const CustomerList = () => {
 
   return (
     <div>
+      <div className="scrolling-container">
       <h4>Customer List</h4>
 
       <Table
@@ -83,6 +84,7 @@ const CustomerList = () => {
             },
           }} />
       </Modal>
+    </div>
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import SupplierDetails from './SupplierDetails'
-import SupplierPayments from './SupplierPayments'
-import NewStock from './NewStock'
+import SupplierDetails from '../../components/SupplierPages/SupplierDetails'
+import SupplierPayments from '../../components/SupplierPages/SupplierPayments'
+import NewStock from '../../components/SupplierPages/NewStock'
 
 function Supplier() {
   return (

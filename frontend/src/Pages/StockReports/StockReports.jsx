@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route,Routes } from 'react-router-dom'
-import CurrentStock from './CurrentStock'
-import StockHistory from './StockHistory'
+import CurrentStock from '../../components/StockReportPages/CurrentStock'
+import StockHistory from '../../components/StockReportPages/StockHistory'
 
 
 function StockReports() {

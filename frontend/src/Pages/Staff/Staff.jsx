@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Table from '../../components/Table/Table';
-import StaffModal from './StaffModal';
+import StaffModal from '../../Models/StaffModel/StaffModal';
 import config from '../../config';
 
 const Staff = () => {
