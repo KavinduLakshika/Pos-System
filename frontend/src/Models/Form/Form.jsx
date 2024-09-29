@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './Form.css'
+import './Form.css';
+import config from '../../config';
 
 const Form = ({ closeModal }) => {
   const [formData, setFormData] = useState({
@@ -14,27 +15,67 @@ const Form = ({ closeModal }) => {
     workplacePhone: '',
     workplaceAddress: ''
   });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    closeModal(); // Close the modal on submit
+
+    const customerData = {
+      cusTitle: formData.title,
+      cusName: formData.name,
+      cusAddress: formData.address,
+      cusPhone: formData.phone,
+      cusEmail: formData.email,
+      cusNIC: formData.nic,
+      cusCompany: formData.company,
+      cusJob: formData.jobPosition,
+      cusWorkPlaceTP: formData.workplacePhone,
+      cusWorkPlaceAddress: formData.workplaceAddress,
+      cusCode: generateCustomerCode(formData.name),
+      cusCity: 'Unknown',
+    };
+
+    try {
+      const response = await fetch(`${config.BASE_URL}/customer`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(customerData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Customer created:', data);
+        closeModal();
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to create customer:', errorData);
+        alert(errorData.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while creating the customer.');
+    }
+  };
+
+  const generateCustomerCode = (CUS) => {
+    return CUS.substring(0, 3).toUpperCase() + Date.now().toString().slice(-4);
   };
 
   return (
     <div>
       <h2>New Customer</h2>
       <form onSubmit={handleSubmit} className="form-container">
-        <div className="form-gorup-1">
-
+        <div className="form-group-1">
           <div className="form-group-name-flex">
             <div className="form-group-name">
               <label>Title <span>*</span></label>
-              <select name="title" value={formData.title} onChange={handleChange}>
+              <select name="title" value={formData.title} onChange={handleChange} required>
                 <option value="Mr.">Mr.</option>
                 <option value="Mrs.">Mrs.</option>
                 <option value="Ms.">Ms.</option>
@@ -44,12 +85,10 @@ const Form = ({ closeModal }) => {
               <label>Name <span>*</span></label>
               <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter Full Name" required />
             </div>
-
           </div>
-
           <div className="form-group">
             <label>Phone <span>*</span></label>
-            <input type="text" name="phone1" value={formData.phone1} onChange={handleChange} placeholder="Enter Phone" required />
+            <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Enter Phone" required />
           </div>
           <div className="form-group">
             <label>Email</label>
@@ -64,7 +103,6 @@ const Form = ({ closeModal }) => {
             <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Enter Address" />
           </div>
         </div>
-
         <div className="form-group-2">
           <div className="form-group">
             <label>Company</label>
@@ -80,10 +118,8 @@ const Form = ({ closeModal }) => {
           </div>
           <div className="form-group">
             <label>Workplace Address</label>
-            <input type="text" name="workplaceAddress1" value={formData.workplaceAddress} onChange={handleChange} placeholder="Workplace Address" />
+            <input type="text" name="workplaceAddress" value={formData.workplaceAddress} onChange={handleChange} placeholder="Workplace Address" />
           </div>
-
-
           <div className="form-actions">
             <button type="button" onClick={closeModal}>Close</button>
             <button type="submit">Save</button>

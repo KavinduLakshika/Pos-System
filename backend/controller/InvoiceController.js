@@ -8,6 +8,7 @@ const createInvoice = async (req, res) => {
         const {
             invoiceDate,
             invoiceDueDate,
+            invoiceQty,
             paidAmount,
             payableAmount,
             dueAmount,
@@ -20,12 +21,11 @@ const createInvoice = async (req, res) => {
 
         // Validate required fields
         if (!invoiceDate ||
-            !invoiceDueDate ||
+            !invoiceQty ||
             !paidAmount ||
             !payableAmount ||
             !dueAmount ||
             !totalAmount ||
-            !discount ||
             !invoiceNote ||
             !productId ||
             !cusId) {
@@ -48,6 +48,7 @@ const createInvoice = async (req, res) => {
         const newInvoice = await Invoice.create({
             invoiceDate,
             invoiceDueDate,
+            invoiceQty,
             paidAmount,
             payableAmount,
             dueAmount,
@@ -113,7 +114,7 @@ const getInvoiceById = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}; 
+};
 
 // Update invoice
 const updateInvoice = async (req, res) => {
@@ -122,6 +123,7 @@ const updateInvoice = async (req, res) => {
         const {
             invoiceDate,
             invoiceDueDate,
+            invoiceQty,
             paidAmount,
             payableAmount,
             dueAmount,
@@ -150,6 +152,7 @@ const updateInvoice = async (req, res) => {
             await invoice.update({
                 invoiceDate,
                 invoiceDueDate,
+                invoiceQty,
                 paidAmount,
                 payableAmount,
                 dueAmount,

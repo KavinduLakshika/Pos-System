@@ -23,13 +23,7 @@ const createCustomer = async (req, res) => {
             !cusCode ||
             !cusAddress ||
             !cusPhone ||
-            !cusEmail ||
-            !cusNIC ||
-            !cusCity ||
-            !cusJob ||
-            !cusCompany ||
-            !cusWorkPlaceTP ||
-            !cusWorkPlaceAddress
+            !cusNIC
         ) {
             return res.status(400).json({ error: "All fields are required." });
         }
