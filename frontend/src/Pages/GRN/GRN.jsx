@@ -7,7 +7,6 @@ import SearchGRN from '../../components/GRN_Pages/SearchGRN'
 const GRN = () => {
     return (
         <div>
-            
             <Routes>
                 <Route path='create-grn' element={<CreateGRN />} />
                 <Route path='list-grn' element={<ListGRN />} />
