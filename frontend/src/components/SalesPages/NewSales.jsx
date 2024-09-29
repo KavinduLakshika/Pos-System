@@ -141,11 +141,11 @@ const NewSales = () => {
             </div>
             <div className="sales-person">
               <label htmlFor="" id='label'>Invoice Date</label>
-              <input type="date" className="form-control" name="invoiceDate" id="date" />
+              <input type="datetime-local" className="form-control" name="invoiceDate" id="date" />
             </div>
             <div className="sales-person">
               <label htmlFor="" id='label'>Invoice Due Date</label>
-              <input type="date" className="form-control" name="invoiceDate" id="date" />
+              <input type="datetime-local" className="form-control" name="invoiceDate" id="date" />
             </div>
           </div>
 
