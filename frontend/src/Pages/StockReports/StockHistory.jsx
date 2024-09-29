@@ -23,8 +23,9 @@ function StockHistory() {
           search={'Search by Product Name'}
           data={data}
           columns={columns}
-          
-          
+          showButton={false}
+          showDelete={false}
+          // showActions={false}          
         />
         </div>
     </div>
