@@ -17,16 +17,12 @@ const NewSales = () => {
     totalPrice:'',
     productNote:'',
     emi:'',
-    invoiceDate:'',
-    invoiceDueDate:'',
-    totalAmount:'',
-    discountPrice:'',
-    invoiceNote:'',
   });
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData({ ...formData, [name]: value });
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -75,7 +71,7 @@ const NewSales = () => {
   return (
     <div>
       <h2>Sales Invoice</h2>
-      <form action="" className='customer-form' >
+      <form action="" className='customer-form' onSubmit={handleSubmit} >
         <div className="sales-add-form">
           <div className="customer">
             <div className="subCaption">
@@ -169,26 +165,26 @@ const NewSales = () => {
             </div>
             <div className="sales-person">
               <label htmlFor="" id='label'>Invoice Date</label>
-              <input value={formData.invoiceDate} type="datetime-local" className="form-control" name="invoiceDate" id="date" />
+              <input type="datetime-local" className="form-control" name="invoiceDate" id="date" />
             </div>
             <div className="sales-person">
               <label htmlFor="" id='label'>Invoice Due Date</label>
-              <input value={formData.invoiceDueDate} type="datetime-local" className="form-control" name="invoiceDueDate" id="date" />
+              <input type="datetime-local" className="form-control" name="invoiceDueDate" id="date" />
             </div>
           </div>
 
           <div className="amount-box">
             <div className="amount-group">
               <label htmlFor="" id='label'>Total Amount</label>
-              <input value={formData.totalAmount} type="number" className="form-control" name="totalAmount" id="readOnly" readOnly />
+              <input  type="number" className="form-control" name="totalAmount" id="readOnly" readOnly />
             </div>
             <div className="amount-group">
               <label htmlFor="" id='label'>Discount</label>
-              <input value={formData.discountPrice} type="number" className="form-control" name="discountPrice" id="readOnly" readOnly />
+              <input type="number" className="form-control" name="discountPrice" id="readOnly" readOnly />
             </div>
             <div className="amount-group">
               <label htmlFor="" id='label'>Invoice Note</label>
-              <textarea value={formData.invoiceNote} name="invoiceNote" className="form-control" id="invoiceNote" rows={3}/>
+              <textarea name="invoiceNote" className="form-control" id="invoiceNote" rows={3}/>
             </div>
           </div>
         </div>
