@@ -1,6 +1,6 @@
 const Invoice = require("../model/Invoice");
 const Customer = require("../model/Customers");
-const Stock = require("../model/Stock");
+const Product = require("../model/Products");
 
 // Create invoice
 const createInvoice = async (req, res) => {
@@ -14,7 +14,7 @@ const createInvoice = async (req, res) => {
             totalAmount,
             discount,
             invoiceNote,
-            stockId,
+            productId,
             cusId,
         } = req.body;
 
@@ -27,15 +27,15 @@ const createInvoice = async (req, res) => {
             !totalAmount ||
             !discount ||
             !invoiceNote ||
-            !stockId ||
+            !productId ||
             !cusId) {
             return res.status(400).json({ error: "All fields are required." });
         }
 
         // Check if stock exists
-        const stock = await Stock.findByPk(stockId);
-        if (!stock) {
-            return res.status(400).json({ message: 'Invalid stock ID' });
+        const product = await Product.findByPk(productId);
+        if (!product) {
+            return res.status(400).json({ message: 'Invalid product ID' });
         }
 
         // Check if customer exists (fixed issue here)
@@ -54,19 +54,19 @@ const createInvoice = async (req, res) => {
             totalAmount,
             discount,
             invoiceNote,
-            stock_stockId: stockId,
+            products_productId: productId,
             customer_cusId: cusId,
         });
 
-        // Fetch newly created invoice with stock, and customer information
-        const invoiceWithStockAndCustomer = await Invoice.findByPk(newInvoice.invoiceId, {
+        // Fetch newly created invoice with product, and customer information
+        const invoiceWithProductAndCustomer = await Invoice.findByPk(newInvoice.invoiceId, {
             include: [
-                { model: Stock, as: 'stock' },
+                { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
             ],
         });
 
-        res.status(201).json(invoiceWithStockAndCustomer);
+        res.status(201).json(invoiceWithProductAndCustomer);
     } catch (error) {
         if (error.name === "SequelizeValidationError") {
             return res.status(400).json({ error: "Validation error: Please check the provided data." });
@@ -75,32 +75,45 @@ const createInvoice = async (req, res) => {
     }
 };
 
-// Get all invoices
 const getAllInvoice = async (req, res) => {
     try {
-        const invoices = await Invoice.findAll();
+        const invoices = await Invoice.findAll({
+            include: [
+                { model: Product, as: 'product' },
+                { model: Customer, as: 'customer' },
+            ],
+        });
+
         if (invoices.length === 0) {
             return res.status(404).json({ message: "No invoices found" });
         }
+
         res.status(200).json(invoices);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-// Get invoice by id
+// Get invoice by id with customer and product details
 const getInvoiceById = async (req, res) => {
     try {
         const { id } = req.params;
-        const invoice = await Invoice.findByPk(id);
+        const invoice = await Invoice.findByPk(id, {
+            include: [
+                { model: Customer, as: 'customer' },
+                { model: Product, as: 'product' },
+            ],
+        });
+
         if (!invoice) {
             return res.status(404).json({ message: "Invoice not found" });
         }
+
         res.status(200).json(invoice);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-};
+}; 
 
 // Update invoice
 const updateInvoice = async (req, res) => {
@@ -115,7 +128,7 @@ const updateInvoice = async (req, res) => {
             totalAmount,
             discount,
             invoiceNote,
-            stockId,
+            productId,
             cusId,
         } = req.body;
 
@@ -125,10 +138,10 @@ const updateInvoice = async (req, res) => {
             return res.status(400).json({ message: 'Invalid customer ID' });
         }
 
-        if (stockId) {
-            const stock = await Stock.findByPk(stockId);
-            if (!stock) {
-                return res.status(400).json({ message: "Invalid stock ID" });
+        if (productId) {
+            const product = await Product.findByPk(productId);
+            if (!product) {
+                return res.status(400).json({ message: "Invalid product ID" });
             }
         }
 
@@ -143,7 +156,7 @@ const updateInvoice = async (req, res) => {
                 totalAmount,
                 discount,
                 invoiceNote,
-                stock_stockId: stockId,
+                products_productId: productId,
                 customer_cusId: cusId,
             });
             res.status(200).json(invoice);

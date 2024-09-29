@@ -116,7 +116,18 @@ const createExpense = async (req, res) => {
 // Get all expenses
 const getAllExpenses = async (req, res) => {
     try {
-        const expenses = await Expenses.findAll();
+        const expenses = await Expenses.findAll({
+            include: [
+                {
+                    model: ExpensesCat,
+                    as: 'expensesCat'
+                },
+                {
+                    model: User,
+                    as: 'user'
+                },
+            ]
+        });
         res.status(200).json(expenses);
     } catch (error) {
         res.status(500).json({ error: `An error occurred: ${error.message}` });
@@ -127,7 +138,18 @@ const getAllExpenses = async (req, res) => {
 const getExpenseById = async (req, res) => {
     try {
         const { id } = req.params;
-        const expenses = await Expenses.findByPk(id);
+        const expenses = await Expenses.findByPk(id, {
+            include: [
+                {
+                    model: ExpensesCat,
+                    as: 'expensesCat'
+                },
+                {
+                    model: User,
+                    as: 'user'
+                },
+            ]
+        });
 
         if (!expenses) {
             return res.status(404).json({ message: 'Expenses not found' });

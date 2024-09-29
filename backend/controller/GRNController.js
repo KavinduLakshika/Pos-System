@@ -102,7 +102,13 @@ const createGrn = async (req, res) => {
 // Get all GRN
 const getAllGrn = async (req, res) => {
     try {
-        const grn = await GRN.findAll();
+        const grn = await GRN.findAll({
+            include: [
+                { model: Product, as: 'product' },
+                { model: Stock, as: 'stock' },
+                { model: Store, as: 'store' },
+            ],
+        });
         res.status(200).json(grn);
     } catch (error) {
         res.status(500).json({ error: `An error occurred: ${error.message}` });
@@ -113,7 +119,13 @@ const getAllGrn = async (req, res) => {
 const getGrnById = async (req, res) => {
     try {
         const { id } = req.params;
-        const grn = await GRN.findByPk(id);
+        const grn = await GRN.findByPk(id, {
+            include: [
+                { model: Product, as: 'product' },
+                { model: Stock, as: 'stock' },
+                { model: Store, as: 'store' },
+            ],
+        });
 
         if (!grn) {
             return res.status(404).json({ message: 'GRN not found' });

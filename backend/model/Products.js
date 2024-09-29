@@ -38,6 +38,10 @@ const Product = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    productProfit: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
     productDescription: {
       type: DataTypes.STRING,
       allowNull: false,

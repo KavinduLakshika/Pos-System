@@ -48,22 +48,31 @@ const createProduct = async (req, res) => {
                 categoryId
             } = req.body;
 
-            // Validate category
-            const category = await Category.findByPk(categoryId);
-            if (!category) {
-                return res.status(400).json({ message: 'Invalid category ID' });
-            }
-
             // Validate required fields
             if (!productName || !productCode || !productWeight || !productBuyingPrice ||
                 !productSellingPrice || !productWarranty || !productQty || !productDescription) {
                 return res.status(400).json({ error: "All fields are required." });
             }
 
+            // Validate category
+            const category = await Category.findByPk(categoryId);
+            if (!category) {
+                return res.status(400).json({ message: 'Invalid category ID' });
+            }
+
+            // Check if product 
+            const existingProduct = await Product.findOne({ where: { productCode } });
+            if (existingProduct) {
+                return res.status(400).json({ error: "A Product with this code already exists." });
+            }
+
             let productImage = null;
             if (req.file) {
                 productImage = `${req.protocol}://${req.get('host')}/uploads/products/${req.file.filename}`;
             }
+
+            // Calculate profit based on buying and selling prices
+            const productProfit = parseFloat(productSellingPrice) - parseFloat(productBuyingPrice);
 
             const newProduct = await Product.create({
                 productName,
@@ -73,6 +82,7 @@ const createProduct = async (req, res) => {
                 productSellingPrice,
                 productWarranty,
                 productQty,
+                productProfit,
                 productDescription,
                 productImage,
                 productStatus: "In stock",

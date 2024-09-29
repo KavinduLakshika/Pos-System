@@ -56,7 +56,12 @@ const createRentalInvoice = async (req, res) => {
 // Get all rental invoices
 const getAllRentalInvoices = async (req, res) => {
     try {
-        const rentalInvoice = await RentalInvoice.findAll();
+        const rentalInvoice = await RentalInvoice.findAll({
+            include: [
+                { model: Customer, as: 'customer' },
+                { model: Product, as: 'product' },
+            ],
+        });
         res.status(200).json(rentalInvoice);
     } catch (error) {
         res.status(500).json({ error: `An error occurred: ${error.message}` });
@@ -67,7 +72,12 @@ const getAllRentalInvoices = async (req, res) => {
 const getRentalInvoiceById = async (req, res) => {
     try {
         const { id } = req.params;
-        const rentalInvoice = await RentalInvoice.findByPk(id);
+        const rentalInvoice = await RentalInvoice.findByPk(id, {
+            include: [
+                { model: Customer, as: 'customer' },
+                { model: Product, as: 'product' },
+            ],
+        });
 
         if (!rentalInvoice) {
             return res.status(404).json({ message: 'Rental Invoice not found' });

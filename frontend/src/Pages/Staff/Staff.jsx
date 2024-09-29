@@ -5,7 +5,7 @@ import StaffModal from './StaffModal';
 
 const Staff = () => {
 
-  const [data,setData] = useState([["1", "Sales Dep.", "K K Somadasa", "119", "118", "Watapika", "123"]]);
+  const [data, setData] = useState([["1", "Sales Dep.", "K K Somadasa", "119", "118", "Watapika", "123"]]);
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
   const columns = ["#", "Department / Job Position", "Full Name", "Contact 1", "Contact 2", "Address", "Nic"];
@@ -68,7 +68,7 @@ const Staff = () => {
     <div>
       <div>
         <h2>Staff</h2>
-        
+
         <Table
           search={'Search by Name'}
           data={data}
@@ -79,13 +79,13 @@ const Staff = () => {
           onDelete={handleDelete}
         />
         <StaffModal
-        showModal={showModal}
-        closeModal={closeModal}
-        handleSubmit={handleSubmit}
-        editData={editIndex !== null ? data[editIndex] : null}  
-      />
+          showModal={showModal}
+          closeModal={closeModal}
+          handleSubmit={handleSubmit}
+          editData={editIndex !== null ? data[editIndex] : null}
+        />
       </div>
-      
+
     </div>
   )
 }

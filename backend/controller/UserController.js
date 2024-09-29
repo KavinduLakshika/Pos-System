@@ -49,6 +49,7 @@ const createUser = async (req, res) => {
                 userEmail,
                 userNIC,
                 userTP,
+                userSecondTP,
                 userAddress,
                 storeId
             } = req.body;
@@ -100,12 +101,21 @@ const createUser = async (req, res) => {
                 userEmail,
                 userNIC,
                 userTP,
+                userSecondTP,
                 userAddress,
                 userImage,
                 userStatus: "Active",
                 store_storeId: storeId,
             });
 
+            const userWithStore = await Transaction.findByPk(newUser.userId, {
+                include: [
+                    {
+                        model: Store,
+                        as: 'store',
+                    },
+                ],
+            });
             // Generate JWT token
             const token = jwt.sign(
                 {
@@ -118,7 +128,7 @@ const createUser = async (req, res) => {
             );
 
             // Return user data and token
-            res.status(201).json({ newUser, token });
+            res.status(201).json({ userWithStore, token });
         } catch (error) {
             if (error.name === "SequelizeValidationError") {
                 const validationErrors = error.errors.map(err => ({
@@ -140,7 +150,14 @@ const createUser = async (req, res) => {
 // Get all user
 const getAllUsers = async (req, res) => {
     try {
-        const user = await User.findAll();
+        const user = await User.findAll({
+            include: [
+                {
+                    model: Store,
+                    as: 'store',
+                },
+            ],
+        });
         res.status(200).json(user);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -151,7 +168,14 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const { id } = req.params;
-        const user = await User.findByPk(id);
+        const user = await User.findByPk(id, {
+            include: [
+                {
+                    model: Store,
+                    as: 'store',
+                },
+            ],
+        });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -181,6 +205,7 @@ const updateUser = async (req, res) => {
                 userEmail,
                 userNIC,
                 userTP,
+                userSecondTP,
                 userAddress,
                 storeId
             } = req.body;
@@ -218,6 +243,7 @@ const updateUser = async (req, res) => {
                 userEmail,
                 userNIC,
                 userTP,
+                userSecondTP,
                 userAddress,
                 userImage,
                 store_storeId: storeId

@@ -75,16 +75,13 @@ const Table = ({
                 <div className="col-md-12">
                     <table className="table table-hover table-responsive">
                         <thead>
-                            
                             <tr>
                                 {tableColumns.map((item, index) => (
                                     <th key={index}>{item}</th>
                                 ))}
-                                                    {showActions && (
-
-                                <th>Actions</th>
+                                {showActions && (
+                                    <th>Actions</th>
                                 )}
-
                             </tr>
                         </thead>
                         <tbody>

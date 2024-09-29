@@ -74,7 +74,14 @@ const createReturn = async (req, res) => {
 // Get all returns
 const getAllReturns = async (req, res) => {
     try {
-        const returns = await Return.findAll();
+        const returns = await Return.findAll({
+            include: [
+                { model: Product, as: 'products' },
+                { model: Store, as: 'store' },
+                { model: User, as: 'user' },
+                { model: Invoice, as: 'invoice' },
+            ],
+        });
         res.status(200).json(returns);
     } catch (error) {
         res.status(500).json({ error: `An error occurred: ${error.message}` });
@@ -85,7 +92,14 @@ const getAllReturns = async (req, res) => {
 const getReturnById = async (req, res) => {
     try {
         const { id } = req.params;
-        const returns = await Return.findByPk(id);
+        const returns = await Return.findByPk(id, {
+            include: [
+                { model: Product, as: 'products' },
+                { model: Store, as: 'store' },
+                { model: User, as: 'user' },
+                { model: Invoice, as: 'invoice' },
+            ],
+        });
 
         if (returns) {
             res.status(200).json(returns);
