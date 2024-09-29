@@ -40,7 +40,7 @@ const CreateProduct = () => {
       reader.readAsDataURL(file);
     }
   };
-  
+
   return (
     <div>
       <div className="scrolling-container">
@@ -69,52 +69,48 @@ const CreateProduct = () => {
           <div className="row">
             <div className="product-details col-md-4 mb-2">
               <label htmlFor="">Product Name</label>
-              <input type="text" name='name' id='' value={formData.productName} className='form-control' />
+              <input onChange={handleChange} type="text" name='productName' id='' value={formData.productName} className='form-control' />
             </div>
             <div className="product-details col-md-4 mb-2">
               <label htmlFor="">Product Code</label>
-              <input type="text" name='code' id='' value={formData.productCode} className='form-control' />
+              <input onChange={handleChange} type="text" name='productCode' id='' value={formData.productCode} className='form-control' />
             </div>
           </div>
 
           <div className="row">
             <div className="product-details col-md-4 mb-2">
               <label htmlFor="">Selling Price</label>
-              <input type="number" name='sellingPrice' id='' value={formData.sellingPrice} className='form-control' />
+              <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
             </div>
             <div className="product-details col-md-4 mb-2">
               <label htmlFor="">Min price</label>
-              <input type="number" name='minPrice' id='' value={formData.minPrice} className='form-control' />
+              <input onChange={handleChange} type="number" name='minPrice' id='' onWheel={(e) => e.target.blur()} value={formData.minPrice} className='form-control' />
             </div>
           </div>
 
           <div className="row">
             <div className="product-details col-md-4 mb-2">
               <label htmlFor="">Warranty</label>
-              <select name='minPrice' id='' value={formData.minPrice} className='form-control' onChange={handleChange} >
+              <select name='warranty' id='' value={formData.warranty} className='form-control' onChange={handleChange} >
                 <option value="1">No Warranty</option>
                 <option value="1">3 Months</option>
                 <option value="1">6 Months</option>
               </select>
             </div>
             <div className="product-details col-md-4 mb-2">
-              <label htmlFor="">Re-Order Level</label>
-              <input type="number" name='reOrderLevel' id='' value={formData.reOrderLevel} className='form-control' />
+              <label htmlFor="">Description</label>
+              <textarea name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
             </div>
           </div>
 
           <div className="row">
             <div className="product-details col-md-4 mb-2">
-              <label htmlFor="">Description</label>
-              <textarea name='minPrice' id='' value={formData.description} className='form-control' rows={2}></textarea>
-            </div>
-            <div className="product-details col-md-4 mb-2">
               <label htmlFor="">Item Image</label>
-              <input type="file" name='minPrice' id='' accept="image/*" onChange={handleImageChange} className='form-control' />
+              <input type="file" name='image' id='' accept="image/*" onChange={handleImageChange} className='form-control' />
               {preview && (
-              <div style={{ margin: '10px auto' }}>
-                <img src={preview} alt="Preview" style={{ width: '300px', height: 'auto' }} />
-              </div>
+                <div style={{ margin: '10px auto' }}>
+                  <img src={preview} alt="Preview" style={{ width: '300px', height: 'auto' }} />
+                </div>
               )}
             </div>
           </div>

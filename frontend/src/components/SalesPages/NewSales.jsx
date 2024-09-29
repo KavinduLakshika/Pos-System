@@ -19,15 +19,12 @@ const NewSales = () => {
     emi: '',
   });
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    closeModal(); // Close the modal on submit
   };
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -89,11 +86,11 @@ const NewSales = () => {
 
               <div className="customer-details">
                 <label htmlFor="">Customer Name</label>
-                <input value={formData.name} type="text" className="form-control" name="cusName" id="cusName" placeholder="Enter Name" />
+                <input  type="text" className="form-control" value={formData.name} name="name" id="cusName" placeholder="Enter Name" onChange={handleChange} />
               </div>
               <div className="customer-details">
                 <label htmlFor="">Reference No</label>
-                <input value={formData.refNo} type="text" className="form-control" name="refNo" id="refNo" placeholder="Enter No" />
+                <input  value={formData.refNo} type="text" className="form-control" name="refNo" id="refNo" placeholder="Enter No" onChange={handleChange} />
               </div>
             </div>
 
@@ -103,25 +100,25 @@ const NewSales = () => {
               </div>
               <div className="row">
                 <div className="product-details col-md-4 mb-2">
-                  <input value={formData.productNo} type="text" name="productNo" className="form-control" id="productNo" placeholder="Product No" />
+                  <input onChange={handleChange} value={formData.productNo} type="text" name="productNo" className="form-control" id="productNo" placeholder="Product No" />
                 </div>
                 <div className="product-details col-md-8 mb-2">
-                  <input value={formData.productName} type="text" name="productName" className="form-control" id="productName" placeholder="Product Name" />
+                  <input onChange={handleChange} value={formData.productName} type="text" name="productName" className="form-control" id="productName" placeholder="Product Name" />
                 </div>
                 <div className="product-details col-md-3 mb-2">
-                  <input value={formData.productPrice} type="number" name="price" className="form-control" id="price" placeholder="Cash Price" onWheel={(e) => e.target.blur()} />
+                  <input onChange={handleChange} value={formData.productPrice} type="number" name="productPrice" className="form-control" id="price" placeholder="Cash Price" onWheel={(e) => e.target.blur()} />
                 </div>
                 <div className="product-details col-md-3 mb-2">
-                  <input value={formData.qty} type="number" onWheel={(e) => e.target.blur()} name="qty" className="form-control" id="qty" placeholder="Enter Quantity" />
+                  <input onChange={handleChange} value={formData.qty} type="number" onWheel={(e) => e.target.blur()} name="qty" className="form-control" id="qty" placeholder="Enter Quantity" />
                 </div>
                 <div className="product-details col-md-3 mb-2">
-                  <input value={formData.discount} type="number" onWheel={(e) => e.target.blur()} name="discount" className="form-control" id="discount" placeholder="Product Discount" />
+                  <input onChange={handleChange} value={formData.discount} type="number" onWheel={(e) => e.target.blur()} name="discount" className="form-control" id="discount" placeholder="Product Discount" />
                 </div>
                 <div className="product-details col-md-3 mb-2">
-                  <input value={formData.totalPrice} type="number" onWheel={(e) => e.target.blur()} name="totalPrice" className="form-control" id="totalPrice" placeholder="Total Price" />
+                  <input onChange={handleChange} value={formData.totalPrice} type="number" onWheel={(e) => e.target.blur()} name="totalPrice" className="form-control" id="totalPrice" placeholder="Total Price" />
                 </div>
                 <div className="product-details col-md-6 mb-2">
-                  <textarea value={formData.productNote} name="note" className="form-control" id="note" placeholder="Note and Warranty" rows="3"></textarea>
+                  <textarea name="productNote" className="form-control" id="note" placeholder="Note and Warranty" rows="3" value={formData.productNote} onChange={handleChange} ></textarea>
                 </div>
                 <div className="product-details-checkbox col-md-1 mb-2">
                   <input type="checkbox" id="emi" name="emi" value="EMI" onChange={handleEmi} />
@@ -129,7 +126,7 @@ const NewSales = () => {
                 </div>
                 {Emi && (
                   <div className="product-details col-md-5">
-                    <input value={formData.emi} type="text" name="emiNo" className="form-control" id="emiNo" placeholder="EMI/Serial Number" />
+                    <input onChange={handleChange} value={formData.emi} type="text" name="emi" className="form-control" id="emi" placeholder="EMI/Serial Number" />
                   </div>
                 )}
 
