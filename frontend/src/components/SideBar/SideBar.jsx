@@ -61,16 +61,16 @@ const Sidebar = () => {
                 { title: 'Product List', path: '/product/product-list' }
             ]
         },
-        {
-            title: 'GRN',
-            icon: <File size={20} />,
-            path: '/grn',
-            submenus: [
-                { title: 'Create GRN', path: '/grn/create-grn' },
-                { title: 'GRN List', path: '/grn/list-grn' },
-                { title: 'GRN Search', path: '/grn/search-grn' }
-            ]
-        },
+        // {
+        //     title: 'GRN',
+        //     icon: <File size={20} />,
+        //     path: '/grn',
+        //     submenus: [
+        //         { title: 'Create GRN', path: '/grn/create-grn' },
+        //         { title: 'GRN List', path: '/grn/list-grn' },
+        //         { title: 'GRN Search', path: '/grn/search-grn' }
+        //     ]
+        // },
         {
             title: 'Stock',
             icon: <Boxes size={20} />,

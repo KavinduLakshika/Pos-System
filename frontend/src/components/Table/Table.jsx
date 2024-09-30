@@ -74,7 +74,7 @@ const Table = ({
             <div className="mt-2">
                 <div className="col-md-12">
                     <table className="table table-hover table-responsive">
-                        <thead>
+                        <thead >
                             <tr>
                                 {tableColumns.map((item, index) => (
                                     <th key={index}>{item}</th>

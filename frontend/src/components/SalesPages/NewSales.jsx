@@ -200,6 +200,7 @@ const NewSales = () => {
             showSearch={false}
             showButton={false}
             showActions={false}
+            
           />
 
         </div>
