@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import Table from '../Table/Table';
+
 import config from '../../config'
+import Table from "../../components/Table/Table";
 
 const SalesHistory = () => {
   const [data, setData] = useState([]);
