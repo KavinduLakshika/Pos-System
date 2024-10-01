@@ -14,8 +14,8 @@ const Table = ({
     showSearch = true,
     showButton = true,
     showActions = true,
-    showEdit=true,
-    showDelete=true
+    showEdit = true,
+    showDelete = true
 }) => {
 
     const [tableData, setTableData] = useState(data);
@@ -77,10 +77,10 @@ const Table = ({
                         <thead >
                             <tr>
                                 {tableColumns.map((item, index) => (
-                                    <th key={index}>{item}</th>
+                                    <th key={index} style={{ backgroundColor: 'black', color: 'white' }}>{item}</th>
                                 ))}
                                 {showActions && (
-                                    <th>Actions</th>
+                                    <th style={{ backgroundColor: 'black', color: 'white' }}>Actions</th>
                                 )}
                             </tr>
                         </thead>
@@ -93,23 +93,23 @@ const Table = ({
                                     {showActions && (
 
                                         <td>
-                                    {showEdit && (
-                                            <button
-                                                className="btn btn-warning btn-sm mr-3"
-                                                onClick={() => onEdit(rowIndex)}
-                                            >
-                                                <FontAwesomeIcon icon={faPen} />
-                                            </button>
-                                    )}
+                                            {showEdit && (
+                                                <button
+                                                    className="btn btn-warning btn-sm mr-3"
+                                                    onClick={() => onEdit(rowIndex)}
+                                                >
+                                                    <FontAwesomeIcon icon={faPen} />
+                                                </button>
+                                            )}
                                             {' '}
-                                    {showDelete && (
-                                            <button
-                                                className="btn btn-danger btn-sm"
-                                                onClick={() => onDelete(rowIndex)}
-                                            >
-                                                <FontAwesomeIcon icon={faTrash} />
-                                            </button>
-                                    )}
+                                            {showDelete && (
+                                                <button
+                                                    className="btn btn-danger btn-sm"
+                                                    onClick={() => onDelete(rowIndex)}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash} />
+                                                </button>
+                                            )}
                                         </td>
                                     )}
                                 </tr>
