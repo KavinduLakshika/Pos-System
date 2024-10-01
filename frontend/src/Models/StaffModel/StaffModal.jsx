@@ -14,7 +14,7 @@ const StaffModal = ({ showModal, closeModal, handleSubmit, editData }) => {
   useEffect(() => {
     if (editData) {
       setFormData({
-        
+
         department: editData[1],
         fullName: editData[2],
         contact1: editData[3],
@@ -51,34 +51,80 @@ const StaffModal = ({ showModal, closeModal, handleSubmit, editData }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h3 className='mb-3'>{editData ? 'Edit Staff Member' : 'Add New Staff Member'}</h3>
-        <form onSubmit={handleFormSubmit}>
-          <div className="form-group">
-            <label>Department / Job Position</label>
-            <input type="text" name="department" value={formData.department} onChange={handleChange} required />
+        <div class="modal-header">
+          <h3 className='mb-3'>{editData ? 'Edit Staff Member' : 'Add New Staff Member'}</h3>
+          <button class="close-icon" onClick={closeModal}>&times;</button>
+        </div>
+        <form onSubmit={handleFormSubmit} className="form-container">
+          <div className="form-group-1">
+            <div className="form-group-name-flex">
+              <div className="form-group-name">
+                <label>Title <span>*</span></label>
+                <select name="title" value={formData.title} onChange={handleChange} required>
+                  <option value="Mr.">Mr.</option>
+                  <option value="Mrs.">Mrs.</option>
+                  <option value="Ms.">Ms.</option>
+                </select>
+              </div>
+              <div className="form-group-name">
+                <label>Full Name <span>*</span></label>
+                <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter Full Name" required />
+              </div>
+            </div>
+            <div className="form-group-name-flex">
+              <div className='form-group-name'>
+                <label>User Name <span>*</span></label>
+                <input type="text" name="uname" value={formData.uname} onChange={handleChange} placeholder="Enter User Name" required />
+              </div>
+              <div className='form-group-name'>
+                <label>User Type <span>*</span></label>
+                <select name="userType" value={formData.userType} onChange={handleChange} required>
+                  <option value="Admin">Admin</option>
+                  <option value="User">User</option>
+                </select>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Password<span>*</span></label>
+              <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter password" required />
+            </div>
+            <div className="form-group">
+              <label>Confirm Password <span>*</span></label>
+              <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} placeholder="Confirm password" required />
+            </div>
           </div>
-          <div className="form-group">
-            <label>Full Name</label>
-            <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} required />
+          <div className="form-group-2">
+            <div className="form-group">
+              <label>NIC<span>*</span></label>
+              <input type="text" name="nic" value={formData.nic} onChange={handleChange} placeholder="Enter NIC" required />
+            </div>
+            <div className="form-group">
+              <label>Address<span>*</span></label>
+              <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Enter Address" required />
+            </div>
+            <div className="form-group">
+              <label>Email<span>*</span></label>
+              <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email" required />
+            </div>
+            <div className="form-group">
+              <label>Contact Number 1<span>*</span></label>
+              <input type="text" name="tp1" value={formData.tp1} onChange={handleChange} placeholder="Enter Phone Number" required />
+            </div>
+            <div className="form-group">
+              <label>Contact Number 2</label>
+              <input type="text" name="tp2" value={formData.tp2} onChange={handleChange} placeholder="Enter Phone Number" />
+            </div>
+            <div className="form-group">
+              <label>Department<span>*</span></label>
+              <select name="department" value={formData.department} onChange={handleChange} required>
+                <option value="main">Main</option>
+              </select>
+            </div>
+            <div className="form-actions">
+              <button type="button" onClick={closeModal}>Close</button>
+              <button type="submit">Save</button>
+            </div>
           </div>
-          <div className="form-group">
-            <label>Contact 1</label>
-            <input type="text" name="contact1" value={formData.contact1} onChange={handleChange} required />
-          </div>
-          <div className="form-group">
-            <label>Contact 2</label>
-            <input type="text" name="contact2" value={formData.contact2} onChange={handleChange} />
-          </div>
-          <div className="form-group">
-            <label>Address</label>
-            <input type="text" name="address" value={formData.address} onChange={handleChange} required />
-          </div>
-          <div className="form-group">
-            <label>NIC</label>
-            <input type="text" name="nic" value={formData.nic} onChange={handleChange} required />
-          </div>
-          <button type="submit" className="btn btn-primary">Submit</button>
-          <button type="button" className="btn btn-secondary" onClick={closeModal}>Close</button>
         </form>
       </div>
     </div>
