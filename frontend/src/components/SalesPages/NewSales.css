@@ -1,3 +1,4 @@
+
 .sales-add-form {
     display: flex;
     justify-content: space-around;
@@ -6,9 +7,6 @@
 
 .customer {
     border-right: 1px solid #c3c3c3;
-}
-
-.customer {
     padding-right: 40px;
 }
 
@@ -31,7 +29,7 @@
 .customer-details label {
     display: block;
     margin-bottom: 5px;
-    font-size: 15px;
+    font-size: 1rem;
 }
 
 .addCusBtn {
@@ -39,7 +37,7 @@
     border: none;
 }
 
-.payment-form{
+.payment-form {
     margin-bottom: 40px;
 }
 
@@ -56,7 +54,7 @@
     margin: 0 10px;
 }
 
-#readOnly{
+#readOnly {
     background-color: #dedede;
 }
 
@@ -79,7 +77,96 @@
 
 .amount-box,
 .payment-details-box,
-.sales-person-box{
+.sales-person-box {
     width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .sales-add-form {
+        margin: 40px 80px;
+    }
+
+    .customer-details {
+        width: 500px;
+    }
+
+    #label {
+        width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sales-add-form {
+        display: block;
+        margin: 10px 20px;
+    }
+
+    .customer {
+        border-right: none;
+        padding-right: 0;
+    }
+
+    .product {
+        padding-left: 0;
+    }
+
+    .subCaption {
+        font-size: 18px;
+    }
+
+    .customer-details {
+        width: 100%;
+    }
+
+    #label {
+        width: 200px;
+    }
+
+    #readOnly {
+        width: 100%;
+    }
+}
+ 
+@media (max-width: 568px) {
+    .sales-add-form {
+        display: block;
+    }
+
+    .customer {
+        border: none;
+        padding-right: 0;
+    }
+
+    .product {
+        padding-left: 0;
+    }
+
+    .subCaption {
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 16px;
+    }
+
+    .customer-details {
+        width: 100%;
+    }
+
+    .payment-form-group {
+        display: block;
+        padding: 10px;
+    }
+
+    .payment-details-amount input {
+        width: 50px;
+    }
+
+    #label{
+        width: 100%;
+    }
+    .amount-box,
+    .payment-details-box,
+    .sales-person-box {
+        width: 100%;
+    }
 }
 

@@ -128,7 +128,7 @@
 /* Responsive styles */
 @media (max-width: 1920px) {
   .ReactModal__Content {
-    height: 60% !important;
+    height: 70% !important;
   }
 }
 
@@ -152,7 +152,7 @@
   }
   .ReactModal__Content {
     width: 80% !important;
-    height: 70% !important;
+    height: 80% !important;
   }
   
 }
@@ -162,9 +162,9 @@
   }
 }
 
-@media (max-width: 1920px) {
+@media (max-width: 1000px) {
   .ReactModal__Content {
-    height: 60% !important;
+    height: 70% !important;
   }
 }
 
