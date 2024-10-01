@@ -100,9 +100,8 @@ const Staff = () => {
 
   return (
     <div>
-      <div>
-        <h2>Staff</h2>
-
+      <div className="scrolling-container">
+        <h4>Staff</h4>
         <Table
           search={'Search by Name'}
           data={data}
