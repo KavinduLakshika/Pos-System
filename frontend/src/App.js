@@ -17,7 +17,7 @@ import Rental from './Pages/Rental/Rental';
 function App() {
   return (
     <BrowserRouter>
-    <div className="d-flex">
+    <div className="d-flex" >
       <SideBar />
       <main style={{ flexGrow: 1, padding: '20px' }}>
         <Routes>

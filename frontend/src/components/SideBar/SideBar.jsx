@@ -76,9 +76,9 @@ const Sidebar = () => {
             icon: <Boxes size={20} />,
             path: '/stock',
             submenus: [
-                { title: 'Daily Summary', path: '/stock/daily-sum' },
-                { title: 'Financial stock', path: '/stock/financial' },
-                { title: 'Product Performance', path: '/stock/product' }
+                { title: 'Daily Summary', path: '/stock/daily-summary' },
+                
+                 
             ]
         },
         {
