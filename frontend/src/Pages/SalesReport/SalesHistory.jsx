@@ -1,61 +1,29 @@
-import { useEffect, useState } from "react";
+import React  from 'react'
+import Table from '../../components/Table/Table';
 
-import config from '../../config'
-import Table from "../../components/Table/Table";
 
-const SalesHistory = () => {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+function SalesHistory() {
 
-  const columns = ["ID", "Date/time", "Due Date", "Paid Amount", "Payable Amount", "Due Amount", "Total Amount", "Discount", "Invoice Note", "Customer", "Products"];
-
-  const btnName = 'Add New Sale'
-
-  useEffect(() => {
-    fetchSalesHistory();
-  }, []);
-
-  const fetchSalesHistory = async () => {
-    try {
-      const response = await fetch(`${config.BASE_URL}/invoices`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch Sales Invoices');
-      }
-      const invoice = await response.json();
-      const formattedData = invoice.map(invoice => [
-        invoice.invoiceId,
-        invoice.invoiceDate,
-        invoice.invoiceDueDate,
-        invoice.paidAmount,
-        invoice.payableAmount,
-        invoice.dueAmount,
-        invoice.totalAmount,
-        invoice.discount,
-        invoice.invoiceNote,
-        invoice.customer?.cusName || "Unknown",
-        invoice.product?.productName || "Unknown"
-      ]);
-      setData(formattedData);
-      setIsLoading(false);
-    } catch (err) {
-      setError(err.message);
-      setIsLoading(false);
-    }
-  };
+    const columns = ['#','Date & Time','Product Category','Product Name','Size','Customer Name','Customer Nic','Value','Sold Price','Job Done By','Profit/Loss','Note'];
+    const btnName = 'Generate Report';
+    const data = [['1','2024-08-09 10.11AM', 'Gold','Ring','24K','Shiranthi Rajapaksha','123','50 000','80 000','Admin', '30 000','Note']];
 
   return (
     <div>
-      <div className="new-sales-container">
-        <h2>SalesHistory</h2>
+
         <div>
-          <Table
-            data={data}
-            columns={columns}
-            btnName={btnName}
-          />
+            <h2>Sales History Report</h2>
+
+           
+                <Table
+                 search={'Search by Customer Name , Product Name'}
+                 data={data}
+                 columns={columns}
+                 btnName={btnName}/>
+
+
+            
         </div>
-      </div>
     </div>
   )
 }
