@@ -1,17 +1,18 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
-import Table from '../Table/Table'
-import config from '../../config'
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import Table from '../Table/Table';
+import config from '../../config';
+import { useNavigate } from 'react-router-dom';
 
 const ProductList = () => {
-
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const columns = ['id', 'Product', 'Product Code', 'Weight(g)', "Buying Price", 'Selling Price', 'Warranty (moths)', 'Quantity', 'Profit', 'Description', 'Status'];
+  const columns = ['id', 'Product', 'Product Code', 'Weight(g)', 'Buying Price', 'Selling Price', 'Warranty (months)', 'Quantity', 'Profit', 'Description', 'Status'];
+  
+  const btnName = ['Add Product'];
 
-  const btnName=['Add Product']
 
   useEffect(() => {
     fetchProductList();
@@ -45,6 +46,12 @@ const ProductList = () => {
     }
   };
 
+  const navigate = useNavigate(); 
+
+  const handleAddProduct = () => {
+    navigate('/product/create');
+  };
+
   return (
     <div>
       <h4>ProductList</h4>
@@ -52,9 +59,10 @@ const ProductList = () => {
         data={data}
         columns={columns}
         btnName={btnName}
+        onAdd={handleAddProduct}
       />
     </div>
-  )
-}
+  );
+};
 
-export default ProductList
+export default ProductList;
