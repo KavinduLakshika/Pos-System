@@ -1,6 +1,8 @@
 const Invoice = require("../model/Invoice");
 const Customer = require("../model/Customers");
 const Product = require("../model/Products");
+const Transaction = require("../model/Transaction");
+const User = require("../model/User");
 
 // Create invoice
 const createInvoice = async (req, res) => {
@@ -17,6 +19,8 @@ const createInvoice = async (req, res) => {
             invoiceNote,
             productId,
             cusId,
+            transactionId,
+            userId,
         } = req.body;
 
         // Validate required fields
@@ -28,11 +32,13 @@ const createInvoice = async (req, res) => {
             !totalAmount ||
             !invoiceNote ||
             !productId ||
-            !cusId) {
+            !cusId||
+            !transactionId ||
+            !userId) {
             return res.status(400).json({ error: "All fields are required." });
         }
 
-        // Check if stock exists
+        // Check if product exists
         const product = await Product.findByPk(productId);
         if (!product) {
             return res.status(400).json({ message: 'Invalid product ID' });
@@ -42,6 +48,18 @@ const createInvoice = async (req, res) => {
         const customer = await Customer.findByPk(cusId);
         if (!customer) {
             return res.status(400).json({ message: 'Invalid customer ID' });
+        }
+
+        // Check if transaction exists
+        const transaction = await Transaction.findByPk(transactionId);
+        if (!transaction) {
+            return res.status(400).json({ message: 'Invalid transaction ID' });
+        }
+
+        // Check if user exists
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid user ID' });
         }
 
         // Create a new invoice
@@ -57,17 +75,21 @@ const createInvoice = async (req, res) => {
             invoiceNote,
             products_productId: productId,
             customer_cusId: cusId,
+            transaction_transactionId: transactionId,
+            user_userId: userId,
         });
 
-        // Fetch newly created invoice with product, and customer information
-        const invoiceWithProductAndCustomer = await Invoice.findByPk(newInvoice.invoiceId, {
+        // Fetch newly created invoice  information
+        const invoiceDetails = await Invoice.findByPk(newInvoice.invoiceId, {
             include: [
                 { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
+                { model: Transaction, as: 'transaction' },
+                { model: User, as: 'user' },
             ],
         });
 
-        res.status(201).json(invoiceWithProductAndCustomer);
+        res.status(201).json(invoiceDetails);
     } catch (error) {
         if (error.name === "SequelizeValidationError") {
             return res.status(400).json({ error: "Validation error: Please check the provided data." });
@@ -82,6 +104,8 @@ const getAllInvoice = async (req, res) => {
             include: [
                 { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
+                { model: Transaction, as: 'transaction' },
+                { model: User, as: 'user' },
             ],
         });
 
@@ -101,8 +125,10 @@ const getInvoiceById = async (req, res) => {
         const { id } = req.params;
         const invoice = await Invoice.findByPk(id, {
             include: [
-                { model: Customer, as: 'customer' },
                 { model: Product, as: 'product' },
+                { model: Customer, as: 'customer' },
+                { model: Transaction, as: 'transaction' },
+                { model: User, as: 'user' },
             ],
         });
 
@@ -132,9 +158,11 @@ const updateInvoice = async (req, res) => {
             invoiceNote,
             productId,
             cusId,
+            transactionId,
+            userId,
         } = req.body;
 
-        // Check if customer exists (fixed issue here)
+        // Check if customer exists
         const customer = await Customer.findByPk(cusId);
         if (!customer) {
             return res.status(400).json({ message: 'Invalid customer ID' });
@@ -145,6 +173,17 @@ const updateInvoice = async (req, res) => {
             if (!product) {
                 return res.status(400).json({ message: "Invalid product ID" });
             }
+        }
+        // Check if transaction exists
+        const transaction = await Transaction.findByPk(transactionId);
+        if (!transaction) {
+            return res.status(400).json({ message: 'Invalid transaction ID' });
+        }
+
+        // Check if user exists
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid user ID' });
         }
 
         const invoice = await Invoice.findByPk(id);
@@ -161,6 +200,8 @@ const updateInvoice = async (req, res) => {
                 invoiceNote,
                 products_productId: productId,
                 customer_cusId: cusId,
+                transaction_transactionId: transactionId,
+                user_userId: userId,
             });
             res.status(200).json(invoice);
         } else {

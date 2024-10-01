@@ -2,6 +2,8 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../dbConfig");
 const Product = require("./Products");
 const Customer = require("./Customers");
+const Transaction = require("./Transaction");
+const User = require("./User");
 
 const Invoice = sequelize.define(
     "Invoice",
@@ -63,6 +65,22 @@ const Invoice = sequelize.define(
             },
             allowNull: false,
         },
+        transaction_transactionId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: Transaction,
+                key: "transactionId",
+            },
+            allowNull: false,
+        },
+        user_userId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: User,
+                key: "userId",
+            },
+            allowNull: false,
+        },
     },
     {
         tableName: "invoice",
@@ -78,5 +96,12 @@ Invoice.belongsTo(Customer, {
     foreignKey: "customer_cusId",
     as: "customer",
 });
-
+Invoice.belongsTo(Transaction, {
+    foreignKey: "transaction_transactionId",
+    as: "transaction",
+});
+Invoice.belongsTo(User, {
+    foreignKey: "user_userId",
+    as: "user",
+});
 module.exports = Invoice;
