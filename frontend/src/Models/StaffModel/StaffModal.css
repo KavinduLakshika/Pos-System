@@ -1,6 +1,6 @@
 .modal-overlay {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   right: auto;
   bottom: auto;
@@ -12,36 +12,48 @@
   width: 50%;
 }
 
-.modal-header {
+/*image*/
+.photo-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 20px;
+}
+
+.user-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.edit-icon label {
+  cursor: pointer;
+  font-size: 18px;
+  color: #333; /* Edit icon color */
+}
+
+#photo-input {
+  display: none;
+}
+
+/* Form container */
+.form-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding-bottom: 20px;
-}
-
-.modal-header h2 {
-  margin: 0;
-}
-
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 2500px;
-  font-size: 0.9rem;
-}
-.close-icon {
-  background-color: transparent;
-  border: none;
-  font-size: 40px;
-  cursor: pointer;
-  color: #000;
-  padding: 0;
-}
-
-.close-icon:hover {
-  color: #ff0000;
+  gap: 40px;
+  padding: 10px 100px;
 }
 
 /* Form group */
@@ -100,55 +112,145 @@
   outline: none;
 }
 
-.btn {
-  margin-right: 8px;
-  padding: 6px 12px;
-  font-size: 0.85rem;
+/* Form actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 
-@media (max-width: 870px) {
-  .modal-content {
-    width: 75%;
-    max-width: 500px;
+.form-actions button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-actions button[type="submit"] {
+  background-color: #00ff00;
+  color: #222;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.form-actions button[type="button"] {
+  background-color: red;
+  color: white;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* React Modal specific styling */
+.ReactModal__Content {
+  width: 60% !important;
+  height: 80% !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  padding: 20px !important;
+  border-radius: 20px !important;
+}
+
+.ReactModal__Overlay {
+  background-color: rgba(0, 0, 0, 0.426) !important;
+}
+
+/* Responsive styles */
+@media (max-width: 1920px) {
+  .ReactModal__Content {
+    height: 70% !important;
+  }
+}
+
+@media (max-width: 1750px) {
+  .ReactModal__Content {
+    width: 70% !important;
+    height: 70% !important;
+  }
+}
+
+@media (max-width: 1530px) {
+  .ReactModal__Content {
+    width: 80% !important;
+    height: 70% !important;
+  }
+}
+
+@media (max-width: 1370px) {
+  .form-group-2 {
+    width: 400px;
+  }
+  .ReactModal__Content {
+    width: 80% !important;
+    height: 80% !important;
+  }
+}
+@media (max-width: 1100px) {
+  .ReactModal__Content {
+    height: 80% !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .ReactModal__Content {
+    height: 70% !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .form-container {
+    padding: 10px 50px;
   }
 
-  .btn {
-    padding: 5px 20px;
-  }
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 110vw;
-    height: 105vh;
+  .form-group {
+    width: 100%;
   }
 }
 
 @media (max-width: 768px) {
-  .modal-content {
-    width: 95%;
-    max-width: 500px;
+  .modal {
+    width: 70%;
   }
 
-  .btn {
-    padding: 5px 20px;
+  .form-container {
+    flex-direction: column;
+    padding: 10px 30px;
+  }
+
+  .form-group-name-flex {
+    flex-direction: column;
+  }
+
+  .form-actions {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-actions button {
+    margin-left: 0;
+    margin-bottom: 10px;
+    width: 100%;
   }
 }
 
-@media (max-width: 575px) {
-  .modal-content {
-    width: 100%;
-    max-width: 500px;
+@media (max-width: 545px) {
+  .modal {
+    width: 90%;
+    padding: 10px;
   }
 
-  .btn {
+  .form-container {
     padding: 10px 20px;
   }
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
+
+  .form-actions button {
     width: 100%;
-    height: 100%;
+  }
+
+  .ReactModal__Content {
+    width: 90% !important;
+    height: auto !important;
   }
 }
