@@ -46,7 +46,7 @@ const SalesHistory = () => {
   return (
     <div>
       <div className="new-sales-container">
-        <h2>SalesHistory</h2>
+        <h4>SalesHistory</h4>
         <div>
           <Table
             data={data}
