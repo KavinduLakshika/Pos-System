@@ -45,7 +45,7 @@ const RentalHistory = () => {
 
   return (
     <div>
-      <h2>Rental History</h2>
+      <h4>Rental History</h4>
       <div>
         <Table
           data={data}

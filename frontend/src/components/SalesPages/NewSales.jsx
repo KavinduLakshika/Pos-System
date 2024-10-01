@@ -123,7 +123,7 @@ const NewSales = () => {
   return (
     <div>
       <div className="scrolling-container">
-        <h2>Sales Invoice</h2>
+        <h4>Sales Invoice</h4>
         <form action="" onSubmit={handleSubmit} >
           <div className="customer-form">
             <div className="sales-add-form">
