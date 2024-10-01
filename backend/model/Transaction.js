@@ -24,23 +24,10 @@ const Transaction = sequelize.define(
             type: DataTypes.DATE,
             allowNull: false,
         },
-        invoice_invoiceId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Invoice,
-                key: "invoiceId",
-            },
-            allowNull: false,
-        },
     },
     {
         tableName: "transaction",
         timestamps: false,
     }
 );
-Transaction.belongsTo(Invoice, {
-    foreignKey: "invoice_invoiceId",
-    as: "invoice",
-});
-
 module.exports = Transaction;

@@ -7,13 +7,7 @@ const createTransaction = async (req, res) => {
         const {
             price,
             dateTime,
-            invoiceId,
         } = req.body;
-
-        const invoice = await Invoice.findByPk(invoiceId);
-        if (!invoice) {
-            return res.status(400).json({ message: 'Invalid invoice ID' });
-        }
 
         if (!price || !dateTime) {
             return res.status(400).json({ error: "All fields are required." });
@@ -23,19 +17,9 @@ const createTransaction = async (req, res) => {
             transactionType: "cash",
             price,
             dateTime,
-            invoice_invoiceId: invoiceId,
         });
 
-        const transactionWithInvoice = await Transaction.findByPk(newTransaction.transactionId, {
-            include: [
-                {
-                    model: Invoice,
-                    as: 'invoice',
-                },
-            ],
-        });
-
-        res.status(201).json(transactionWithInvoice);
+        res.status(201).json(newTransaction);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -44,14 +28,7 @@ const createTransaction = async (req, res) => {
 // Get all transactions
 const getAllTransactions = async (req, res) => {
     try {
-        const transaction = await Transaction.findAll({
-            include: [
-                {
-                    model: Invoice,
-                    as: 'invoice',
-                },
-            ],
-        });
+        const transaction = await Transaction.findAll();
         res.status(200).json(transaction);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -62,14 +39,7 @@ const getAllTransactions = async (req, res) => {
 const getTransactionById = async (req, res) => {
     try {
         const { id } = req.params;
-        const transaction = await Transaction.findByPk(id, {
-            include: [
-                {
-                    model: Invoice,
-                    as: 'invoice',
-                },
-            ],
-        });
+        const transaction = await Transaction.findByPk(id)
         if (!transaction) {
             return res.status(404).json({ message: "Transaction not found" });
         }
