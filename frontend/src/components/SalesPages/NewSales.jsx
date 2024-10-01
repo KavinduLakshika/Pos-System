@@ -302,8 +302,8 @@ const NewSales = () => {
             </div>
 
             <div className="payment-form-button  d-grid d-md-flex me-md-2 justify-content-end px-5">
-              <button className='btn btn-danger btn-md' >Cancel</button>
-              <button className='btn btn-primary btn-md '>Create invoice</button>
+              <button className='btn btn-danger btn-md mb-2' >Cancel</button>
+              <button className='btn btn-primary btn-md mb-2'>Create invoice</button>
             </div>
           </div>
         </form>

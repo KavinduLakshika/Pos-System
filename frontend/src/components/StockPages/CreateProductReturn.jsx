@@ -113,8 +113,8 @@ const CreateProductReturn = () => {
                         </div>
                     </div>
                     <div className="d-grid d-md-flex me-md-2 justify-content-end px-5">
-                        <button className="btn btn-danger btn-md">Clear</button>
-                        <button className="btn btn-primary btn-md">Proceed</button>
+                        <button className="btn btn-danger btn-md mb-2">Clear</button>
+                        <button className="btn btn-primary btn-md mb-2">Proceed</button>
                     </div>
                 </form>
             </div>
