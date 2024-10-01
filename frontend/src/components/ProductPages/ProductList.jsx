@@ -10,7 +10,7 @@ const ProductList = () => {
   const [error, setError] = useState(null);
 
   const columns = ['id', 'Product', 'Product Code', 'Weight(g)', 'Buying Price', 'Selling Price', 'Warranty (months)', 'Quantity', 'Profit', 'Description', 'Status'];
-  
+
   const btnName = ['Add Product'];
 
 
@@ -46,7 +46,7 @@ const ProductList = () => {
     }
   };
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleAddProduct = () => {
     navigate('/product/create');
@@ -54,13 +54,15 @@ const ProductList = () => {
 
   return (
     <div>
-      <h4>ProductList</h4>
-      <Table
-        data={data}
-        columns={columns}
-        btnName={btnName}
-        onAdd={handleAddProduct}
-      />
+      <div className="scrolling-container">
+        <h4>ProductList</h4>
+        <Table
+          data={data}
+          columns={columns}
+          btnName={btnName}
+          onAdd={handleAddProduct}
+        />
+      </div>
     </div>
   );
 };

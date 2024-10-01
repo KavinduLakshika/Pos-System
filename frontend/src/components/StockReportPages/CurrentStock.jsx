@@ -13,26 +13,24 @@ function CurrentStock() {
   const columns = ['#', 'Category', 'Product Name', 'Product Weight', , 'Quantity', 'Stock Date', 'Description', 'Image', 'Supplier', 'Status'];
   const btnName = '+ New Stock';
 
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
 
   const handleNewStockClick = () => {
-    navigate('/supplier/new-stock'); 
+    navigate('/supplier/new-stock');
   };
 
 
   return (
 
     <div>
-      <div>
-        <h2>Current Stock</h2>
-
+      <div className="scrolling-container">
+        <h4>Current Stock</h4>
         <Table
           search={'Search by Product Name'}
           data={data}
           columns={columns}
           btnName={btnName}
           onAdd={handleNewStockClick}
-
         />
       </div>
     </div>
