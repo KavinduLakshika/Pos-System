@@ -228,11 +228,11 @@ const NewSales = () => {
               <div className="amount-box">
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Total Amount</label>
-                  <input type="number" className="form-control" name="totalAmount" id="readOnly" readOnly />
+                  <input type="number" className="form-control" onWheel={(e) => e.target.blur()} name="totalAmount" id="readOnly" readOnly />
                 </div>
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Discount</label>
-                  <input type="number" className="form-control" name="discountPrice" id="readOnly" readOnly />
+                  <input type="number" className="form-control" onWheel={(e) => e.target.blur()} name="discountPrice" id="readOnly" readOnly />
                 </div>
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Invoice Note</label>
@@ -289,11 +289,11 @@ const NewSales = () => {
               <div className="amount-box">
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Paid Amount</label>
-                  <input className="form-control" type="number" name="totalAmount" id="readOnly" readOnly />
+                  <input className="form-control" type="number" onWheel={(e) => e.target.blur()} name="totalAmount" id="readOnly" readOnly />
                 </div>
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Due Amount</label>
-                  <input className="form-control" type="number" name="discount" id="readOnly" readOnly />
+                  <input className="form-control" type="number" onWheel={(e) => e.target.blur()} name="discount" id="readOnly" readOnly />
                 </div>
                 <div className="amount-group">
                   <label htmlFor="" id='label'>If Credit Sale</label>

@@ -115,11 +115,11 @@ const NewRental = () => {
             <div className="amount-box">
               <div className="amount-group">
                 <label htmlFor="" id='label'>Total Amount</label>
-                <input type="number" className="form-control" name="totalAmount" id="readOnly" readOnly />
+                <input type="number" className="form-control" name="totalAmount" onWheel={(e) => e.target.blur()} id="readOnly" readOnly />
               </div>
               <div className="amount-group">
                 <label htmlFor="" id='label'>Advance Payment</label>
-                <input type="number" className="form-control" name="advance" id="advance" />
+                <input type="number" className="form-control" name="advance" onWheel={(e) => e.target.blur()} id="advance" />
               </div>
               <div className="amount-group">
                 <label htmlFor="" id='label'>Invoice Note</label>

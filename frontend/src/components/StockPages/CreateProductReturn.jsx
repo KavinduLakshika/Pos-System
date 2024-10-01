@@ -45,7 +45,7 @@ const CreateProductReturn = () => {
                             </Modal>
                             <div className="Stock-details">
                                 <label htmlFor="">Invoice Number</label>
-                                <input type="number" className="form-control" name="invoiceNo" id="" placeholder="" />
+                                <input type="number" className="form-control" onWheel={(e) => e.target.blur()} name="invoiceNo" id="" placeholder="" />
                             </div>
                             <div className="Stock-details  mb-2">
                                 <label htmlFor="">Return Type</label>
@@ -89,7 +89,7 @@ const CreateProductReturn = () => {
                             <div className="row">
                                 <div className="Stock-details col-md-4  mb-2">
                                     <label htmlFor="">Quantity</label>
-                                    <input type="number" className="form-control" name="qty" id="" />
+                                    <input type="number" className="form-control" onWheel={(e) => e.target.blur()} name="qty" id="" />
                                 </div>
                                 <div className="Stock-details col-md-4  mb-2">
                                     <label htmlFor="">Note</label>
