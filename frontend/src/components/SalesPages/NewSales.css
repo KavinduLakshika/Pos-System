@@ -103,11 +103,11 @@
 
     .customer {
         border-right: none;
-        padding-right: 0;
+        padding: 10px;
     }
 
     .product {
-        padding-left: 0;
+        padding: 10px;
     }
 
     .subCaption {
@@ -130,15 +130,6 @@
 @media (max-width: 568px) {
     .sales-add-form {
         display: block;
-    }
-
-    .customer {
-        border: none;
-        padding-right: 0;
-    }
-
-    .product {
-        padding-left: 0;
     }
 
     .subCaption {

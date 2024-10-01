@@ -45,14 +45,16 @@ const SalesHistory = () => {
 
   return (
     <div>
-      <div className="new-sales-container">
-        <h4>SalesHistory</h4>
-        <div>
-          <Table
-            data={data}
-            columns={columns}
-            btnName={btnName}
-          />
+      <div className="scrolling-container">
+        <div className="new-sales-container">
+          <h4>SalesHistory</h4>
+          <div>
+            <Table
+              data={data}
+              columns={columns}
+              btnName={btnName}
+            />
+          </div>
         </div>
       </div>
     </div>

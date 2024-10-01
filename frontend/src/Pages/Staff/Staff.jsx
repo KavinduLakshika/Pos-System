@@ -68,6 +68,7 @@ const Staff = () => {
     <div>
       <div>
         <h2>Staff</h2>
+
         <Table
           data={data}
           columns={columns}

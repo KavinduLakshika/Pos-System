@@ -45,15 +45,16 @@ const RentalHistory = () => {
 
   return (
     <div>
-      <h4>Rental History</h4>
-      <div>
-        <Table
-          data={data}
-          columns={columns}
-          btnName={btnName}
-        />
+      <div className="scrolling-container">
+        <h4>Rental History</h4>
+        <div>
+          <Table
+            data={data}
+            columns={columns}
+            btnName={btnName}
+          />
+        </div>
       </div>
-
     </div>
   )
 }

@@ -146,7 +146,7 @@ const Sidebar = () => {
                      }}
                 >
                     <div className="text-center mt-2 p-2">
-                        <h1>Logo</h1>
+                        <h1></h1>
                     </div>
                     <div className="position-sticky pt-3">
                         <ul className="nav flex-column">
@@ -166,7 +166,7 @@ const Sidebar = () => {
                                 <div className="collapse" id={`submenu-${index}`}>
                                     <ul className="nav flex-column ms-3">
                                         {item.submenus.map((submenu, subIndex) => (
-                                            <li key={subIndex} className="nav-item">
+                                            <li key={subIndex} className="nav-item nav-sub">
                                                 <Link to={submenu.path} className="nav-link">{submenu.title}</Link>
                                             </li>
                                         ))}

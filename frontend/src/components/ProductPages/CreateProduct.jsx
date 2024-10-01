@@ -156,8 +156,8 @@ const CreateProduct = () => {
             </select>
           </div> */}
             <div className="sales-addbtn d-grid d-md-flex me-md-2 justify-content-end px-5">
-              <button type='reset' className="btn btn-danger btn-md">Clear</button>
-              <button className="btn btn-primary btn-md">Add Product</button>
+              <button type='reset' className="btn btn-danger btn-md mb-2">Clear</button>
+              <button className="btn btn-primary btn-md mb-2">Add Product</button>
             </div>
           </form>
 

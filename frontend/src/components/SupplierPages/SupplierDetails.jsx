@@ -45,13 +45,15 @@ function SupplierDetails() {
 
   return (
     <div>
-      <h2>Supplier Details</h2>
-      <Table
-        search={'Search by Supplier Name'}
-        data={data}
-        columns={columns}
-        btnName={btnName}
-      />
+      <div className="scrolling-container">
+        <h4>Supplier Details</h4>
+        <Table
+          search={'Search by Supplier Name'}
+          data={data}
+          columns={columns}
+          btnName={btnName}
+        />
+      </div>
     </div>
   );
 }
