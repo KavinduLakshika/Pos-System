@@ -38,6 +38,11 @@
   transform: translateX(-100%);
 }
 
+.nav-sub{
+  background-color: rgba(255, 255, 255, 0.309);
+  border-bottom: 1px solid rgb(187, 187, 187);
+}
+
 @media (max-width: 768px) {
   
   .nav-item {

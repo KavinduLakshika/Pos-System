@@ -166,7 +166,7 @@ const Sidebar = () => {
                                 <div className="collapse" id={`submenu-${index}`}>
                                     <ul className="nav flex-column ms-3">
                                         {item.submenus.map((submenu, subIndex) => (
-                                            <li key={subIndex} className="nav-item">
+                                            <li key={subIndex} className="nav-item nav-sub">
                                                 <Link to={submenu.path} className="nav-link">{submenu.title}</Link>
                                             </li>
                                         ))}
