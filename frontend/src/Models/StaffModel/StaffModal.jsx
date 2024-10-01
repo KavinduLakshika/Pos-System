@@ -14,6 +14,7 @@ const StaffModal = ({ showModal, closeModal, handleSubmit, editData }) => {
   useEffect(() => {
     if (editData) {
       setFormData({
+        
         department: editData[1],
         fullName: editData[2],
         contact1: editData[3],
