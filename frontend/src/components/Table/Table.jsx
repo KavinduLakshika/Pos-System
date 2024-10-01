@@ -4,7 +4,6 @@ import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 
 const Table = ({
-    search,
     data,
     columns,
     onAdd,
@@ -48,11 +47,11 @@ const Table = ({
         <div className="container-fluid p-2">
             <div className="row mb-2">
                 {showSearch && (
-                    <div className="col-md-6">
+                    <div className="col-md-6 mb-3   ">
                         <input
                             type="text"
                             className="form-control"
-                            placeholder={search}
+                            placeholder='Search'
                             value={searchQuery}
                             onChange={(e) => {
                                 setSearchQuery(e.target.value);
@@ -64,7 +63,7 @@ const Table = ({
 
                 {showButton && (
                     <div className="col-md-6 d-flex justify-content-end">
-                        <button className="btn btn-primary" onClick={onAdd}>
+                        <button className="btn btn-info text-white" onClick={onAdd}>
                             {btnName}
                         </button>
                     </div>
