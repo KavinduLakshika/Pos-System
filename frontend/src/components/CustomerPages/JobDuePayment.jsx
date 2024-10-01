@@ -11,7 +11,7 @@ const JobDuePayment = () => {
   return (
     <div>
       <div className="scrolling-container">
-        <h1>JobDuePayment</h1>
+        <h4>JobDuePayment</h4>
         <Table
             data={data}
             columns={Columns}
