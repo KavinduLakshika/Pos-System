@@ -30,11 +30,11 @@ const CreateProductReturn = () => {
                     <div className="row">
                         <div className="customer col-md-4">
                             <div className='row'>
-                                <div className="Stock-details col-md-10">
+                                <div className="Stock-details col-md-10 mb-2">
                                     <label htmlFor="">Customer Name</label>
                                     <input type="text" className="form-control" name="name" id="cusName" placeholder="Enter Name" />
                                 </div>
-                                <button className='addCusBtn col-md-2 bg- mt-4' type="button" onClick={openModal}><PlusSquareIcon size={30} /></button>
+                                <button className='addCusBtn col-md-2 bg- mt-3' type="button" onClick={openModal}><PlusSquareIcon size={30} /></button>
                             </div>
                             <Modal
                                 isOpen={modalIsOpen}
@@ -47,7 +47,7 @@ const CreateProductReturn = () => {
                                 <label htmlFor="">Invoice Number</label>
                                 <input type="number" className="form-control" name="invoiceNo" id="" placeholder="" />
                             </div>
-                            <div className="Stock-details">
+                            <div className="Stock-details  mb-2">
                                 <label htmlFor="">Return Type</label>
                                 <select name="type" id="" className='form-control'>
                                     <option value="">select Type</option>
@@ -55,7 +55,7 @@ const CreateProductReturn = () => {
                                     <option value="Broken">Broken</option>
                                 </select>
                             </div>
-                            <div className="Stock-details">
+                            <div className="Stock-details  mb-2">
                                 <label htmlFor="">Store</label>
                                 <select name="store" id="" className='form-control'>
                                     <option value="">select store</option>
@@ -63,11 +63,11 @@ const CreateProductReturn = () => {
                                     <option value="Sub">Sub</option>
                                 </select>
                             </div>
-                            <div className="Stock-details">
+                            <div className="Stock-details  mb-2">
                                 <label htmlFor="">Return Date</label>
                                 <input type="Date" className="form-control" name="returnDate" id="" />
                             </div>
-                            <div className="Stock-details">
+                            <div className="Stock-details  mb-2">
                                 <label htmlFor="">Note</label>
                                 <textarea className="form-control" name="note" id="" placeholder="Add your note here" rows={3} />
                             </div>
@@ -80,18 +80,18 @@ const CreateProductReturn = () => {
                                     <input type="text" className="form-control" name="productNo" id="" />
                                 </div>
 
-                                <div className="Stock-details col-md-4">
+                                <div className="Stock-details col-md-4  mb-2">
                                     <label htmlFor="">Product Name</label>
                                     <input type="text" className="form-control" name="productName" id="" />
                                 </div>
                             </div>
 
                             <div className="row">
-                                <div className="Stock-details col-md-4">
+                                <div className="Stock-details col-md-4  mb-2">
                                     <label htmlFor="">Quantity</label>
                                     <input type="number" className="form-control" name="qty" id="" />
                                 </div>
-                                <div className="Stock-details col-md-4">
+                                <div className="Stock-details col-md-4  mb-2">
                                     <label htmlFor="">Note</label>
                                     <textarea className="form-control" name="productNote" id="" rows={2} />
                                 </div>
