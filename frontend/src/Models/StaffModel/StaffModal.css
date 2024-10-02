@@ -1,269 +1,90 @@
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(96, 96, 96, 0.226);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  z-index: 1000;
-}
-
 .modal-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  right: auto;
-  bottom: auto;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 20px;
-  border-radius: 20px;
-  width: 50%;
-  box-shadow: 1px 1px 10px rgb(229, 229, 229);
-}
-
-/*image*/
-.photo-container {
-  position: relative;
-  width: 150px;
-  height: 150px;
-  margin: 0 auto 20px;
-}
-
-.user-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid #ddd;
-}
-
-.edit-icon {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background-color: #fff;
-  border-radius: 50%;
-  padding: 5px;
-  cursor: pointer;
-}
-
-.edit-icon label {
-  cursor: pointer;
-  font-size: 18px;
-  color: #333; /* Edit icon color */
-}
-
-#photo-input {
-  display: none;
-}
-
-/* Form container */
-.form-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 40px;
-  padding: 10px 100px;
-}
-
-/* Form group */
-.form-group {
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.form-group input,
-.form-group select {
-  width: 100%;
-  font-size: 15px;
-  padding: 8px 10px;
-  box-sizing: border-box;
-  border-radius: 5px;
-  border: 1px solid rgb(195, 195, 195);
-  outline: none;
-}
-
-.form-group-1 {
-  width: 400px;
-}
-
-.form-group-2 {
-  width: 500px;
-}
-
-/* Form group name flex */
-.form-group-name-flex {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.form-group-name {
-  margin-bottom: 15px;
-}
-
-.form-group-name label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.form-group-name input,
-.form-group-name select {
-  width: 100%;
-  padding: 8px 10px;
-  box-sizing: border-box;
-  border-radius: 5px;
-  border: 1px solid rgb(195, 195, 195);
-  outline: none;
-}
-
-/* Form actions */
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.form-actions button {
-  margin-left: 10px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.form-actions button[type="submit"] {
-  background-color: #00ff00;
-  color: #222;
-  font-size: 17px;
-  font-weight: 600;
-}
-
-.form-actions button[type="button"] {
-  background-color: red;
-  color: white;
-  font-size: 17px;
-  font-weight: 600;
-}
-
-/* React Modal specific styling */
-.ReactModal__Content {
-  width: 60% !important;
-  height: 80% !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  padding: 20px !important;
-  border-radius: 20px !important;
-}
-
-.ReactModal__Overlay {
-  background-color: rgba(0, 0, 0, 0.426) !important;
-}
-
-/* Responsive styles */
-@media (max-width: 1920px) {
-  .ReactModal__Content {
-    height: 70% !important;
-  }
-}
-
-@media (max-width: 1750px) {
-  .ReactModal__Content {
-    width: 70% !important;
-    height: 70% !important;
-  }
-}
-
-@media (max-width: 1530px) {
-  .ReactModal__Content {
-    width: 80% !important;
-    height: 70% !important;
-  }
-}
-
-@media (max-width: 1370px) {
-  .form-group-2 {
-    width: 400px;
-  }
-  .ReactModal__Content {
-    width: 80% !important;
-    height: 80% !important;
-  }
-}
-@media (max-width: 1100px) {
-  .ReactModal__Content {
-    height: 80% !important;
-  }
-}
-
-@media (max-width: 1000px) {
-  .ReactModal__Content {
-    height: 70% !important;
-  }
-}
-
-@media (max-width: 1200px) {
-  .form-container {
-    padding: 10px 50px;
-  }
-
-  .form-group {
-    width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .modal {
-    width: 70%;
-  }
-
-  .form-container {
-    flex-direction: column;
-    padding: 10px 30px;
-  }
-
-  .form-group-name-flex {
-    flex-direction: column;
-  }
-
-  .form-actions {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
     justify-content: center;
-    flex-direction: column;
     align-items: center;
   }
-
-  .form-actions button {
-    margin-left: 0;
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px; 
+  font-size: 0.9rem;
+  }
+  
+  .form-group {
     margin-bottom: 10px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 3px;
+  font-size: 0.85rem;
+  }
+  
+  .form-group input {
     width: 100%;
+    padding: 6px;
+  box-sizing: border-box;
+  font-size: 0.85rem;
   }
-}
+  
+  .btn {
+    margin-right: 8px;
+  padding: 6px 12px; 
+  font-size: 0.85rem;
+  }
+  
+  @media (max-width: 870px) {
+    .modal-content {
+      width: 75%;
+      max-width: 500px; 
+    }
+  
+    .btn {
+      padding: 5px 20px; 
+    }
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 110vw;
+        height: 105vh;
+    }
+  }
 
-@media (max-width: 545px) {
-  .modal {
-    width: 90%;
-    padding: 10px;
+  @media (max-width: 768px) {
+    .modal-content {
+      width: 95%;
+      max-width: 500px; 
+    }
+  
+    .btn {
+      padding: 5px 20px; 
+    }
   }
 
-  .form-container {
-    padding: 10px 20px;
+  @media (max-width: 575px) {
+    .modal-content {
+      width: 100%;
+      max-width: 500px; 
+    }
+  
+    .btn {
+      padding: 10px 20px; 
+    }
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
   }
-
-  .form-actions button {
-    width: 100%;
-  }
-
-  .ReactModal__Content {
-    width: 90% !important;
-    height: auto !important;
-  }
-}
