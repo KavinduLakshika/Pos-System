@@ -109,7 +109,7 @@ const Sidebar = () => {
             submenus: [
                 { title: 'Daily Summary', path: '/sales-reports/daily-summary' },
                 { title: 'Sales History', path: '/sales-reports/sales-history' },
-                
+
             ]
         }, {
             title: 'Stock Reports',
@@ -123,9 +123,9 @@ const Sidebar = () => {
     ];
 
     return (
-      <>
-                <button 
-                    className="toggle-btn d-md-none" 
+        <>
+                <button
+                    className="toggle-btn d-md-none rounded bg-warning"
                     onClick={toggleSidebar}
                     style={{
                         position: 'fixed',
@@ -139,51 +139,51 @@ const Sidebar = () => {
                 >
                     <Menu size={24} />
                 </button>
-                <nav className={`col-md-3 col-lg-2 d-md-block bg-color sidebar ${isCollapsed ? 'collapsed' : ''}`}
-                     style={{
-                         transform: isCollapsed ? 'translateX(-100%)' : 'translateX(0)',
-                         transition: 'transform 0.3s ease-in-out'
-                     }}
-                >
-                    <div className="text-center mt-2 p-2">
-                        <h1></h1>
-                    </div>
-                    <div className="position-sticky pt-3">
-                        <ul className="nav flex-column">
-                    <li className="nav-item">
-                        <Link to={'/'} className="nav-link d-flex align-items-center ">
-                            <span className="me-2"><LayoutDashboard size={20} /></span>
-                            <span className="fs-8 p-2 menu-link d-md-inline">Dashboard</span>
-                        </Link>
-                    </li>
-                    {menuItems.map((item, index) => (
-                        <li key={index} className="nav-item">
-                            <Link to={item.path} className="nav-link d-flex align-items-center" data-bs-toggle={item.submenus && item.submenus.length > 0 ? "collapse" : ""} data-bs-target={`#submenu-${index}`}>
-                                <span className="me-2">{item.icon}</span>
-                                <span className="fs-8 p-2 menu-link d-md-inline">{item.title}</span>
+            <nav className={`col-md-3 col-lg-2 d-md-block bg-color sidebar ${isCollapsed ? 'collapsed' : ''}`}
+                style={{
+                    transform: isCollapsed ? 'translateX(-100%)' : 'translateX(0)',
+                    transition: 'transform 0.3s ease-in-out'
+                }}
+            >
+                <div className="text-center mt-2 p-2">
+                    <h1></h1>
+                </div>
+                <div className="position-sticky pt-3">
+                    <ul className="nav flex-column">
+                        <li className="nav-item">
+                            <Link to={'/'} className="nav-link d-flex align-items-center ">
+                                <span className="me-2"><LayoutDashboard size={20} /></span>
+                                <span className="fs-8 p-2 menu-link d-md-inline">Dashboard</span>
                             </Link>
-                            {item.submenus && item.submenus.length > 0 && (
-                                <div className="collapse" id={`submenu-${index}`}>
-                                    <ul className="nav flex-column ms-3">
-                                        {item.submenus.map((submenu, subIndex) => (
-                                            <li key={subIndex} className="nav-item nav-sub">
-                                                <Link to={submenu.path} className="nav-link">{submenu.title}</Link>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
                         </li>
-                    ))}
-                    <li className="nav-item">
-                        <Link to={'/staff'} className="nav-link d-flex align-items-center ">
-                            <span className="me-2"><User size={20} /></span>
-                            <span className="fs-8 p-2 menu-link d-md-inline">Staff</span>
-                        </Link>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+                        {menuItems.map((item, index) => (
+                            <li key={index} className="nav-item">
+                                <Link to={item.path} className="nav-link d-flex align-items-center" data-bs-toggle={item.submenus && item.submenus.length > 0 ? "collapse" : ""} data-bs-target={`#submenu-${index}`}>
+                                    <span className="me-2">{item.icon}</span>
+                                    <span className="fs-8 p-2 menu-link d-md-inline">{item.title}</span>
+                                </Link>
+                                {item.submenus && item.submenus.length > 0 && (
+                                    <div className="collapse" id={`submenu-${index}`}>
+                                        <ul className="nav flex-column ms-3">
+                                            {item.submenus.map((submenu, subIndex) => (
+                                                <li key={subIndex} className="nav-item nav-sub">
+                                                    <Link to={submenu.path} className="nav-link">{submenu.title}</Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </li>
+                        ))}
+                        <li className="nav-item">
+                            <Link to={'/staff'} className="nav-link d-flex align-items-center ">
+                                <span className="me-2"><User size={20} /></span>
+                                <span className="fs-8 p-2 menu-link d-md-inline">Staff</span>
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </>
     );
 };
