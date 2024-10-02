@@ -19,7 +19,7 @@ function App() {
     <BrowserRouter>
     <div className="d-flex" >
       <SideBar />
-      <main style={{ flexGrow: 1, padding: '20px 10px' }}>
+      <div style={{ flexGrow: 1, margin: '20px 0px' }}>
         <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/sales/*" element={<Sales />} />
@@ -34,7 +34,7 @@ function App() {
         <Route path="/staff" element={<Staff />} />
 
         </Routes>
-        </main>
+        </div>
       </div>
     </BrowserRouter>
   );
