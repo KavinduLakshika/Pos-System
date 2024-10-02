@@ -7,33 +7,28 @@ const RentalHistory = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const columns = ["ID", "Date/time", "Due Date", "Paid Amount", "Payable Amount", "Due Amount", "Total Amount", "Discount", "Invoice Note", "Customer", "Products"];
+  const columns = ["ID", "Date/time", "Total Amount", "Advance Payment ", "Customer", "Products"];
 
   const btnName = 'Add New Sale'
 
   useEffect(() => {
-    fetchSalesHistory();
+    fetchRentalHistory();
   }, []);
 
-  const fetchSalesHistory = async () => {
+  const fetchRentalHistory = async () => {
     try {
-      const response = await fetch(`${config.BASE_URL}/invoices`);
+      const response = await fetch(`${config.BASE_URL}/rentalInvoices`);
       if (!response.ok) {
-        throw new Error('Failed to fetch Sales Invoices');
+        throw new Error('Failed to fetch Rental Invoice');
       }
-      const invoice = await response.json();
-      const formattedData = invoice.map(invoice => [
-        invoice.invoiceId,
-        invoice.invoiceDate,
-        invoice.invoiceDueDate,
-        invoice.paidAmount,
-        invoice.payableAmount,
-        invoice.dueAmount,
-        invoice.totalAmount,
-        invoice.discount,
-        invoice.invoiceNote,
-        invoice.customer?.cusName || "Unknown",
-        invoice.product?.productName || "Unknown"
+      const rentalInvoice = await response.json();
+      const formattedData = rentalInvoice.map(rentalInvoice => [
+        rentalInvoice.rentalInvoiceId,
+        rentalInvoice.rentalInvoiceDate,
+        rentalInvoice.rentalInvoiceTotalAmount,
+        rentalInvoice.rentalInvoiceAdvancePayment,
+        rentalInvoice.customer?.cusName,
+        rentalInvoice.product?.productName,
       ]);
       setData(formattedData);
       setIsLoading(false);

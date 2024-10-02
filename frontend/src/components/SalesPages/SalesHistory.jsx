@@ -7,7 +7,7 @@ const SalesHistory = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const columns = ["ID", "Date/time", "Due Date", "Paid Amount", "Payable Amount", "Due Amount", "Total Amount", "Discount", "Invoice Note", "Customer", "Products"];
+  const columns = ["ID", "Date/time", "Due Date", "Paid Amount", "Payable Amount", "Due Amount", "Total Amount", "Discount", "Customer", "Products"];
 
   const btnName = 'Add New Sale'
 
@@ -31,7 +31,6 @@ const SalesHistory = () => {
         invoice.dueAmount,
         invoice.totalAmount,
         invoice.discount,
-        invoice.invoiceNote,
         invoice.customer?.cusName || "Unknown",
         invoice.product?.productName || "Unknown"
       ]);

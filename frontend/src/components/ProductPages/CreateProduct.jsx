@@ -1,7 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Product.css'
+import config from '../../config';
 
 const CreateProduct = () => {
+
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState('');
 
   const [formData, setFormData] = useState({
     superCategory: 'select',
@@ -9,25 +13,38 @@ const CreateProduct = () => {
     productName: '',
     productCode: '',
     sellingPrice: '',
-    minPrice: '',
+    buyingPrice: '',
+    qty: '',
     warranty: '',
-    reOrderLevel: '',
     description: '',
-    label: '',
+    weight: '',
   });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+
+    const productData = {
+      productName: formData.productName,
+      productCode: formData.productCode,
+      productSellingPrice: formData.sellingPrice,
+      productBuyingPrice: formData.buyingPrice,
+      productDescription: formData.description,
+      productWarranty: formData.warranty,
+      categoryName: formData.productCategory,
+      quantity: formData.qty,
+      weight: formData.weight,
+      image: image,
+    };
+    console.log(productData);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
-
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState('');
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -59,7 +76,7 @@ const CreateProduct = () => {
               </div>
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Product category</label>
-                <select name="producCategory" id="" onChange={handleChange} className="form-control">
+                <select name="productCategory" id="" onChange={handleChange} className="form-control">
                   <option value="1">select</option>
                   <option value="2">procat1</option>
                   <option value="3">procat2</option>
@@ -84,8 +101,18 @@ const CreateProduct = () => {
                 <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
               </div>
               <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Min price</label>
-                <input onChange={handleChange} type="number" name='minPrice' id='' onWheel={(e) => e.target.blur()} value={formData.minPrice} className='form-control' />
+                <label htmlFor="" className='mb-1'>Buying price</label>
+                <input onChange={handleChange} type="number" name='buyingPrice' id='' onWheel={(e) => e.target.blur()} value={formData.buyingPrice} className='form-control' />
+              </div>
+            </div>
+            <div className="row">
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Quantity</label>
+                <input onChange={handleChange} type="number" name='qty' onWheel={(e) => e.target.blur()} id='' value={formData.qty} className='form-control' />
+              </div>
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Weight</label>
+                <input onChange={handleChange} type="number" name='Weight' id='' onWheel={(e) => e.target.blur()} value={formData.buyingPrice} className='form-control' />
               </div>
             </div>
 
@@ -155,7 +182,7 @@ const CreateProduct = () => {
               <option value=""></option>
             </select>
           </div> */}
-            <div className="sales-addbtn d-grid d-md-flex me-md-2 justify-content-end px-5">
+            <div className="sales-add btn d-grid d-md-flex me-md-2 justify-content-end px-5">
               <button type='reset' className="btn btn-danger btn-md mb-2">Clear</button>
               <button className="btn btn-primary btn-md mb-2">Add Product</button>
             </div>
@@ -170,10 +197,9 @@ const CreateProduct = () => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   )
 }
 
-export default CreateProduct
+export default CreateProduct;

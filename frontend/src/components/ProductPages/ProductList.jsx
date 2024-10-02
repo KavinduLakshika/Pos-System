@@ -9,7 +9,7 @@ const ProductList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const columns = ['id', 'Product', 'Product Code', 'Weight(g)', 'Buying Price', 'Selling Price', 'Warranty (months)', 'Quantity', 'Profit', 'Description', 'Status'];
+  const columns = ['id', 'Product', 'Product Code', 'Weight(g/Kg)', 'Buying Price', 'Selling Price', 'Warranty (months)', 'Quantity', 'Profit', 'Description', 'Status'];
 
   const btnName = ['Add Product'];
 
