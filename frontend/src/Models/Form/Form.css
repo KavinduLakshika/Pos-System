@@ -184,7 +184,6 @@
   .form-actions button {
     margin-left: 0;
     margin-bottom: 10px;
-    width: 100%;
   }
 
   .form-group-1 {
@@ -206,13 +205,10 @@
     padding: 10px 0px;
   }
 
-  .form-actions button {
-    width: 100%;
-  }
 
   .ReactModal__Content {
     width: 90% !important;
-    height: 70% !important;
+    height: 50% !important;
   }
 
   .form-group input,
