@@ -8,6 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-y: auto;
   }
   
   .modal-content {
@@ -70,11 +71,17 @@
 .edit-icon label {
   cursor: pointer;
   font-size: 18px;
-  color: #333; /* Edit icon color */
+  color: #333;
 }
 
 #photo-input {
   display: none;
+}
+
+.form-flex{
+  display: flex;
+  gap: 50px;
+  justify-content: space-around;
 }
   @media (max-width: 870px) {
     .modal-content {
@@ -120,5 +127,10 @@
         left: 0;
         width: 100%;
         height: 100%;
+    }
+    .form-flex{
+      display: block;
+      gap: 50px;
+      justify-content: space-around;
     }
   }
