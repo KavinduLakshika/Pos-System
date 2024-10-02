@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, ShoppingCart, User } from 'lucide-react';
 import './NewSales.css';
 import Form from '../../Models/Form/Form';
 import Modal from 'react-modal';
@@ -129,7 +129,8 @@ const NewSales = () => {
             <div className="sales-add-form">
               <div className="customer">
                 <div className="subCaption">
-                  <p>Customer Details</p>
+
+                  <p><User />Customer Details</p>
                   <button className='addCusBtn' type="button" onClick={openModal}><PlusCircle size={30} /></button>
                 </div>
                 <Modal
@@ -152,7 +153,7 @@ const NewSales = () => {
 
               <div className="product">
                 <div className="subCaption">
-                  <p>Product Details</p>
+                  <p><ShoppingCart /> Product Details</p>
                 </div>
                 <div className="row">
                   <div className="product-details col-md-4 mb-2">
