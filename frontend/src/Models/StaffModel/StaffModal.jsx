@@ -55,7 +55,19 @@ const StaffModal = ({ showModal, closeModal, handleSubmit, editData }) => {
   };
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    handleSubmit(formData);
+    const staffData = {
+      userTitle: formData.title,
+      userFullName: formData.fullName,
+      userName: formData.userName,
+      userType: formData.userType,
+      userPassword: formData.password,
+      userEmail: formData.email,
+      userNIC: formData.nic,
+      userAddress: formData.userAddress,
+      userTP: formData.contact1,
+      userSecondTP: formData.contact2,
+      store: formData.department,
+    };
   };
 
   const handlePhotoChange = (e) => {
