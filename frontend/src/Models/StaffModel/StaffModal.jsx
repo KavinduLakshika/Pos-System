@@ -77,7 +77,7 @@ const StaffModal = ({ showModal, closeModal, handleSubmit, editData }) => {
       <h3 className='mb-3'>{editData ? 'Edit Staff Member' : 'Add New Staff Member'}</h3>
       <div className="photo-container">
         <img
-          src={formData.photo || 'https://www.flaticon.com/free-icon/user_149071'}
+          src={formData.photo || 'https://via.placeholder.com/150'}
           alt="User"
           className="user-photo"
         />
