@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Form.css';
 import config from '../../config';
 
-const Form = ({ closeModal }) => {
+const Form = ({ closeModal, onSave, cus }) => {
+  const [formErrors, setFormErrors] = useState({});
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     title: 'Mr.',
     name: '',
@@ -16,13 +18,74 @@ const Form = ({ closeModal }) => {
     workplaceAddress: ''
   });
 
+  // UseEffect to populate the form with customer data if editing
+  useEffect(() => {
+    if (cus) {
+      setFormData({
+        title: cus.cusTitle || 'Mr.',
+        name: cus.cusName || '',
+        phone: cus.cusPhone || '',
+        email: cus.cusEmail || '',
+        nic: cus.cusNIC || '',
+        address: cus.cusAddress || '',
+        company: cus.cusCompany || '',
+        jobPosition: cus.cusJob || '',
+        workplacePhone: cus.cusWorkPlaceTP || '',
+        workplaceAddress: cus.cusWorkPlaceAddress || '',
+      });
+    }
+  }, [cus]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    // Remove error message when user starts correcting the input
+    if (formErrors[name]) {
+      setFormErrors({ ...formErrors, [name]: '' });
+    }
+  };
+
+  // Validation function
+  const validate = () => {
+    const errors = {};
+
+    if (!formData.name.trim()) {
+      errors.name = 'Name is required.';
+    }
+
+    if (!formData.phone.trim()) {
+      errors.phone = 'Phone number is required.';
+    } else if (!/^\d{10}$/.test(formData.phone.trim())) {
+      errors.phone = 'Phone number must be 10 digits.';
+    }
+
+    if (formData.email && !/^\S+@\S+\.\S+$/.test(formData.email.trim())) {
+      errors.email = 'Email is invalid.';
+    }
+
+    if (formData.nic && !/^\d{9}[VvXx]$/.test(formData.nic.trim())) {
+      errors.nic = 'NIC format is invalid. Example: 123456789V';
+    }
+
+    if (!formData.address.trim()) {
+      errors.address = 'Address is required.';
+    }
+
+    if (formData.workplacePhone && !/^\d{10}$/.test(formData.workplacePhone.trim())) {
+      errors.workplacePhone = 'Workplace phone must be 10 digits.';
+    }
+
+    return errors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
 
     const customerData = {
       cusTitle: formData.title,
@@ -40,8 +103,13 @@ const Form = ({ closeModal }) => {
     };
 
     try {
-      const response = await fetch(`${config.BASE_URL}/customer`, {
-        method: 'POST',
+      const url = cus
+        ? `${config.BASE_URL}/customer/${cus.cusId}`
+        : `${config.BASE_URL}/customer`;
+      const method = cus ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -50,26 +118,29 @@ const Form = ({ closeModal }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Customer created:', data);
+        console.log(cus ? 'Customer updated:' : 'Customer created:', data);
+        setError(cus ? 'Successfully Updated!' : 'Successfully Created!');
+        onSave();
         closeModal();
       } else {
         const errorData = await response.json();
-        console.error('Failed to create customer:', errorData);
-        alert(errorData.error);
+        console.error('Failed to save customer:', errorData);
+        setError(errorData.error);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while creating the customer.');
+      setError('An error occurred while saving the customer.');
     }
   };
 
-  const generateCustomerCode = (CUS) => {
-    return CUS.substring(0, 3).toUpperCase() + Date.now().toString().slice(-4);
+  const generateCustomerCode = (name) => {
+    return name.substring(0, 3).toUpperCase() + Date.now().toString().slice(-4);
   };
 
   return (
     <div>
-      <h2>New Customer</h2>
+      <h2>{cus ? 'Edit Customer' : 'New Customer'}</h2>
+      {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit} className="form-container">
         <div className="form-group-1">
           <div className="form-group-name-flex">
@@ -82,25 +153,73 @@ const Form = ({ closeModal }) => {
               </select>
             </div>
             <div className="form-group-name">
-              <label>Name <span>*</span></label>
-              <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter Full Name" required />
+              <label htmlFor="name">Name <span>*</span></label>
+              <input
+                id="name"
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Enter Full Name"
+                required
+                aria-describedby={formErrors.name ? 'name-error' : undefined}
+              />
+              {formErrors.name && <span id="name-error" className="error-text">{formErrors.name}</span>}
             </div>
           </div>
           <div className="form-group">
-            <label>Phone <span>*</span></label>
-            <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Enter Phone" required />
+            <label htmlFor="phone">Phone <span>*</span></label>
+            <input
+              id="phone"
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="Enter Phone"
+              required
+              aria-describedby={formErrors.phone ? 'phone-error' : undefined}
+            />
+            {formErrors.phone && <span id="phone-error" className="error-text">{formErrors.phone}</span>}
           </div>
           <div className="form-group">
-            <label>Email</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter Email" />
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter Email"
+              aria-describedby={formErrors.email ? 'email-error' : undefined}
+            />
+            {formErrors.email && <span id="email-error" className="error-text">{formErrors.email}</span>}
           </div>
           <div className="form-group">
-            <label>NIC</label>
-            <input type="text" name="nic" value={formData.nic} onChange={handleChange} placeholder="Enter NIC" />
+            <label htmlFor="nic">NIC</label>
+            <input
+              id="nic"
+              type="text"
+              name="nic"
+              value={formData.nic}
+              onChange={handleChange}
+              placeholder="Enter NIC"
+              aria-describedby={formErrors.nic ? 'nic-error' : undefined}
+            />
+            {formErrors.nic && <span id="nic-error" className="error-text">{formErrors.nic}</span>}
           </div>
           <div className="form-group">
-            <label>Address</label>
-            <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Enter Address" />
+            <label htmlFor="address">Address <span>*</span></label>
+            <input
+              id="address"
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              placeholder="Enter Address"
+              required
+              aria-describedby={formErrors.address ? 'address-error' : undefined}
+            />
+            {formErrors.address && <span id="address-error" className="error-text">{formErrors.address}</span>}
           </div>
         </div>
         <div className="form-group-2">
@@ -114,7 +233,15 @@ const Form = ({ closeModal }) => {
           </div>
           <div className="form-group">
             <label>Workplace Phone</label>
-            <input type="text" name="workplacePhone" value={formData.workplacePhone} onChange={handleChange} placeholder="Enter Office Phone" />
+            <input
+              type="text"
+              name="workplacePhone"
+              value={formData.workplacePhone}
+              onChange={handleChange}
+              placeholder="Enter Office Phone"
+              aria-describedby={formErrors.workplacePhone ? 'workplacePhone-error' : undefined}
+            />
+            {formErrors.workplacePhone && <span id="workplacePhone-error" className="error-text">{formErrors.workplacePhone}</span>}
           </div>
           <div className="form-group">
             <label>Workplace Address</label>
@@ -122,7 +249,7 @@ const Form = ({ closeModal }) => {
           </div>
           <div className="form-actions">
             <button type="button" onClick={closeModal}>Close</button>
-            <button type="submit">Save</button>
+            <button type="submit">{cus ? 'Update' : 'Save Changes'}</button>
           </div>
         </div>
       </form>
