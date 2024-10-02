@@ -112,7 +112,7 @@ const CreateProduct = () => {
               </div>
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Weight</label>
-                <input onChange={handleChange} type="number" name='Weight' id='' onWheel={(e) => e.target.blur()} value={formData.buyingPrice} className='form-control' />
+                <input onChange={handleChange} type="number" name='weight' id='' onWheel={(e) => e.target.blur()} value={formData.weight} className='form-control' />
               </div>
             </div>
 
