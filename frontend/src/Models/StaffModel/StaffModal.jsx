@@ -73,6 +73,7 @@ const StaffModal = ({ showModal, closeModal, handleSubmit, editData }) => {
 
 
   return (
+    <div class="overlay">
     <div className="modal-overlay">
       <h3 className='mb-3'>{editData ? 'Edit Staff Member' : 'Add New Staff Member'}</h3>
       <div className="photo-container">
@@ -161,6 +162,7 @@ const StaffModal = ({ showModal, closeModal, handleSubmit, editData }) => {
           </div>
         </div>
       </form>
+    </div>
     </div>
   );
 };
