@@ -32,7 +32,7 @@ const Product = sequelize.define(
     },
     productWarranty: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     productQty: {
       type: DataTypes.INTEGER,
@@ -44,15 +44,15 @@ const Product = sequelize.define(
     },
     productEmi: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     productDescription: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     productImage: {
-      type: DataTypes.BLOB,
-      allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     productStatus: {
       type: DataTypes.STRING,

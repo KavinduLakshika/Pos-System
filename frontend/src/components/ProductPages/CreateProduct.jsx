@@ -3,10 +3,10 @@ import './Product.css'
 import config from '../../config';
 
 const CreateProduct = () => {
-
+  const [products, setProducts] = useState([]);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState('');
-
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     superCategory: 'select',
     productCategory: 'select',
@@ -18,25 +18,83 @@ const CreateProduct = () => {
     warranty: '',
     description: '',
     weight: '',
+    image: '',
   });
 
-  const handleSubmit = (e) => {
+  //product Category
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${config.BASE_URL}/categories`);
+        if (response.ok) {
+          const data = await response.json();
+          setCategories(data);
+        } else {
+          console.error('Failed to fetch categories');
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  //product list
+  useEffect(() => {
+    fetch(`${config.BASE_URL}/products`)
+      .then(response => response.json())
+      .then(data => {
+        setProducts(data);
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
 
-    const productData = {
-      productName: formData.productName,
-      productCode: formData.productCode,
-      productSellingPrice: formData.sellingPrice,
-      productBuyingPrice: formData.buyingPrice,
-      productDescription: formData.description,
-      productWarranty: formData.warranty,
-      categoryName: formData.productCategory,
-      quantity: formData.qty,
-      weight: formData.weight,
-      image: image,
-    };
-    console.log(productData);
+    const formDataToSend = new FormData();
+
+    // Append all text fields
+    formDataToSend.append('productName', formData.productName);
+    formDataToSend.append('productCode', formData.productCode);
+    formDataToSend.append('productSellingPrice', formData.sellingPrice);
+    formDataToSend.append('productBuyingPrice', formData.buyingPrice);
+    formDataToSend.append('productDescription', formData.description);
+    formDataToSend.append('productWarranty', formData.warranty);
+    formDataToSend.append('categoryId', formData.productCategory);
+    formDataToSend.append('productQty', formData.qty);
+    formDataToSend.append('productWeight', formData.weight);
+
+    // Append the image file
+    if (image) {
+      formDataToSend.append('productImage', image);
+    }
+
+    console.log('FormData content:', formDataToSend);
+
+    try {
+      const response = await fetch(`${config.BASE_URL}/product`, {
+        method: 'POST',
+        body: formDataToSend,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Product created:', data);
+        alert('Create Product successfully');
+      } else {
+        const errorData = await response.json();
+        console.error('Failed to create product:', errorData);
+        alert(errorData.error || 'Failed to create product');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while creating the product.');
+    }
   };
 
   const handleChange = (e) => {
@@ -56,6 +114,11 @@ const CreateProduct = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+  const handleReset = () => {
+    setFormData(FormData);
+    setImage(null);
+    setPreview('');
   };
 
   return (
@@ -77,9 +140,12 @@ const CreateProduct = () => {
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Product category</label>
                 <select name="productCategory" id="" onChange={handleChange} className="form-control">
-                  <option value="1">select</option>
-                  <option value="2">procat1</option>
-                  <option value="3">procat2</option>
+                  <option value="select">Select Product Category</option>
+                  {categories.map((category) => (
+                    <option key={category.categoryId} value={category.categoryId}>
+                      {category.categoryName}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -176,25 +242,24 @@ const CreateProduct = () => {
                 )}
               </div>
             </div>
-            {/* <div className="product-details">
-            <label htmlFor="">Product Name</label>
-            <select name="" id="">
-              <option value=""></option>
-            </select>
-          </div> */}
             <div className="sales-add btn d-grid d-md-flex me-md-2 justify-content-end px-5">
-              <button type='reset' className="btn btn-danger btn-md mb-2">Clear</button>
+              <button type='reset' className="btn btn-danger btn-md mb-2" onReset={handleReset}>Clear</button>
               <button className="btn btn-primary btn-md mb-2">Add Product</button>
             </div>
           </form>
 
-          {/*show product*/}
           <div className="showProduct col-md-4">
             <h4>Products</h4>
-            <div className="showProduct-group">
-              <p>Product name</p>
-              <p>product category</p>
-            </div>
+            {products.length > 0 ? (
+              products.map(product => (
+                <div key={product.productId} className="showProduct-group">
+                  <p>{product.productName}</p>
+                  <p>{product.category ? product.category.categoryName : 'No Category'}</p>
+                </div>
+              ))
+            ) : (
+              <p>No products available</p>
+            )}
           </div>
         </div>
       </div>
