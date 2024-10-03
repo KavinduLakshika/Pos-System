@@ -133,6 +133,7 @@ const Form = ({ closeModal, onSave, cus }) => {
     }
   };
 
+
   const generateCustomerCode = (name) => {
     return name.substring(0, 3).toUpperCase() + Date.now().toString().slice(-4);
   };

@@ -46,6 +46,43 @@ const ProductList = () => {
     }
   };
 
+  const handleDelete = async (rowIndex) => {
+    try {
+      const productId = data[rowIndex][0];
+      const response = await fetch(`${config.BASE_URL}/product/${productId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete Product');
+      }
+
+      setData(prevData => prevData.filter((_, index) => index !== rowIndex));
+      fetchProductList();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleEdit = (rowIndex) => {
+    const selectedProdData = data[rowIndex];
+    const selectedProd = {
+      productId: selectedProdData[0],
+      productName: selectedProdData[1],
+      productCode: selectedProdData[2],
+      productWeight: selectedProdData[3],
+      productBuyingPrice: selectedProdData[4],
+      productSellingPrice: selectedProdData[5],
+      productWarranty: selectedProdData[6],
+      productQty: selectedProdData[7],
+      productProfit: selectedProdData[8],
+      productDescription: selectedProdData[9],
+      productStatus: selectedProdData[10],
+    };
+
+    navigate('/product/create', { state: { selectedProd } });
+  };
+
   const navigate = useNavigate();
 
   const handleAddProduct = () => {
@@ -66,6 +103,8 @@ const ProductList = () => {
             columns={columns}
             btnName={btnName}
             onAdd={handleAddProduct}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
           />
         )}
       </div>

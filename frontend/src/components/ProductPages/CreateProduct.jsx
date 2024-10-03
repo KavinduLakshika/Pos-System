@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import './Product.css'
 import config from '../../config';
+import { useLocation } from 'react-router-dom';
 
 const CreateProduct = () => {
+  const location = useLocation();
+  const selectedProd = location.state?.selectedProd;
   const [products, setProducts] = useState([]);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState('');
@@ -20,6 +23,23 @@ const CreateProduct = () => {
     weight: '',
     image: '',
   });
+
+  useEffect(() => {
+    if (selectedProd) {
+      setFormData({
+        productCategory: selectedProd.productCategory || 'select',
+        productName: selectedProd.productName || '',
+        productCode: selectedProd.productCode || '',
+        sellingPrice: selectedProd.productSellingPrice || '',
+        buyingPrice: selectedProd.productBuyingPrice || '',
+        qty: selectedProd.productQty || '',
+        warranty: selectedProd.productWarranty || '',
+        description: selectedProd.productDescription || '',
+        weight: selectedProd.productWeight || '',
+        image: '',
+      });
+    }
+  }, [selectedProd]);
 
   //product Category
   useEffect(() => {
@@ -54,7 +74,6 @@ const CreateProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
     const formDataToSend = new FormData();
 
@@ -74,29 +93,27 @@ const CreateProduct = () => {
       formDataToSend.append('productImage', image);
     }
 
-    console.log('FormData content:', formDataToSend);
-
     try {
-      const response = await fetch(`${config.BASE_URL}/product`, {
-        method: 'POST',
+      const url = selectedProd ? `${config.BASE_URL}/product/${selectedProd.productId}` : `${config.BASE_URL}/product`;
+      const method = selectedProd ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
         body: formDataToSend,
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Product created:', data);
-        alert('Create Product successfully');
+        alert(`${selectedProd ? 'Product updated' : 'Product created'} successfully`);
       } else {
         const errorData = await response.json();
-        console.error('Failed to create product:', errorData);
-        alert(errorData.error || 'Failed to create product');
+        alert(errorData.error || `Failed to ${selectedProd ? 'update' : 'create'} product`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while creating the product.');
+      alert('An error occurred while processing the product.');
     }
   };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -116,7 +133,19 @@ const CreateProduct = () => {
     }
   };
   const handleReset = () => {
-    setFormData(FormData);
+    setFormData({
+      superCategory: 'select',
+      productCategory: 'select',
+      productName: '',
+      productCode: '',
+      sellingPrice: '',
+      buyingPrice: '',
+      qty: '',
+      warranty: '',
+      description: '',
+      weight: '',
+      image: '',
+    });
     setImage(null);
     setPreview('');
   };
@@ -124,8 +153,7 @@ const CreateProduct = () => {
   return (
     <div>
       <div className="scrolling-container">
-        <h4>Add Product</h4>
-     
+        <h4>{selectedProd ? 'Edit Product' : 'Add Product'}</h4>
         <div className="row">
           <form action="" className='col-md-8 product-form' onSubmit={handleSubmit}>
             <div className="row">
@@ -244,7 +272,7 @@ const CreateProduct = () => {
             </div>
             <div className="sales-add btn d-grid d-md-flex me-md-2 justify-content-end px-5">
               <button type='reset' className="btn btn-danger btn-md mb-2" onReset={handleReset}>Clear</button>
-              <button className="btn btn-primary btn-md mb-2">Add Product</button>
+              <button className="btn btn-primary btn-md mb-2">{selectedProd ? 'Update Product' : 'Add Product'}</button>
             </div>
           </form>
 
