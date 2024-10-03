@@ -5,10 +5,10 @@ import StaffModal from '../../Models/StaffModel/StaffModal';
 
 const Staff = () => {
 
-  const [data, setData] = useState([["1", "Sales Dep.", "K K Somadasa", "119", "118", "Watapika", "123"]]);
+  const [data, setData] = useState([["1", "Sales Dep.", "K K Somadasa","Email", "119", "118", "Watapika", "123","Username","Password","Status"]]);
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
-  const columns = ["#", "Department / Job Position", "Full Name", "Contact 1", "Contact 2", "Address", "Nic"];
+  const columns = ["#", "Department / Job Position", "Full Name","Email@", "Contact 1", "Contact 2", "Address", "Nic","Username","Password","Status"];
   const btnName = 'Add New Staff Member';
 
   const handleAddNewStaff = () => {

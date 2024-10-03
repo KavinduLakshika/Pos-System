@@ -142,9 +142,15 @@ const NewSales = () => {
                 </Modal>
 
                 <div className="customer-details">
+                  <label htmlFor="">Customer Nic</label>
+                  <input onChange={handleChange} value={formData.nic} type="text" className="form-control" name="nic" id="cusNic" placeholder="Enter Nic" />
+                </div>
+
+                <div className="customer-details">
                   <label htmlFor="">Customer Name</label>
                   <input onChange={handleChange} value={formData.name} type="text" className="form-control" name="name" id="cusName" placeholder="Enter Name" />
                 </div>
+
                 <div className="customer-details">
                   <label htmlFor="">Reference No</label>
                   <input onChange={handleChange} value={formData.refNo} type="text" className="form-control" name="refNo" id="refNo" placeholder="Enter No" />
