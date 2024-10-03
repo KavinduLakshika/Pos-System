@@ -7,12 +7,11 @@ const Staff = () => {
 
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedStaff, setSelectedStaff] = useState(null);
 
-
-  const columns = ["#", "Department / Job Position", "Full Name", "User Type", "User Name", "Contact 1", "Contact 2", "Address", "Nic", "Status"];
+  const columns = ["#", "Title", "Department / Job Position", "Full Name", "User Type", "User Name", "Email", "Contact 1", "Contact 2", "Address", "Nic", "Status"];
   const btnName = 'Add New Staff Member';
 
   useEffect(() => {
@@ -23,15 +22,17 @@ const Staff = () => {
     try {
       const response = await fetch(`${config.BASE_URL}/users`);
       if (!response.ok) {
-        throw new Error('Failed to fetch product list');
+        throw new Error('Failed to fetch user list');
       }
       const user = await response.json();
       const formattedData = user.map(user => [
         user.userId,
+        user.userTitle,
         user.store?.storeName || "unknown",
         user.userFullName,
-        user.userType, 
+        user.userType,
         user.userName,
+        user.userEmail,
         user.userTP,
         user.userSecondTP,
         user.userAddress,
@@ -46,57 +47,49 @@ const Staff = () => {
     }
   };
 
-  const handleAddNewStaff = () => {
-    setEditIndex(null);
-    setShowModal(true);
+  const handleDelete = async (rowIndex) => {
+    try {
+      const userId = data[rowIndex][0];
+      const response = await fetch(`${config.BASE_URL}/user/${userId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete user');
+      }
+
+      setData(prevData => prevData.filter((_, index) => index !== rowIndex));
+      fetchStaff();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
+  const handleAddNewStaff = () => {
+    setSelectedStaff(null); 
+    setShowModal(true);
+  };
 
   const closeModal = () => {
     setShowModal(false);
   };
 
-
-  const handleSubmit = (formData) => {
-    if (editIndex === null) {
-
-      const newStaff = [
-        (data.length + 1).toString(),
-        formData.department,
-        formData.fullName,
-        formData.contact1,
-        formData.contact2,
-        formData.address,
-        formData.nic
-      ];
-      setData([...data, newStaff]);
-    } else {
-
-      const updatedData = [...data];
-      updatedData[editIndex] = [
-        data[editIndex][0],
-        formData.department,
-        formData.fullName,
-        formData.contact1,
-        formData.contact2,
-        formData.address,
-        formData.nic
-      ];
-      setData(updatedData);
-    }
-    setShowModal(false);
-  };
-
-
-  const handleEdit = (index) => {
-    setEditIndex(index);
+  const handleEdit = (rowIndex) => {
+    const selectedStaffData = data[rowIndex];
+    setSelectedStaff({
+      userId: selectedStaffData[0],
+      title:selectedStaffData[1],
+      department: selectedStaffData[2],
+      fullName: selectedStaffData[3],
+      userType: selectedStaffData[4],  
+      userName: selectedStaffData[5],
+      email: selectedStaffData[6],
+      contact1: selectedStaffData[7],
+      contact2: selectedStaffData[8],
+      address: selectedStaffData[9],
+      nic: selectedStaffData[10]
+    });
     setShowModal(true);
-  };
-
-
-  const handleDelete = (index) => {
-    const updatedData = data.filter((_, i) => i !== index);
-    setData(updatedData);
   };
 
   return (
@@ -120,12 +113,12 @@ const Staff = () => {
         <StaffModal
           showModal={showModal}
           closeModal={closeModal}
-          handleSubmit={handleSubmit}
-          editData={editIndex !== null ? data[editIndex] : null}
+          onSave={fetchStaff}
+          staff={selectedStaff}
         />
       </div>
     </div>
   )
 }
 
-export default Staff
+export default Staff;

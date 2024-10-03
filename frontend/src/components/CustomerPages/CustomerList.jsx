@@ -56,7 +56,7 @@ const CustomerList = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete room');
+        throw new Error('Failed to delete customer');
       }
 
       setData(prevData => prevData.filter((_, index) => index !== rowIndex));
