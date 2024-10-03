@@ -35,7 +35,7 @@ function CardTwo({ JanTotal, FebTotal, MarTotal, AprTotal, JunTotal }) {
   }, [JanTotal, FebTotal, MarTotal, AprTotal, JunTotal]);
 
   return (
-    <div className="card h-100">
+    <div className="card h-100 me-3">
       <div className="card-header">Total Sales Earnings Over Time</div>
       <div className="card-body">
         <canvas ref={chartRef}></canvas>
