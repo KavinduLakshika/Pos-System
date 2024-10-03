@@ -13,6 +13,9 @@ const Dashboard = () => {
   const ThisMonthTotal = 'Rs. 10,000';
   const LastMonthTotal = 'Rs. 10,000';
 
+  const todayTotalSales ='5';
+  const monthTotalSales = '40';
+
   //card two line chart 
   const JanTotal = 65;
   const FebTotal = 59;
@@ -42,6 +45,8 @@ const Dashboard = () => {
               YesterdayTotal={YesterdayTotal}
               ThisMonthTotal={ThisMonthTotal}
               LastMonthTotal={LastMonthTotal}
+              todayTotalSales={todayTotalSales}
+              monthTotalSales={monthTotalSales}
             />
           </div>
         </div>
