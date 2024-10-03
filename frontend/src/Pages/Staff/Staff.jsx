@@ -29,10 +29,13 @@ const Staff = () => {
         (data.length + 1).toString(),
         formData.department,
         formData.fullName,
+        formData.email,
         formData.contact1,
         formData.contact2,
         formData.address,
-        formData.nic
+        formData.nic,
+        formData.userName,
+        formData.password
       ];
       setData([...data, newStaff]);
     } else {
@@ -42,10 +45,13 @@ const Staff = () => {
         data[editIndex][0],
         formData.department,
         formData.fullName,
+        formData.email,
         formData.contact1,
         formData.contact2,
         formData.address,
-        formData.nic
+        formData.nic,
+        formData.userName,
+        formData.password
       ];
       setData(updatedData);
     }

@@ -162,10 +162,7 @@ const StaffModal = ({ showModal, closeModal, handleSubmit, editData }) => {
                 <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Enter Password" />
               </div>
 
-              <div className="form-group">
-                <label>Status</label>
-                <input type="status" name="status" value={formData.status} onChange={handleChange} placeholder="Select Status" />
-              </div>
+              
 
 
 
