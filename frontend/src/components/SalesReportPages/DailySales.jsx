@@ -1,6 +1,6 @@
 import React from 'react'
 import Table from '../Table/Table';
-
+import { useNavigate } from 'react-router-dom';
 
 function DailySales() {
 
@@ -8,6 +8,11 @@ function DailySales() {
   const btnName = '+ New Sale';
   const data = [['1', '2024-08-09 10.11AM', 'Gold', 'Ring', '24K', 'Shiranthi Rajapaksha', '123', '50 000', '80 000', 'Admin', '30 000', 'Note']];
 
+  const navigate = useNavigate();
+
+  const handleNewSale = () => {
+    navigate('/sales/new');
+  }
   return (
     <div>
       <div className="scrolling-container">
@@ -16,7 +21,9 @@ function DailySales() {
           search={'Search by Customer Name , Product Name'}
           data={data}
           columns={columns}
-          btnName={btnName} />
+          btnName={btnName}
+          onAdd={handleNewSale}
+        />
       </div>
     </div>
   )

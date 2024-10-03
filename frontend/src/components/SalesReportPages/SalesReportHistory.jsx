@@ -1,8 +1,7 @@
 import React from 'react'
 import Table from '../Table/Table';
 
-
-function SalesHistory() {
+const SalesHistory = () => {
 
   const columns = ['#', 'Date & Time', 'Product Category', 'Product Name', 'Size', 'Customer Name', 'Customer Nic', 'Value', 'Sold Price', 'Job Done By', 'Profit/Loss', 'Note'];
   const btnName = 'Generate Report';
@@ -16,7 +15,8 @@ function SalesHistory() {
           search={'Search by Customer Name , Product Name'}
           data={data}
           columns={columns}
-          btnName={btnName} />
+          btnName={btnName}
+        />
       </div>
     </div>
   )
