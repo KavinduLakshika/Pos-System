@@ -7,7 +7,7 @@ function SupplierDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const columns = ['#', 'Supplier Name', 'Supplier Address', 'NIC', 'Email', 'Contact 1', 'Contact 2', 'Status'];
+  const columns = ['#', 'Supplier Name', 'Supplier Address', 'NIC', 'Email', 'Contact 1', 'Contact 2', 'Paid', 'Balance', 'Payment Date', 'Status'];
 
   const btnName = ' + New Supplier ';
 
@@ -33,13 +33,38 @@ function SupplierDetails() {
         supplier.supplierPaid,
         supplier.supplierBalance,
         supplier.supplierPaymentDate,
-        supplier.supplierStatus,
+        <select
+          className='form-control'
+          value={supplier.supplierStatus}
+          onChange={(e) => handleStatusChange(supplier.supplierId, e.target.value)}
+        >
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
       ]);
       setData(formattedData);
       setIsLoading(false);
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
+    }
+  };
+  const handleStatusChange = async (supplierId, newStatus) => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/supplier/${supplierId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ supplierStatus: newStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update supplier status');
+      }
+      fetchSuppliers();
+    } catch (error) {
+      setError(error.message);
     }
   };
 
