@@ -37,7 +37,14 @@ const Staff = () => {
         user.userSecondTP,
         user.userAddress,
         user.userNIC,
-        user.userStatus,
+        <select
+          className='form-control'
+          value={user.userStatus}
+          onChange={(e) => handleStatusChange(user.userId, e.target.value)}
+        >
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
       ]);
       setData(formattedData);
       setIsLoading(false);
@@ -46,6 +53,26 @@ const Staff = () => {
       setIsLoading(false);
     }
   };
+
+  const handleStatusChange = async (userId, newStatus) => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/user/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userStatus: newStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update user status');
+      }
+      fetchStaff();
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
 
   const handleDelete = async (rowIndex) => {
     try {
@@ -66,7 +93,7 @@ const Staff = () => {
   };
 
   const handleAddNewStaff = () => {
-    setSelectedStaff(null); 
+    setSelectedStaff(null);
     setShowModal(true);
   };
 
@@ -78,10 +105,10 @@ const Staff = () => {
     const selectedStaffData = data[rowIndex];
     setSelectedStaff({
       userId: selectedStaffData[0],
-      title:selectedStaffData[1],
+      title: selectedStaffData[1],
       department: selectedStaffData[2],
       fullName: selectedStaffData[3],
-      userType: selectedStaffData[4],  
+      userType: selectedStaffData[4],
       userName: selectedStaffData[5],
       email: selectedStaffData[6],
       contact1: selectedStaffData[7],
