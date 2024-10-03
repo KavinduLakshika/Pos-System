@@ -2,25 +2,28 @@ import React from 'react';
 
 function CardOne({ TodayTotal, YesterdayTotal, ThisMonthTotal, LastMonthTotal }) {
   return (
-    <div className="card">
+    <div className="card h-100">
       <div className="card-header">Total Sales Earnings</div>
       <div className="card-body">
-        <div className="earnings-grid">
-          <div className="earning-item">
-            <h5>Today</h5>
-            <p>{TodayTotal}</p>
+        <div className="row">
+          <div className="col-6">
+            <h5 className="card-title">Today</h5>
+            <p className="card-text">{TodayTotal}</p>
           </div>
-          <div className="earning-item">
-            <h5>This Month</h5>
-            <p>{ThisMonthTotal}</p>
+          <div className="col-6">
+            <h5 className="card-title">This Month</h5>
+            <p className="card-text">{ThisMonthTotal}</p>
           </div>
-          <div className="earning-item">
-            <h5>Yesterday</h5>
-            <p>{YesterdayTotal}</p>
+        </div>
+        <br />
+        <div className="row">
+          <div className="col-6">
+            <h5 className="card-title">Yesterday</h5>
+            <p className="card-text">{YesterdayTotal}</p>
           </div>
-          <div className="earning-item">
-            <h5>Last Month</h5>
-            <p>{LastMonthTotal}</p>
+          <div className="col-6">
+            <h5 className="card-title">Last Month</h5>
+            <p className="card-text">{LastMonthTotal}</p>
           </div>
         </div>
       </div>

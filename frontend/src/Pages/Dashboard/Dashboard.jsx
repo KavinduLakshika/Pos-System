@@ -1,5 +1,5 @@
 import React from 'react';
-import './Dashboard.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import CardOne from './CardOne';
 import CardTwo from './CardTwo';
 
@@ -17,27 +17,33 @@ const Dashboard = () => {
   const JunTotal = 55;
 
   return (
-    <div className="dashboard-container">
-      <h1 className="dashboard-title">Dashboard</h1>
+    <div className="container-fluid my-4">
+      <h1 className="h2 mb-4">Dashboard</h1>
 
-      <div className="grid-container">
-        <div className="card-item">
-          <CardOne 
-            TodayTotal={TodayTotal}
-            YesterdayTotal={YesterdayTotal}
-            ThisMonthTotal={ThisMonthTotal}
-            LastMonthTotal={LastMonthTotal}
-          />
+      <div className="row">
+        <div className="col-lg-3 col-md-12 mb-4">
+          {/* CardOne takes up 3 columns on large screens, full width on small */}
+          <div className="h-100">
+            <CardOne
+              TodayTotal={TodayTotal}
+              YesterdayTotal={YesterdayTotal}
+              ThisMonthTotal={ThisMonthTotal}
+              LastMonthTotal={LastMonthTotal}
+            />
+          </div>
         </div>
 
-        <div className="card-item-wide">
-          <CardTwo 
-            JanTotal={JanTotal}
-            FebTotal={FebTotal}
-            MarTotal={MarTotal}
-            AprTotal={AprTotal}
-            JunTotal={JunTotal}
-          />
+        <div className="col-lg-9 col-md-12 mb-4">
+          {/* CardTwo takes up 9 columns on large screens, full width on small */}
+          <div className="h-100">
+            <CardTwo
+              JanTotal={JanTotal}
+              FebTotal={FebTotal}
+              MarTotal={MarTotal}
+              AprTotal={AprTotal}
+              JunTotal={JunTotal}
+            />
+          </div>
         </div>
       </div>
     </div>
