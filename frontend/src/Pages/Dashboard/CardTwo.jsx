@@ -1,12 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import './Dashboard.css';
 
-function CardTwo({JanTotal, FebTotal, MarTotal, AprTotal, JunTotal}) {
-
-    const chartRef = useRef(null); 
+function CardTwo({ JanTotal, FebTotal, MarTotal, AprTotal, JunTotal }) {
+    const chartRef = useRef(null);
 
     useEffect(() => {
-        
         const data = {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','September','October','November','December'],
             datasets: [
@@ -33,12 +31,12 @@ function CardTwo({JanTotal, FebTotal, MarTotal, AprTotal, JunTotal}) {
             ],
         };
 
-        // Create the chart
-        const myChart = new window.Chart(chartRef.current, {
+        const config = {
             type: 'line',
             data: data,
             options: {
                 responsive: true,
+                maintainAspectRatio: false, // Allow the chart to scale properly
                 plugins: {
                     legend: {
                         position: 'top',
@@ -49,24 +47,23 @@ function CardTwo({JanTotal, FebTotal, MarTotal, AprTotal, JunTotal}) {
                     },
                 },
             },
-        });
+        };
 
-        
+        // Create the chart
+        const myChart = new window.Chart(chartRef.current, config);
+
+        // Cleanup function to destroy the chart instance when component unmounts
         return () => {
             myChart.destroy();
         };
-    }, []);
+    }, [JanTotal, FebTotal, MarTotal, AprTotal, JunTotal]);
 
     return (
-        <div>
-            <div>
-                <div className="card bg-light mb-3 rounded-lg shadow-md relative cardTwo">
-                    <div className="card-header">Total Sales Earnings Over Time</div>
-                    <div className="row">
-                        <div className="col">
-                            <canvas ref={chartRef}></canvas> 
-                        </div>
-                    </div>
+        <div className="chart-container card bg-light mb-3 rounded-lg shadow-md relative cardTwo" > 
+            <div className="card-header">Total Sales Earnings Over Time</div>
+            <div className="row">
+                <div className="col">
+                    <canvas ref={chartRef}></canvas>
                 </div>
             </div>
         </div>
