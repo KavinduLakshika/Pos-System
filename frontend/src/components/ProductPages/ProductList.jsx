@@ -56,12 +56,18 @@ const ProductList = () => {
     <div>
       <div className="scrolling-container">
         <h4>ProductList</h4>
-        <Table
-          data={data}
-          columns={columns}
-          btnName={btnName}
-          onAdd={handleAddProduct}
-        />
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : (
+          <Table
+            data={data}
+            columns={columns}
+            btnName={btnName}
+            onAdd={handleAddProduct}
+          />
+        )}
       </div>
     </div>
   );

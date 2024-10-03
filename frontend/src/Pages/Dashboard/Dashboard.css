@@ -1,0 +1,15 @@
+.cardOne{
+    width: 400px;
+}
+
+.cardTwo{
+    width: 600px;
+}
+
+.cardTwo {
+    padding: 20px;
+}
+
+.card {
+    height: 350px; /* Set a height for the card */
+}

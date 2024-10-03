@@ -125,7 +125,7 @@ const CreateProduct = () => {
     <div>
       <div className="scrolling-container">
         <h4>Add Product</h4>
-
+     
         <div className="row">
           <form action="" className='col-md-8 product-form' onSubmit={handleSubmit}>
             <div className="row">

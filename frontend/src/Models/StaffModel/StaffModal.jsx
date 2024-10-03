@@ -4,14 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import config from '../../config';
 
-const StaffModal = ({ showModal, closeModal, staff }) => {
+const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
   const [image, setImage] = useState(null);
   const [stores, setStores] = useState([]);
+  const [error, setError] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
 
   const [formData, setFormData] = useState({
-    title: '',
+    title: '-Select Title-',
     fullName: '',
-    userType: '',
+    userType: '-Select Title-',
     userName: '',
     email: '',
     password: '',
@@ -23,9 +25,27 @@ const StaffModal = ({ showModal, closeModal, staff }) => {
     photo: ''
   });
 
-  // Fetch stores
   useEffect(() => {
-    const fetchStores = async () => {
+    if (staff) {
+      setFormData({
+        title: staff.title || '-Select Title-',
+        fullName: staff.fullName || '',
+        userType: staff.userType || '-Select Type-',
+        userName: staff.userName || '',
+        email: staff.email || '',
+        password: '',
+        nic: staff.nic || '',
+        address: staff.address || '',
+        contact1: staff.contact1 || '',
+        contact2: staff.contact2 || '',
+        department: staff.department || '',
+        photo: staff.photo || ''
+      });
+    }
+  }, [staff]);
+
+  useEffect(() => {
+    const fetchStore = async () => {
       try {
         const response = await fetch(`${config.BASE_URL}/stores`);
         if (response.ok) {
@@ -39,8 +59,54 @@ const StaffModal = ({ showModal, closeModal, staff }) => {
       }
     };
 
-    fetchStores();
+    fetchStore();
   }, []);
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formDataToSend = new FormData();
+
+      // Append form data
+      formDataToSend.append('userTitle', formData.title);
+      formDataToSend.append('userFullName', formData.fullName);
+      formDataToSend.append('userName', formData.userName);
+      formDataToSend.append('userPassword', formData.password);
+      formDataToSend.append('userType', formData.userType);
+      formDataToSend.append('userEmail', formData.email);
+      formDataToSend.append('userNIC', formData.nic);
+      formDataToSend.append('userTP', formData.contact1);
+      formDataToSend.append('userSecondTP', formData.contact2 || null);
+      formDataToSend.append('userAddress', formData.address);
+      formDataToSend.append('storeId', formData.department);
+
+      // Append image if exists
+      if (image) {
+        formDataToSend.append('userImage', image);
+      }
+
+
+
+      const response = await fetch(`${config.BASE_URL}/user${staff ? `/${staff.userId}` : ''}`, {
+        method: staff ? 'PUT' : 'POST',
+        body: formDataToSend
+      });
+
+      if (response.ok) {
+        setError(staff ? 'Successfully Updated!' : 'Successfully Created!');
+        onSave();
+        closeModal();
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to create user');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('An error occurred while saving the customer.');
+    }
+  };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,6 +114,10 @@ const StaffModal = ({ showModal, closeModal, staff }) => {
       ...prevFormData,
       [name]: value
     }));
+
+    if (formErrors[name]) {
+      setFormErrors({ ...formErrors, [name]: '' });
+    }
   };
 
   const handlePhotoChange = (e) => {
@@ -62,55 +132,13 @@ const StaffModal = ({ showModal, closeModal, staff }) => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formDataToSend = new FormData();
-    formDataToSend.append('userTitle', formData.title);
-    formDataToSend.append('userFullName', formData.fullName);
-    formDataToSend.append('userType', formData.userType);
-    formDataToSend.append('userName', formData.userName);
-    formDataToSend.append('userEmail', formData.email);
-    formDataToSend.append('userNIC', formData.nic);
-    formDataToSend.append('userAddress', formData.address);
-    formDataToSend.append('userTP', formData.contact1);
-    formDataToSend.append('userSecondTP', formData.contact2);
-    formDataToSend.append('storeId', formData.department);
-
-    if (formData.password) {
-      formDataToSend.append('userPassword', formData.password);
-    }
-
-    if (image) {
-      formDataToSend.append('userImage', image);
-    }
-
-    try {
-      const response = await fetch(`${config.BASE_URL}/user`, {
-        method: 'POST',
-        body: formDataToSend,
-      });
-      if (response.ok) {
-        const data = await response.json();
-        console.log('User created:', data);
-        alert('Create User successfully');
-      } else {
-        const errorData = await response.json();
-        console.error('Failed to create User:', errorData);
-        alert(errorData.error || 'Failed to create User');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred while creating the User.');
-    }
-  };
-
   if (!showModal) return null;
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h3 className="mb-3">{staff ? 'Edit Staff Member' : 'Add New Staff Member'}</h3>
+        <h2>{staff ? 'Edit User' : 'New User'}</h2>
+        {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <div className="photo-container">
@@ -139,6 +167,7 @@ const StaffModal = ({ showModal, closeModal, staff }) => {
               <div className="form-group">
                 <label>Title <span>*</span></label>
                 <select name="title" value={formData.title} onChange={handleChange} required>
+                  <option value="select">-select title-</option>
                   <option value="Mr.">Mr.</option>
                   <option value="Mrs.">Mrs.</option>
                   <option value="Ms.">Ms.</option>
@@ -147,6 +176,7 @@ const StaffModal = ({ showModal, closeModal, staff }) => {
               <div className="form-group">
                 <label>Department / Job Position</label>
                 <select name="department" id=""
+                  value={formData.department || ''}
                   onChange={handleChange}
                   className="form-control"
                   required
@@ -207,6 +237,7 @@ const StaffModal = ({ showModal, closeModal, staff }) => {
               <div className="form-group-name">
                 <label>User Type <span>*</span></label>
                 <select name="userType" value={formData.userType} onChange={handleChange} required>
+                  <option value="select">-Select Type-</option>
                   <option value="Admin">Admin</option>
                   <option value="User">User</option>
                 </select>
@@ -251,7 +282,7 @@ const StaffModal = ({ showModal, closeModal, staff }) => {
                 />
               </div>
               <div className="form-group mt-4">
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">{staff ? 'Update' : 'Save Changes'}</button>
                 <button type="button" className="btn btn-danger" onClick={closeModal}>Close</button>
               </div>
             </div>
