@@ -47,12 +47,18 @@ function SupplierDetails() {
     <div>
       <div className="scrolling-container">
         <h4>Supplier Details</h4>
-        <Table
-          search={'Search by Supplier Name'}
-          data={data}
-          columns={columns}
-          btnName={btnName}
-        />
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : (
+          <Table
+            search={'Search by Supplier Name'}
+            data={data}
+            columns={columns}
+            btnName={btnName}
+          />
+        )}
       </div>
     </div>
   );

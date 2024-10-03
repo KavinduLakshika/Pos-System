@@ -1,33 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Table from '../Table/Table'
+import config from '../../config';
 
 const ReturnedProductList = () => {
-    const [data,] = useState([
-    ]);
-    const Columns = ["id", 'No', 'Retun Date', 'Customer', 'Store', 'Total Item', 'handle by', 'Item Info'];
+    const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const Columns = ["id", 'Return Type', 'Return Date', 'Product', 'Store', 'handle by', 'Invoice id'];
     const btnName = 'Create Return item';
-    
+
     const navigate = useNavigate();
 
-    const handleCreateRetun = () => {
+    const handleCreateReturn = () => {
         navigate('/stock/create');
     };
 
+    useEffect(() => {
+        fetchReturn();
+    }, []);
+
+    const fetchReturn = async () => {
+        try {
+            const response = await fetch(`${config.BASE_URL}/returns`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch return list');
+            }
+            const returns = await response.json();
+            const formattedData = returns.map(returns => [
+                returns.returnItemId,
+                returns.returnItemType,
+                returns.returnItemDate,
+                returns.products?.productName,
+                returns.store?.storeName,
+                returns.user?.userName,
+                returns.invoice?.invoiceId,
+            ]);
+            setData(formattedData);
+            setIsLoading(false);
+        } catch (err) {
+            setError(err.message);
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div>
             <div className="scrolling-container">
                 <h4>Returned Product List</h4>
-                <div className="">
-                    <Table
-                        data={data}
-                        columns={Columns}
-                        btnName={btnName}
-                        onAdd={handleCreateRetun}
-                        showActions={false}
-                    />
-                </div>
+                {isLoading ? (
+                    <p>Loading...</p>
+                ) : error ? (
+                    <p>Error: {error}</p>
+                ) : (
+                    <div className="">
+                        <Table
+                            data={data}
+                            columns={Columns}
+                            btnName={btnName}
+                            onAdd={handleCreateReturn}
+                            showActions={false}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     )
