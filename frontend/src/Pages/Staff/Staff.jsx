@@ -1,15 +1,50 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Table from '../../components/Table/Table';
 import StaffModal from '../../Models/StaffModel/StaffModal';
-
+import config from '../../config';
 
 const Staff = () => {
 
-  const [data, setData] = useState([["1", "Sales Dep.", "K K Somadasa", "119", "118", "Watapika", "123"]]);
+  const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
-  const columns = ["#", "Department / Job Position", "Full Name", "Contact 1", "Contact 2", "Address", "Nic"];
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+  const columns = ["#", "Department / Job Position", "Full Name", "User Type", "User Name", "Contact 1", "Contact 2", "Address", "Nic", "Status"];
   const btnName = 'Add New Staff Member';
+
+  useEffect(() => {
+    fetchStaff();
+  }, []);
+
+  const fetchStaff = async () => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/users`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch product list');
+      }
+      const user = await response.json();
+      const formattedData = user.map(user => [
+        user.userId,
+        user.store?.storeName || "unknown",
+        user.userFullName,
+        user.userType, 
+        user.userName,
+        user.userTP,
+        user.userSecondTP,
+        user.userAddress,
+        user.userNIC,
+        user.userStatus,
+      ]);
+      setData(formattedData);
+      setIsLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setIsLoading(false);
+    }
+  };
 
   const handleAddNewStaff = () => {
     setEditIndex(null);
@@ -68,15 +103,20 @@ const Staff = () => {
     <div>
       <div>
         <h2>Staff</h2>
-
-        <Table
-          data={data}
-          columns={columns}
-          btnName={btnName}
-          onAdd={handleAddNewStaff}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : (
+          <Table
+            data={data}
+            columns={columns}
+            btnName={btnName}
+            onAdd={handleAddNewStaff}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        )}
         <StaffModal
           showModal={showModal}
           closeModal={closeModal}
