@@ -8,11 +8,15 @@ const Sidebar = () => {
 
     useEffect(() => {
         const handleResize = () => {
-            setIsCollapsed(window.innerWidth <= 768);
+            if (window.innerWidth <= 768) {
+                setIsCollapsed(true); 
+            } 
+            else{
+                setIsCollapsed(false); 
+            }
         };
 
         window.addEventListener('resize', handleResize);
-        handleResize();
 
         return () => window.removeEventListener('resize', handleResize);
     }, []);
