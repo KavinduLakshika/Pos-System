@@ -21,7 +21,14 @@ const Dashboard = () => {
   const FebTotal = 59;
   const MarTotal = 89;
   const AprTotal = 81;
-  const JunTotal = 55;
+  const MayTotal = 55;
+  const JunTotal = 20;
+  const JulTotal = 10;
+  const AugTotal = 30;
+  const SepTotal = 60;
+  const OctTotal = 0;
+  const NovTotal = 5;
+  const DecTotal = 20;
 
   //card three bar chart stock
   const lables = ['Ring', 'Neckless', 'Bangle', 'Earing']
@@ -59,7 +66,15 @@ const Dashboard = () => {
               FebTotal={FebTotal}
               MarTotal={MarTotal}
               AprTotal={AprTotal}
+              MayTotal={MayTotal}
               JunTotal={JunTotal}
+              JulTotal={JulTotal}
+              AugTotal={AugTotal}
+              SepTotal={SepTotal}
+              OctTotal={OctTotal}
+              NovTotal={NovTotal}
+              DecTotal={DecTotal}
+
             />
           </div>
         </div>
