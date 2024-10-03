@@ -1,4 +1,5 @@
 import React from 'react';
+import './Dashboard.css'
 
 function CardOne({ TodayTotal, YesterdayTotal, ThisMonthTotal, LastMonthTotal,todayTotalSales,monthTotalSales }) {
   return (
