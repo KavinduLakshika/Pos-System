@@ -1,6 +1,7 @@
 import React from 'react';
+import './Dashboard.css'
 
-function CardOne({ TodayTotal, YesterdayTotal, ThisMonthTotal, LastMonthTotal }) {
+function CardOne({ TodayTotal, YesterdayTotal, ThisMonthTotal, LastMonthTotal,todayTotalSales,monthTotalSales }) {
   return (
     <div className="card h-100">
       <div className="card-header">Total Sales Earnings</div>
@@ -9,10 +10,12 @@ function CardOne({ TodayTotal, YesterdayTotal, ThisMonthTotal, LastMonthTotal })
           <div className="col-6">
             <h5 className="card-title">Today</h5>
             <p className="card-text">{TodayTotal}</p>
+            <span>{todayTotalSales} Sales </span>
           </div>
           <div className="col-6">
             <h5 className="card-title">This Month</h5>
             <p className="card-text">{ThisMonthTotal}</p>
+            <span>{monthTotalSales} Sales </span>
           </div>
         </div>
         <br />

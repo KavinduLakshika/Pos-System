@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-function CardTwo({ JanTotal, FebTotal, MarTotal, AprTotal, JunTotal }) {
+function CardTwo({ JanTotal, FebTotal, MarTotal, AprTotal, MayTotal, JunTotal, JulTotal, AugTotal, SepTotal, OctTotal, NovTotal, DecTotal }) {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -9,7 +9,7 @@ function CardTwo({ JanTotal, FebTotal, MarTotal, AprTotal, JunTotal }) {
       datasets: [
         {
           label: 'Sales Earnings',
-          data: [JanTotal, FebTotal, MarTotal, AprTotal, JunTotal, 0, 0, 0, 0, 0, 0, 0],
+          data: [JanTotal, FebTotal, MarTotal, AprTotal, MayTotal, JunTotal, JulTotal, AugTotal, SepTotal, OctTotal, NovTotal, DecTotal],
           fill: false,
           backgroundColor: 'rgba(75, 192, 192, 1)',
           borderColor: 'rgba(75, 192, 192, 1)',

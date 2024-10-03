@@ -13,12 +13,22 @@ const Dashboard = () => {
   const ThisMonthTotal = 'Rs. 10,000';
   const LastMonthTotal = 'Rs. 10,000';
 
+  const todayTotalSales ='5';
+  const monthTotalSales = '40';
+
   //card two line chart 
   const JanTotal = 65;
   const FebTotal = 59;
   const MarTotal = 89;
   const AprTotal = 81;
-  const JunTotal = 55;
+  const MayTotal = 55;
+  const JunTotal = 20;
+  const JulTotal = 10;
+  const AugTotal = 30;
+  const SepTotal = 60;
+  const OctTotal = 0;
+  const NovTotal = 5;
+  const DecTotal = 20;
 
   //card three bar chart stock
   const lables = ['Ring', 'Neckless', 'Bangle', 'Earing']
@@ -42,6 +52,8 @@ const Dashboard = () => {
               YesterdayTotal={YesterdayTotal}
               ThisMonthTotal={ThisMonthTotal}
               LastMonthTotal={LastMonthTotal}
+              todayTotalSales={todayTotalSales}
+              monthTotalSales={monthTotalSales}
             />
           </div>
         </div>
@@ -54,7 +66,15 @@ const Dashboard = () => {
               FebTotal={FebTotal}
               MarTotal={MarTotal}
               AprTotal={AprTotal}
+              MayTotal={MayTotal}
               JunTotal={JunTotal}
+              JulTotal={JulTotal}
+              AugTotal={AugTotal}
+              SepTotal={SepTotal}
+              OctTotal={OctTotal}
+              NovTotal={NovTotal}
+              DecTotal={DecTotal}
+
             />
           </div>
         </div>
