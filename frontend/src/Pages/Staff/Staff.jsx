@@ -16,7 +16,7 @@ const Staff = () => {
 
   useEffect(() => {
     fetchStaff();
-  }, []);
+  });
 
   const fetchStaff = async () => {
     try {
