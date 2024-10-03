@@ -277,7 +277,7 @@ const CreateProduct = () => {
           </form>
 
           <div className="showProduct col-md-4">
-            <h4>Products</h4>
+            <h4>Products With Category</h4>
             {products.length > 0 ? (
               products.map(product => (
                 <div key={product.productId} className="showProduct-group">

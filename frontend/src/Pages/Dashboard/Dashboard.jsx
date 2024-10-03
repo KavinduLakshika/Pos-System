@@ -74,12 +74,9 @@ const Dashboard = () => {
               OctTotal={OctTotal}
               NovTotal={NovTotal}
               DecTotal={DecTotal}
-
             />
           </div>
         </div>
-
-
       </div>
 
       <div className='row'>
@@ -88,18 +85,12 @@ const Dashboard = () => {
             stockSize={stockSize}
             lables={lables} />
         </div>
-
         <div className="col-lg-6 col-sm-12 ">
-
           <CardFour
             dataValues={stockDistribution}
             labels={productLabels} />
-
         </div>
-
       </div>
-
-
     </div>
   );
 };

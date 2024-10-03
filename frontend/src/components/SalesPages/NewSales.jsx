@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlusCircle, ShoppingCart, User } from 'lucide-react';
 import './NewSales.css';
 import Form from '../../Models/Form/Form';
@@ -6,11 +6,15 @@ import Modal from 'react-modal';
 import Table from '../Table/Table'
 import config from '../../config';
 
-const NewSales = () => {
+const NewSales = ({ invoice }) => {
+  const [data,] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const Columns = ["id", 'product', 'qty', 'price'];
   const [formData, setFormData] = useState({
-    name: '',
-    refNo: '',
+    cusName: '',
+    cusNic: '',
+    cusCode: '',
     productNo: '',
     productName: '',
     productPrice: '',
@@ -50,11 +54,13 @@ const NewSales = () => {
         cusId: customerData.customerId,
         productId: productData.productId,
         invoiceDate: new Date().toISOString(),
-        cusCode: formData.refNo,
+        cusName: formData.cusName,
+        cusNIC: formData.cusNic,
+        cusCode: formData.cusCode,
         productCode: formData.productNo,
         productName: formData.productName,
         productSellingPrice: formData.productPrice,
-        productQty: formData.qty,
+        invoiceQty: formData.qty,
         discount: formData.discount,
         totalAmount: formData.totalPrice,
         invoiceNote: formData.productNote,
@@ -115,10 +121,8 @@ const NewSales = () => {
     setBank(e.target.checked)
   }
 
-  const [data,] = useState([
-    ['1', "MaleeshaPa", "5", '1'],
-  ]);
-  const Columns = ["id", 'product', 'qty', 'price'];
+
+
 
   return (
     <div>
@@ -143,17 +147,17 @@ const NewSales = () => {
 
                 <div className="customer-details">
                   <label htmlFor="">Customer Nic</label>
-                  <input onChange={handleChange} value={formData.nic} type="text" className="form-control" name="nic" id="cusNic" placeholder="Enter Nic" />
+                  <input onChange={handleChange} value={formData.cusNic} type="text" className="form-control" name="cusNic" id="cusNic" placeholder="Enter Nic" />
                 </div>
 
                 <div className="customer-details">
                   <label htmlFor="">Customer Name</label>
-                  <input onChange={handleChange} value={formData.name} type="text" className="form-control" name="name" id="cusName" placeholder="Enter Name" />
+                  <input onChange={handleChange} value={formData.cusName} type="text" className="form-control" name="cusName" id="cusName" placeholder="Enter Name" />
                 </div>
 
                 <div className="customer-details">
-                  <label htmlFor="">Reference No</label>
-                  <input onChange={handleChange} value={formData.refNo} type="text" className="form-control" name="refNo" id="refNo" placeholder="Enter No" />
+                  <label htmlFor="">Customer Code</label>
+                  <input onChange={handleChange} value={formData.cusCode} type="text" className="form-control" name="cusCode" id="refNo" placeholder="Enter No" />
                 </div>
               </div>
 
