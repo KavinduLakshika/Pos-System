@@ -67,7 +67,7 @@ const createUser = async (req, res) => {
                 !userAddress ||
                 !storeId
             ) {
-                return res.status(400).json({ error: "All fields are required, including storeId." });
+                return res.status(400).json({ error: "All fields are required" });
             }
 
             // Validate store existence
@@ -108,7 +108,7 @@ const createUser = async (req, res) => {
                 store_storeId: storeId,
             });
 
-            const userWithStore = await Transaction.findByPk(newUser.userId, {
+            const userWithStore = await User.findByPk(newUser.userId, {
                 include: [
                     {
                         model: Store,
