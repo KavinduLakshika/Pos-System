@@ -7,7 +7,7 @@ function SupplierDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const columns = ['#', 'Supplier Name', 'Supplier Address', 'NIC', 'Email', 'Contact 1', 'Contact 2', 'Advance', 'Balance', 'Payment date/Time ', 'Status'];
+  const columns = ['#', 'Supplier Name', 'Supplier Address', 'NIC', 'Email', 'Contact 1', 'Contact 2', 'Status'];
 
   const btnName = ' + New Supplier ';
 
