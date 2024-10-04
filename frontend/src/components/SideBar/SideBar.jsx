@@ -130,8 +130,8 @@ const Sidebar = () => {
             icon: <FileText size={20} />,
             path: '/staff',
             submenus: [
-                { title: 'Current Stock', path: '/staff/create-staff' },
-                { title: 'Stock History', path: '/staff/create-store' },
+                { title: 'Create Staff', path: '/staff/create-staff' },
+                { title: 'Departments', path: '/staff/create-store' },
             ]
         },
     ];

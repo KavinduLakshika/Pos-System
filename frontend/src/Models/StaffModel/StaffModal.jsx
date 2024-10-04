@@ -282,8 +282,8 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
                 />
               </div>
               <div className="form-group mt-4">
-                <button type="submit" className="btn btn-primary">{staff ? 'Update' : 'Save Changes'}</button>
                 <button type="button" className="btn btn-danger" onClick={closeModal}>Close</button>
+                <button type="submit" className="btn btn-primary">{staff ? 'Update' : 'Save Changes'}</button>
               </div>
             </div>
           </div>
