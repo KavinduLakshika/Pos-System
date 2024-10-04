@@ -21,7 +21,7 @@ const Table = ({
     const [tableColumns, setTableColumns] = useState(columns);
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const [itemsPerPage, setItemsPerPage] = useState(25);
 
     useEffect(() => {
         setTableData(data);
@@ -38,16 +38,18 @@ const Table = ({
         });
     });
 
-    const currentItems = filteredData.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
+    const currentItems = itemsPerPage === -1
+        ? filteredData
+        : filteredData.slice(
+            (currentPage - 1) * itemsPerPage,
+            currentPage * itemsPerPage
+        );
 
     return (
         <div className="container-fluid p-2">
             <div className="row mb-2">
                 {showSearch && (
-                    <div className="col-md-6 mb-3   ">
+                    <div className="col-md-4 mb-3   ">
                         <input
                             type="text"
                             className="form-control"
@@ -60,9 +62,16 @@ const Table = ({
                         />
                     </div>
                 )}
-
+                <div className="col-md-2 mb-3 ">
+                    <select className="form-control" value={itemsPerPage} onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }} >
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                        <option value={-1}>All</option>
+                    </select>
+                </div>
                 {showButton && (
-                    <div className="col-md-6 d-flex justify-content-end">
+                    <div className="col-md- d-flex justify-content-end">
                         <button className="btn btn-info text-white" onClick={onAdd}>
                             {btnName}
                         </button>
