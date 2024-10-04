@@ -8,7 +8,6 @@ const StoreForm = ({ closeModal, showModal, onSave, store }) => {
     const [formData, setFormData] = useState({
         name: '',
         address: '',
-        status: 'Active',
     });
 
     useEffect(() => {
@@ -16,13 +15,11 @@ const StoreForm = ({ closeModal, showModal, onSave, store }) => {
             setFormData({
                 name: store.storeName,
                 address: store.storeAddress,
-                status: store.storeStatus,
             });
         } else if (!showModal) {
             setFormData({
                 name: '',
                 address: '',
-                status: 'Active',
             });
             setFormErrors({});
             setError(null);
@@ -54,17 +51,16 @@ const StoreForm = ({ closeModal, showModal, onSave, store }) => {
         const storeData = {
             storeName: formData.name,
             storeAddress: formData.address,
-            storeStatus: formData.status,
         };
 
         try {
             const response = await fetch(`${config.BASE_URL}/store${store ? `/${store.storeId}` : ''}`, {
-            method: store ? 'PUT' : 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(storeData),
-        });
+                method: store ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(storeData),
+            });
 
             if (!response.ok) {
                 const errorData = await response.json();
