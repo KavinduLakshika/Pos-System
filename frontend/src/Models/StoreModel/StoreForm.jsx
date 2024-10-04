@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../StaffModel/StaffModal.css';
 import config from '../../config';
 
-const StoreForm = ({ closeModal, showModal, onSave }) => {
+const StoreForm = ({ closeModal, showModal, onSave, store }) => {
     const [formErrors, setFormErrors] = useState({});
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
@@ -12,7 +12,13 @@ const StoreForm = ({ closeModal, showModal, onSave }) => {
     });
 
     useEffect(() => {
-        if (!showModal) {
+        if (showModal && store) {
+            setFormData({
+                name: store.storeName,
+                address: store.storeAddress,
+                status: store.storeStatus,
+            });
+        } else if (!showModal) {
             setFormData({
                 name: '',
                 address: '',
@@ -21,7 +27,7 @@ const StoreForm = ({ closeModal, showModal, onSave }) => {
             setFormErrors({});
             setError(null);
         }
-    }, [showModal]);
+    }, [showModal, store]);
 
     const validate = () => {
         const errors = {};
@@ -52,24 +58,24 @@ const StoreForm = ({ closeModal, showModal, onSave }) => {
         };
 
         try {
-            const response = await fetch(`${config.BASE_URL}/store`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(storeData),
-            });
+            const response = await fetch(`${config.BASE_URL}/store${store ? `/${store.storeId}` : ''}`, {
+            method: store ? 'PUT' : 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(storeData),
+        });
 
             if (!response.ok) {
                 const errorData = await response.json();
                 setError(errorData.error || 'An error occurred.');
             } else {
-                alert('Store created successfully!');
+                alert(store ? 'Store updated successfully!' : 'Store created successfully!');
                 closeModal();
                 onSave();
             }
         } catch (err) {
-            setError('Failed to create store. Please try again.');
+            setError('Failed to save store. Please try again.');
         }
     };
 
@@ -91,7 +97,7 @@ const StoreForm = ({ closeModal, showModal, onSave }) => {
         <div>
             <div className="modal-overlay">
                 <div className="modal-content">
-                    <h4>Add Department</h4>
+                    <h4>{store ? 'Update Department' : 'Add Department'}</h4>
                     {error && <p className="error">{error}</p>}
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
@@ -101,13 +107,6 @@ const StoreForm = ({ closeModal, showModal, onSave }) => {
                         <div className="form-group">
                             <label htmlFor="address">Store Address</label>
                             <input type="text" value={formData.address} onChange={handleChange} name="address" id="address" className="form-control" />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="status">Store Status</label>
-                            <select value={formData.status} onChange={handleChange} name="status" id="status" className="form-control">
-                                <option value="Active">Active</option>
-                                <option value="Close">Close</option>
-                            </select>
                         </div>
                         <div className="form-actions">
                             <button type="button" className="btn btn-danger" onClick={closeModal}>Close</button>
