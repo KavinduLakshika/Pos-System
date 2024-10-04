@@ -47,6 +47,7 @@ const NewStock = () => {
   };
 
   return (
+    <div className="scrolling-container">
     <div className="container-fluid my-5 mt-2">
       <h4 className=" mb-4">Create New Stock</h4>
 
@@ -162,6 +163,7 @@ const NewStock = () => {
           <button type="submit" className="btn btn-success">New Stock</button>
         </div>
       </form>
+    </div>
     </div>
   );
 };

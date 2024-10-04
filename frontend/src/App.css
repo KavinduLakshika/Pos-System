@@ -35,6 +35,10 @@
   scrollbar-width: none;
 }
 
+.scroll-table{
+  overflow-y:auto;
+  scrollbar-width: none;
+}
 
 @media (max-width:568px) {
   .scrolling-container {

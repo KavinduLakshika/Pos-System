@@ -78,60 +78,65 @@ const Form = ({ closeModal, onSave, cus }) => {
 
     return errors;
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = validate();
     if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
+        setFormErrors(errors);
+        return;
     }
 
     const customerData = {
-      cusTitle: formData.title,
-      cusName: formData.name,
-      cusAddress: formData.address,
-      cusPhone: formData.phone,
-      cusEmail: formData.email,
-      cusNIC: formData.nic,
-      cusCompany: formData.company,
-      cusJob: formData.jobPosition,
-      cusWorkPlaceTP: formData.workplacePhone,
-      cusWorkPlaceAddress: formData.workplaceAddress,
-      cusCode: generateCustomerCode(formData.name),
-      cusCity: 'Unknown',
+        cusTitle: formData.title,
+        cusName: formData.name,
+        cusAddress: formData.address,
+        cusPhone: formData.phone,
+        cusEmail: formData.email,
+        cusNIC: formData.nic,
+        cusCompany: formData.company,
+        cusJob: formData.jobPosition,
+        cusWorkPlaceTP: formData.workplacePhone,
+        cusWorkPlaceAddress: formData.workplaceAddress,
+        cusCode: generateCustomerCode(formData.name),
+        cusCity: 'Unknown',
     };
 
+    console.log('Customer data:', customerData); // Log the customer data
+
     try {
-      const url = cus
-        ? `${config.BASE_URL}/customer/${cus.cusId}`
-        : `${config.BASE_URL}/customer`;
-      const method = cus ? 'PUT' : 'POST';
+        const url = cus
+            ? `${config.BASE_URL}/customer/${cus.cusId}`
+            : `${config.BASE_URL}/customer`;
+        const method = cus ? 'PUT' : 'POST';
 
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(customerData),
-      });
+        const response = await fetch(url, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(customerData),
+        });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log(cus ? 'Customer updated:' : 'Customer created:', data);
-        setError(cus ? 'Successfully Updated!' : 'Successfully Created!');
-        onSave();
-        closeModal();
-      } else {
-        const errorData = await response.json();
-        console.error('Failed to save customer:', errorData);
-        setError(errorData.error);
-      }
+        console.log('Response status:', response.status); // Log response status
+
+        const responseData = await response.json(); // Always parse response to JSON
+        console.log('Response data:', responseData); // Log response data
+
+        if (response.ok) {
+            console.log(cus ? 'Customer updated:' : 'Customer created:', responseData);
+            setError(cus ? 'Successfully Updated!' : 'Successfully Created!');
+            onSave();
+            closeModal();
+        } else {
+            console.error('Failed to save customer:', responseData); // Log complete response data
+            setError(responseData.error || 'An error occurred while saving the customer.'); // Use a fallback error message
+        }
     } catch (error) {
-      console.error('Error:', error);
-      setError('An error occurred while saving the customer.');
+        console.error('Error:', error);
+        setError('An error occurred while saving the customer.');
     }
-  };
+};
+
 
 
   const generateCustomerCode = (name) => {
