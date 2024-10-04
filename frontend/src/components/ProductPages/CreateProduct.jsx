@@ -11,7 +11,6 @@ const CreateProduct = () => {
   const [preview, setPreview] = useState('');
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
-    superCategory: 'select',
     productCategory: 'select',
     productName: '',
     productCode: '',
@@ -134,7 +133,6 @@ const CreateProduct = () => {
   };
   const handleReset = () => {
     setFormData({
-      superCategory: 'select',
       productCategory: 'select',
       productName: '',
       productCode: '',
@@ -157,14 +155,6 @@ const CreateProduct = () => {
         <div className="row">
           <form action="" className='col-md-8 product-form' onSubmit={handleSubmit}>
             <div className="row">
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Super category</label>
-                <select name="superCategory" value={formData.superCategory} onChange={handleChange} id="" className="form-control">
-                  <option value="1">select</option>
-                  <option value="2">cat1</option>
-                  <option value="3">cat2</option>
-                </select>
-              </div>
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Product category</label>
                 <select name="productCategory" id="" onChange={handleChange} className="form-control">
