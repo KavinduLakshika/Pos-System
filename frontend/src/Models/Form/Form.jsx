@@ -64,8 +64,8 @@ const Form = ({ closeModal, onSave, cus }) => {
       errors.email = 'Email is invalid.';
     }
 
-    if (formData.nic && !/^\d{9}[VvXx]$/.test(formData.nic.trim())) {
-      errors.nic = 'NIC format is invalid. Example: 123456789V';
+    if (formData.nic && !/^(\d{9}[VvXx]|\d{12})$/.test(formData.nic.trim())) {
+      errors.nic = 'NIC format is invalid.';
     }
 
     if (!formData.address.trim()) {

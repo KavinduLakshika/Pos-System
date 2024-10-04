@@ -9,7 +9,7 @@ const CustomerList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedCus, setSelectedCus] = useState(null); 
+  const [selectedCus, setSelectedCus] = useState(null);
 
   const columns = ['id', 'Customer', 'Customer Code', 'Address', 'Phone', 'Email', 'NIC', 'Job', 'Office', 'Office TP', 'Office Address', 'Points', 'Status'];
   const btnName = 'New Customer';
@@ -38,13 +38,40 @@ const CustomerList = () => {
         cus.cusWorkPlaceTP,
         cus.cusWorkPlaceAddress,
         cus.cusPoints,
-        cus.cusStatus,
+        <select
+          className='form-control'
+          value={cus.cusStatus}
+          onChange={(e) => handleStatusChange(cus.cusId, e.target.value)}
+        >
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
       ]);
       setData(formattedData);
       setIsLoading(false);
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (cusId, newStatus) => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/customer/${cusId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cusStatus: newStatus }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Failed to update customer status: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
+      }
+      await fetchCustomer();
+    } catch (error) {
+      setError(`Error updating customer status: ${error.message}`);
     }
   };
 
@@ -85,13 +112,13 @@ const CustomerList = () => {
   };
 
   const openModal = () => {
-    setSelectedCus(null); 
+    setSelectedCus(null);
     setModalIsOpen(true);
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
-    fetchCustomer(); 
+    fetchCustomer();
   };
 
   return (
@@ -119,8 +146,8 @@ const CustomerList = () => {
         >
           <Form
             closeModal={closeModal}
-            onSave={fetchCustomer} 
-            cus={selectedCus} 
+            onSave={fetchCustomer}
+            cus={selectedCus}
             style={{
               content: {
                 width: '30%',
