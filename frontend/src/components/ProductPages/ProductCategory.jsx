@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../Table/Table';
-import Modal from 'react-modal';
+import CategoryForm from '../../Models/CategoryForm/CategoryForm'
 import config from '../../config';
 
 const ProductCategory = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const columns = ["ID", "Category","Category Type"];
+  const columns = ["ID", "Category", "Category Type"];
   const btnName = "Add Category";
 
   useEffect(() => {
@@ -60,18 +60,16 @@ const ProductCategory = () => {
       categoryId: selectedCatData[0],
       categoryName: selectedCatData[1],
     });
-    setModalIsOpen(true);
+    setShowModal(true);
   };
 
   const openModal = () => {
-    setSelectedCategory(null);
-    setModalIsOpen(true);
-  };
+    setShowModal(true);
+};
 
-  const closeModal = () => {
-    setModalIsOpen(false);
-    fetchCategory();
-  };
+const closeModal = () => {
+    setShowModal(false);
+};
 
   return (
     <div>
@@ -91,13 +89,13 @@ const ProductCategory = () => {
             onEdit={handleEdit}
           />
         )}
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          contentLabel="Category Form"
-        >
-         
-        </Modal>
+
+        <CategoryForm
+          showModal={showModal}
+          closeModal={closeModal}
+          store={selectedCategory}
+
+        />
       </div>
     </div>
   );
