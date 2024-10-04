@@ -11,7 +11,7 @@ const CreateProduct = () => {
   const [preview, setPreview] = useState('');
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
-    superCategory: 'select',
+    
     productCategory: 'select',
     productName: '',
     productCode: '',
@@ -134,7 +134,7 @@ const CreateProduct = () => {
   };
   const handleReset = () => {
     setFormData({
-      superCategory: 'select',
+      
       productCategory: 'select',
       productName: '',
       productCode: '',
