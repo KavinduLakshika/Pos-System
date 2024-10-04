@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../Table/Table';
 import Modal from 'react-modal';
-import CategoryForm from '../../Models/CategoryModal/Category';
 import config from '../../config';
 
 const ProductCategory = () => {
@@ -97,20 +96,7 @@ const ProductCategory = () => {
           onRequestClose={closeModal}
           contentLabel="Category Form"
         >
-          <CategoryForm
-            closeModal={closeModal}
-            onSave={fetchCategory}
-            category={selectedCategory}
-            style={{
-              content: {
-                width: '30%',
-                height: '30%',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-              },
-            }}
-          />
+         
         </Modal>
       </div>
     </div>
