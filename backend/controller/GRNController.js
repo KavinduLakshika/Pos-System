@@ -11,12 +11,9 @@ const createGrn = async (req, res) => {
             grnRef,
             grnCashAmount,
             grnChequeAmount,
-            grnChequeNumber,
             grnDueAmount,
             grnVat,
-            grnDiscount,
             grnTotal,
-            grnGrandTotal,
             productId,
             stockId,
             storeId,
@@ -27,11 +24,8 @@ const createGrn = async (req, res) => {
             !grnRef ||
             !grnCashAmount ||
             !grnChequeNumber ||
-            !grnDueAmount ||
             !grnVat ||
-            !grnDiscount ||
             !grnTotal ||
-            !grnGrandTotal ||
             !productId ||
             !stockId ||
             !storeId
@@ -68,12 +62,9 @@ const createGrn = async (req, res) => {
             grnRef,
             grnCashAmount,
             grnChequeAmount,
-            grnChequeNumber,
             grnDueAmount,
             grnVat,
-            grnDiscount,
             grnTotal,
-            grnGrandTotal,
             products_productId: productId,
             stock_stockId: stockId,
             store_storeId: storeId,
@@ -145,12 +136,9 @@ const updateGrn = async (req, res) => {
             grnRef,
             grnCashAmount,
             grnChequeAmount,
-            grnChequeNumber,
             grnDueAmount,
             grnVat,
-            grnDiscount,
             grnTotal,
-            grnGrandTotal,
             productId,
             stockId,
             storeId,
@@ -166,12 +154,9 @@ const updateGrn = async (req, res) => {
             grnRef,
             grnCashAmount,
             grnChequeAmount,
-            grnChequeNumber,
             grnDueAmount,
             grnVat,
-            grnDiscount,
             grnTotal,
-            grnGrandTotal,
             products_productId: productId,
             stock_stockId: stockId,
             store_storeId: storeId,

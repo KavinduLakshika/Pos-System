@@ -16,7 +16,7 @@ const CustomerList = () => {
 
   useEffect(() => {
     fetchCustomer();
-  }, []);
+  },);
 
   const fetchCustomer = async () => {
     try {
