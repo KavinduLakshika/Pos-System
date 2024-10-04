@@ -107,6 +107,7 @@ const CreateProductReturn = () => {
                                     showSearch={false}
                                     showButton={false}
                                     showActions={false}
+                                    showRow={false}
                                 />
                             </div>
 

@@ -38,6 +38,7 @@ const CreateStore = () => {
 
     const fetchStores = async () => {
         try {
+            setIsLoading(true);
             const response = await fetch(`${config.BASE_URL}/stores`);
             if (!response.ok) {
                 throw new Error('Failed to fetch user list');
