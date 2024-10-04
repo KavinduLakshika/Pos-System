@@ -1,34 +1,45 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CardOne from './CardOne';
 import CardTwo from './CardTwo';
 import CardThree from './CardThree';
 import CardFour from './CardFour';
+import config from '../../config';
 
 const Dashboard = () => {
+  const base_url = config.BASE_URL;
 
-  //card one total price
-  const TodayTotal = 'Rs. 10,000';
-  const YesterdayTotal = 'Rs. 10,000';
-  const ThisMonthTotal = 'Rs. 10,000';
-  const LastMonthTotal = 'Rs. 10,000';
+  const [reportData, setReportData] = useState({
+    TodayTotal: "0",
+    YesterdayTotal: "0",
+    ThisMonthTotal: '0',
+    LastMonthTotal: '0',
+    todayTotalSales: [],
+    monthTotalSales: [],
+  });
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await fetch(`${base_url}/getReports`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-  const todayTotalSales ='5';
-  const monthTotalSales = '40';
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
 
-  //card two line chart 
-  const JanTotal = 65;
-  const FebTotal = 59;
-  const MarTotal = 89;
-  const AprTotal = 81;
-  const MayTotal = 55;
-  const JunTotal = 20;
-  const JulTotal = 10;
-  const AugTotal = 30;
-  const SepTotal = 60;
-  const OctTotal = 0;
-  const NovTotal = 5;
-  const DecTotal = 20;
+        const data = await response.json();
+        setReportData(data.message);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchReports();
+  }, [base_url]);
 
   //card three bar chart stock
   const lables = ['Ring', 'Neckless', 'Bangle', 'Earing']
@@ -48,32 +59,21 @@ const Dashboard = () => {
 
           <div className="h-100">
             <CardOne
-              TodayTotal={TodayTotal}
-              YesterdayTotal={YesterdayTotal}
-              ThisMonthTotal={ThisMonthTotal}
-              LastMonthTotal={LastMonthTotal}
-              todayTotalSales={todayTotalSales}
-              monthTotalSales={monthTotalSales}
+              TodayTotal={reportData.revenueToday}
+              YesterdayTotal={reportData.revenueYesterday}
+              ThisMonthTotal={reportData.revenueMonth}
+              LastMonthTotal={reportData.revenueLastMonth}
+              todayTotalSales={reportData.salesToday}
+              monthTotalSales={reportData.salesMonth}
             />
           </div>
         </div>
 
         <div className="col-lg-9 col-md-12 mb-4">
-
           <div className="h-100">
             <CardTwo
-              JanTotal={JanTotal}
-              FebTotal={FebTotal}
-              MarTotal={MarTotal}
-              AprTotal={AprTotal}
-              MayTotal={MayTotal}
-              JunTotal={JunTotal}
-              JulTotal={JulTotal}
-              AugTotal={AugTotal}
-              SepTotal={SepTotal}
-              OctTotal={OctTotal}
-              NovTotal={NovTotal}
-              DecTotal={DecTotal}
+              monthlyRevenue={reportData.monthlyRevenue}
+              monthlySales={reportData.monthTotalSales}
             />
           </div>
         </div>
