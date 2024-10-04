@@ -8,43 +8,35 @@ const StoreForm = ({ closeModal, showModal }) => {
     const [formData, setFormData] = useState({
         name: '',
         address: '',
-        status:'',
+        status: '',
     });
 
-    const handleChange = (e) => {
-        const{name,value}=e.target;
-        setFormData({...formData,[name]:value});
-
-        if (formErrors[name]) {
-            setFormErrors({ ...formErrors, [name]: '' });
-        }
-    };
     const validate = () => {
         const errors = {};
-    
+
         if (!formData.name.trim()) {
             errors.name = 'Name is Required';
         }
         if (!formData.address.trim()) {
             errors.address = 'Address is Required';
         }
-    
-        return errors; 
+
+        return errors;
     };
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+    
         const errors = validate();
         if (Object.keys(errors).length > 0) {
-            setFormErrors(errors); 
+            setFormErrors(errors);
             return;
         }
     
         const storeData = {
             storeName: formData.name,
             storeAddress: formData.address,
-            storeStatus:formData.status
+            storeStatus: formData.status
         };
     
         try {
@@ -59,17 +51,35 @@ const StoreForm = ({ closeModal, showModal }) => {
             if (!response.ok) {
                 const errorData = await response.json();
                 setError(errorData.error || 'An error occurred.');
+                alert(errorData.error|| 'an error occurred')
             } else {
                 const data = await response.json();
                 alert('Store created successfully!');
+                setFormData({
+                    name: '',
+                    address: '',
+                    status: '',
+                });
+                
                 closeModal();
             }
         } catch (err) {
             setError('Failed to create store. Please try again.');
+            alert(error|| 'an error occurred')
+        }
+    };    
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value
+        }));
+
+        if (formErrors[name]) {
+            setFormErrors({ ...formErrors, [name]: '' });
         }
     };
-    
-  
 
     if (!showModal) return null;
 
@@ -89,7 +99,10 @@ const StoreForm = ({ closeModal, showModal }) => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="">Store Status</label>
-                            <input type="text" value={formData.status} onChange={handleChange} name="status" id="status" className='form-control' />
+                            <select value={formData.status} onChange={handleChange} name="status" id="status" className='form-control' >
+                                <option value="Active">Active</option>
+                                <option value="Close">Close</option>
+                            </select>
                         </div>
                         <div className="form-actions">
                             <button type="button" className="btn btn-danger" onClick={closeModal}>Close</button>
