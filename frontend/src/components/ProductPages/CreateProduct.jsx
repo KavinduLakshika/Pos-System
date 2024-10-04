@@ -241,9 +241,12 @@ const CreateProduct = () => {
               </div>
 
               <div className="product-details col-md-4 mb-2">
-              <label htmlFor="" className='mb-1'>Selling Price</label>
-                <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
              
+
+              <label htmlFor="" className='mb-1'>Buying price</label>
+                <input onChange={handleChange} type="number" name='buyingPrice' id='' onWheel={(e) => e.target.blur()} value={formData.buyingPrice} className='form-control' />
+             
+
               </div>
             </div>
 
@@ -256,8 +259,8 @@ const CreateProduct = () => {
               </div>
 
               <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Buying price</label>
-                <input onChange={handleChange} type="number" name='buyingPrice' id='' onWheel={(e) => e.target.blur()} value={formData.buyingPrice} className='form-control' />
+              <label htmlFor="" className='mb-1'>Selling Price</label>
+                <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
               </div>
             </div>
 
