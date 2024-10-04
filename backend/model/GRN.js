@@ -28,10 +28,6 @@ const GRN = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        grnChequeNumber: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         grnDueAmount: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -40,16 +36,12 @@ const GRN = sequelize.define(
             type: DataTypes.FLOAT,
             allowNull: false,
         },
-        grnDiscount: {
-            type: DataTypes.FLOAT,
-            allowNull: false,
-        },
         grnTotal: {
             type: DataTypes.FLOAT,
             allowNull: false,
         },
-        grnGrandTotal: {
-            type: DataTypes.FLOAT,
+        bilImage: {
+            type: DataTypes.STRING,
             allowNull: false,
         },
         products_productId: {
