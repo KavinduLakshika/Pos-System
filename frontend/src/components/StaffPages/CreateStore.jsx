@@ -85,7 +85,7 @@ const CreateStore = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to delete store');
+                alert('Failed to delete the department, it has an active staff member.')
             }
             fetchStores();
         } catch (err) {
