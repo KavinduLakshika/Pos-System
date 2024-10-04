@@ -125,6 +125,15 @@ const Sidebar = () => {
                 { title: 'Stock History', path: '/stock-reports/stock-history' },
             ]
         },
+        {
+            title: 'Staff',
+            icon: <FileText size={20} />,
+            path: '/staff',
+            submenus: [
+                { title: 'Current Stock', path: '/staff/create-staff' },
+                { title: 'Stock History', path: '/staff/create-store' },
+            ]
+        },
     ];
 
     return (
@@ -180,12 +189,6 @@ const Sidebar = () => {
                                 )}
                             </li>
                         ))}
-                        <li className="nav-item">
-                            <Link to={'/staff'} className="nav-link d-flex align-items-center ">
-                                <span className="me-2"><User size={20} /></span>
-                                <span className="fs-8 p-2 menu-link d-md-inline">Staff</span>
-                            </Link>
-                        </li>
                     </ul>
                 </div>
             </nav>
