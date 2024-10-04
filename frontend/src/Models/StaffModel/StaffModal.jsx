@@ -86,8 +86,6 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
         formDataToSend.append('userImage', image);
       }
 
-
-
       const response = await fetch(`${config.BASE_URL}/user${staff ? `/${staff.userId}` : ''}`, {
         method: staff ? 'PUT' : 'POST',
         body: formDataToSend
