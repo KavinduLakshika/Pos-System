@@ -10,27 +10,27 @@ const CreateStore = () => {
     const [error, setError] = useState(null);
     const [selectedStore, setSelectedStore] = useState(null);
 
-    const columns = ['id', 'Department name', 'Address','Status'];
+    const columns = ['id', 'Department name', 'Address', 'Status'];
     const btnName = 'Add Department';
 
     const handleStatusChange = async (storeId, newStatus) => {
         try {
-          const response = await fetch(`${config.BASE_URL}/store/${storeId}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ storeStatus: newStatus }),
-          });
-    
-          if (!response.ok) {
-            throw new Error('Failed to update store status');
-          }
-          fetchStores();
+            const response = await fetch(`${config.BASE_URL}/store/${storeId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ storeStatus: newStatus }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update store status');
+            }
+            fetchStores();
         } catch (error) {
-          setError(error.message);
+            setError(error.message);
         }
-      };
+    };
 
     useEffect(() => {
         fetchStores();
@@ -47,14 +47,14 @@ const CreateStore = () => {
                 store.storeId,
                 store.storeName,
                 store.storeAddress,
-                < select
+                <select
                     className='form-control'
                     value={store.storeStatus}
                     onChange={(e) => handleStatusChange(store.storeId, e.target.value)}
                 >
                     <option value="Active">Active</option>
                     <option value="Close">Close</option>
-                </select >
+                </select>,
             ]);
             setData(formattedData);
             setIsLoading(false);
@@ -72,7 +72,7 @@ const CreateStore = () => {
             storeAddress: selectStoreData[2],
         });
         setShowModal(true);
-    }
+    };
 
     const handleDelete = async (rowIndex) => {
         const confirmDelete = window.confirm('Are you sure you want to delete this store?');
@@ -129,6 +129,6 @@ const CreateStore = () => {
             </div>
         </div>
     );
-}
+};
 
 export default CreateStore;

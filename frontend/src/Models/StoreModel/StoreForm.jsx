@@ -1,24 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../StaffModel/StaffModal.css';
 import config from '../../config';
 
-const StoreForm = ({ closeModal, showModal }) => {
+const StoreForm = ({ closeModal, showModal, onSave }) => {
     const [formErrors, setFormErrors] = useState({});
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
         address: '',
-        status: '',
+        status: 'Active',
     });
+
+    useEffect(() => {
+        if (!showModal) {
+            setFormData({
+                name: '',
+                address: '',
+                status: 'Active',
+            });
+            setFormErrors({});
+            setError(null);
+        }
+    }, [showModal]);
 
     const validate = () => {
         const errors = {};
 
         if (!formData.name.trim()) {
-            errors.name = 'Name is Required';
+            errors.name = 'Name is required';
         }
         if (!formData.address.trim()) {
-            errors.address = 'Address is Required';
+            errors.address = 'Address is required';
         }
 
         return errors;
@@ -26,19 +38,19 @@ const StoreForm = ({ closeModal, showModal }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         const errors = validate();
         if (Object.keys(errors).length > 0) {
             setFormErrors(errors);
             return;
         }
-    
+
         const storeData = {
             storeName: formData.name,
             storeAddress: formData.address,
-            storeStatus: formData.status
+            storeStatus: formData.status,
         };
-    
+
         try {
             const response = await fetch(`${config.BASE_URL}/store`, {
                 method: 'POST',
@@ -47,27 +59,19 @@ const StoreForm = ({ closeModal, showModal }) => {
                 },
                 body: JSON.stringify(storeData),
             });
-    
+
             if (!response.ok) {
                 const errorData = await response.json();
                 setError(errorData.error || 'An error occurred.');
-                alert(errorData.error|| 'an error occurred')
             } else {
-                const data = await response.json();
                 alert('Store created successfully!');
-                setFormData({
-                    name: '',
-                    address: '',
-                    status: '',
-                });
-                
                 closeModal();
+                onSave();
             }
         } catch (err) {
             setError('Failed to create store. Please try again.');
-            alert(error|| 'an error occurred')
         }
-    };    
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -88,18 +92,19 @@ const StoreForm = ({ closeModal, showModal }) => {
             <div className="modal-overlay">
                 <div className="modal-content">
                     <h4>Add Department</h4>
+                    {error && <p className="error">{error}</p>}
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="">Store Name</label>
-                            <input type="text" value={formData.name} onChange={handleChange} name="name" id="name" className='form-control' />
+                            <label htmlFor="name">Store Name</label>
+                            <input type="text" value={formData.name} onChange={handleChange} name="name" id="name" className="form-control" />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="">Store Address</label>
-                            <input type="text" value={formData.address} onChange={handleChange} name="address" id="address" className='form-control' />
+                            <label htmlFor="address">Store Address</label>
+                            <input type="text" value={formData.address} onChange={handleChange} name="address" id="address" className="form-control" />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="">Store Status</label>
-                            <select value={formData.status} onChange={handleChange} name="status" id="status" className='form-control' >
+                            <label htmlFor="status">Store Status</label>
+                            <select value={formData.status} onChange={handleChange} name="status" id="status" className="form-control">
                                 <option value="Active">Active</option>
                                 <option value="Close">Close</option>
                             </select>
@@ -112,7 +117,7 @@ const StoreForm = ({ closeModal, showModal }) => {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default StoreForm
+export default StoreForm;
