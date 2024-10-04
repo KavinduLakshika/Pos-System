@@ -105,6 +105,7 @@ const CreateProduct = () => {
       if (response.ok) {
         const data = await response.json();
         alert(`${selectedProd ? 'Product updated' : 'Product created'} successfully`);
+        handleReset();
       } else {
         const errorData = await response.json();
         alert(errorData.error || `Failed to ${selectedProd ? 'update' : 'create'} product`);
