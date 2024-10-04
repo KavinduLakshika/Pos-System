@@ -1,28 +1,36 @@
 const Category = require("../model/Category");
 
-//create category
+// Create category
 const createCategory = async (req, res) => {
     try {
         const {
             categoryName,
             categoryType
         } = req.body;
-        if (!categoryName || !categoryType) {
-            return res.status(400).json({ error: "All fields are required." });
+
+        // Check only for essential fields
+        if (!categoryName) {
+            return res.status(400).json({ error: "Category Name is required." });
         }
+
+        // Check if category with the same name already exists
         const existingCategory = await Category.findOne({ where: { categoryName } });
         if (existingCategory) {
             return res
                 .status(400)
-                .json({ error: "A  Category Name is already exists." });
+                .json({ error: "A Category Name already exists." });
         }
+
+        // Create the new category with categoryStatus defaulting to "In stock"
         const newCategory = await Category.create({
             categoryName,
-            categoryType,
-            categoryStatus: "In stock"
+            categoryType: categoryType || 'Default Type', // Optional, use default if not provided
+            categoryStatus: "In stock" // You can change this if needed
         });
+
         res.status(201).json(newCategory);
     } catch (error) {
+        // Error handling remains the same
         if (error.name === "SequelizeValidationError") {
             return res
                 .status(400)
@@ -31,14 +39,15 @@ const createCategory = async (req, res) => {
 
         if (error.name === "SequelizeUniqueConstraintError") {
             return res.status(400).json({
-                error:
-                    "Duplicate field value: A Category name already exists.",
+                error: "Duplicate field value: A Category name already exists.",
             });
         }
 
         res.status(400).json({ error: `An error occurred: ${error.message}` });
     }
 };
+
+
 // Get all category
 const getAllCategories = async (req, res) => {
     try {
@@ -78,10 +87,11 @@ const updateCategory = async (req, res) => {
             return res.status(404).json({ message: "Category not found" });
         }
 
+        // Update only the fields that are provided
         await category.update({
-            categoryName,
-            categoryType,
-            categoryStatus
+            categoryName: categoryName !== undefined ? categoryName : category.categoryName, // Keep current if not provided
+            categoryType: categoryType !== undefined ? categoryType : category.categoryType, // Keep current if not provided
+            categoryStatus: categoryStatus !== undefined ? categoryStatus : category.categoryStatus // Keep current if not provided
         });
 
         res.status(200).json(category);
@@ -89,6 +99,7 @@ const updateCategory = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+
 
 // Delete a category
 const deleteCustomer = async (req, res) => {
