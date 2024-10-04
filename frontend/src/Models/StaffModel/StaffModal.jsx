@@ -179,7 +179,7 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
                   value={formData.department || ''}
                   onChange={handleChange}
                   className="form-control"
-                  required
+                  
                 >
                   <option value="select">Select Department</option>
                   {stores.map((store) => (
