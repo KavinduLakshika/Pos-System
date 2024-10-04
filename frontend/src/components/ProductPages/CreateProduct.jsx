@@ -150,7 +150,7 @@ const CreateProduct = () => {
     setImage(null);
     setPreview('');
   };
-
+ss
   return (
     <div>
       <div className="scrolling-container">
