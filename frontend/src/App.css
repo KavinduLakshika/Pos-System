@@ -35,6 +35,7 @@
   scrollbar-width: none;
 }
 
+
 @media (max-width:568px) {
   .scrolling-container {
     height: 120vh ;
