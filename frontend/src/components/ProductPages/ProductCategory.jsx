@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../Table/Table';
-import CategoryForm from '../../Models/CategoryForm/CategoryForm'
+import CategoryForm from '../../Models/CategoryForm/CategoryForm';
 import config from '../../config';
 
 const ProductCategory = () => {
@@ -14,7 +14,7 @@ const ProductCategory = () => {
   const btnName = "Add Category";
 
   useEffect(() => {
-    fetchCategory();
+    fetchCategory(); // Load categories on mount
   }, []);
 
   const fetchCategory = async () => {
@@ -27,6 +27,7 @@ const ProductCategory = () => {
       const formattedData = categories.map((cat) => [
         cat.categoryId,
         cat.categoryName,
+        cat.categoryType,
       ]);
       setData(formattedData);
       setIsLoading(false);
@@ -38,7 +39,7 @@ const ProductCategory = () => {
 
   const handleDelete = async (rowIndex) => {
     try {
-      const categoryId = data[rowIndex][0];
+      const categoryId = data[rowIndex][0]; // Get categoryId from row
       const response = await fetch(`${config.BASE_URL}/category/${categoryId}`, {
         method: 'DELETE',
       });
@@ -47,8 +48,8 @@ const ProductCategory = () => {
         throw new Error('Failed to delete category');
       }
 
+      // Update the table after deleting the row
       setData((prevData) => prevData.filter((_, index) => index !== rowIndex));
-      fetchCategory();
     } catch (err) {
       setError(err.message);
     }
@@ -59,17 +60,24 @@ const ProductCategory = () => {
     setSelectedCategory({
       categoryId: selectedCatData[0],
       categoryName: selectedCatData[1],
+      categoryType: selectedCatData[2],  // Include categoryType for editing
     });
     setShowModal(true);
   };
 
   const openModal = () => {
+    setSelectedCategory(null);  // Clear previous selection if adding a new category
     setShowModal(true);
-};
+  };
 
-const closeModal = () => {
+  const closeModal = () => {
     setShowModal(false);
-};
+  };
+
+  const handleSave = () => {
+    fetchCategory();  // Refresh categories after saving
+    closeModal();     // Close modal after save
+  };
 
   return (
     <div>
@@ -93,8 +101,8 @@ const closeModal = () => {
         <CategoryForm
           showModal={showModal}
           closeModal={closeModal}
-          store={selectedCategory}
-
+          selectedCategory={selectedCategory}  // Pass selectedCategory for edit
+          onSave={handleSave}                  // Refresh the list on save
         />
       </div>
     </div>
