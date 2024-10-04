@@ -11,7 +11,6 @@ const CreateProduct = () => {
   const [preview, setPreview] = useState('');
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
-
     productCategory: 'select',
     productName: '',
     productCode: '',
@@ -105,6 +104,7 @@ const CreateProduct = () => {
       if (response.ok) {
         const data = await response.json();
         alert(`${selectedProd ? 'Product updated' : 'Product created'} successfully`);
+        handleReset();
       } else {
         const errorData = await response.json();
         alert(errorData.error || `Failed to ${selectedProd ? 'update' : 'create'} product`);
@@ -134,7 +134,6 @@ const CreateProduct = () => {
   };
   const handleReset = () => {
     setFormData({
-
       productCategory: 'select',
       productName: '',
       productCode: '',
@@ -149,7 +148,6 @@ const CreateProduct = () => {
     setImage(null);
     setPreview('');
   };
-
   return (
     <div>
       <div className="scrolling-container">
