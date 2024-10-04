@@ -1,43 +1,102 @@
 import React, { useEffect, useRef } from 'react';
+import Chart from 'chart.js/auto';
 
-function CardTwo({ JanTotal, FebTotal, MarTotal, AprTotal, MayTotal, JunTotal, JulTotal, AugTotal, SepTotal, OctTotal, NovTotal, DecTotal }) {
+function CardTwo({ monthlyRevenue, monthlySales }) {
   const chartRef = useRef(null);
+  const chartInstance = useRef(null);
 
   useEffect(() => {
-    const data = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-      datasets: [
-        {
-          label: 'Sales Earnings',
-          data: [JanTotal, FebTotal, MarTotal, AprTotal, MayTotal, JunTotal, JulTotal, AugTotal, SepTotal, OctTotal, NovTotal, DecTotal],
-          fill: false,
-          backgroundColor: 'rgba(75, 192, 192, 1)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          tension: 0.1,
+    if (monthlyRevenue && monthlyRevenue.length > 0 && chartRef.current) {
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
+
+      const ctx = chartRef.current.getContext('2d');
+
+      const sortedRevenueData = [...monthlyRevenue].sort((a, b) => {
+        return new Date(a.year, getMonthIndex(a.month)) - new Date(b.year, getMonthIndex(b.month));
+      });
+
+      const sortedSalesData = monthlySales
+        ? [...monthlySales].sort((a, b) => {
+          return new Date(a.year, getMonthIndex(a.month)) - new Date(b.year, getMonthIndex(b.month));
+        })
+        : [];
+
+      const labels = sortedRevenueData.map(item => `${item.month} ${item.year}`);
+
+      chartInstance.current = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Monthly Revenue',
+              data: sortedRevenueData.map(item => item.revenue),
+              fill: false,
+              borderColor: 'rgb(75, 192, 192)',
+              tension: 0.1,
+            },
+            {
+              label: 'Monthly Sales',
+              data: sortedSalesData.map(item => item.sales), 
+              fill: false,
+              borderColor: 'rgb(192, 75, 192)',
+              tension: 0.1,
+            },
+          ],
         },
-      ],
-    };
-
-    const config = {
-      type: 'line',
-      data: data,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
-    };
-
-    const myChart = new window.Chart(chartRef.current, config);
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: false,
+                text: 'Revenue / Sales',
+              },
+            },
+            x: {
+              title: {
+                display: false,
+                text: 'Month',
+              },
+            },
+          },
+        },
+      });
+    }
 
     return () => {
-      myChart.destroy();
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
     };
-  }, [JanTotal, FebTotal, MarTotal, AprTotal, JunTotal]);
+  }, [monthlyRevenue, monthlySales]);
+
+  const getMonthIndex = (monthName) => {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return months.indexOf(monthName);
+  };
 
   return (
     <div className="card h-100 me-3">
-      <div className="card-header">Total Sales Earnings Over Time</div>
-      <div className="card-body">
+      <div className="card-header">Total Sales & Revenue Over Time</div>
+      <div className="card-body" style={{ height: '300px' }}>
         <canvas ref={chartRef}></canvas>
       </div>
     </div>
