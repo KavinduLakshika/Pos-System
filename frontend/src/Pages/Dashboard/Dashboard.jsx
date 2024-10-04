@@ -51,6 +51,7 @@ const Dashboard = () => {
 
 
   return (
+    <div className="scrolling-container">
     <div className="container-fluid my-4">
       <h1 className="h2 mb-4">Dashboard</h1>
 
@@ -91,6 +92,7 @@ const Dashboard = () => {
             labels={productLabels} />
         </div>
       </div>
+    </div>
     </div>
   );
 };
