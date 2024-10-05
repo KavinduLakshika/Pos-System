@@ -33,7 +33,6 @@ const createInvoice = async (req, res) => {
             !invoiceNote ||
             !productId ||
             !cusId||
-            !transactionId ||
             !userId) {
             return res.status(400).json({ error: "All fields are required." });
         }

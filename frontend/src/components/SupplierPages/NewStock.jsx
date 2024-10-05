@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './NewStock.css';
 import Table from '../Table/Table';
+import { useNavigate } from 'react-router-dom';
 
 const NewStock = () => {
   const [formData, setFormData] = useState({
@@ -46,10 +47,19 @@ const NewStock = () => {
     }
   };
 
+  const navigate = useNavigate();
+
+  const handleNewStockClick = () => {
+    navigate('/stock-reports/current-stock');
+  };
   return (
     <div className="scrolling-container">
     <div className="container-fluid my-5 mt-2">
       <h4 className=" mb-4">Create New Stock</h4>
+
+      <div className="d-flex justify-content-end mt-4">
+      <button className='btn btn-warning' onClick={handleNewStockClick}>Current Stock</button>
+      </div>
 
       <form onSubmit={handleSubmit}>
         <div className="row">
