@@ -11,7 +11,6 @@ const CreateProduct = () => {
   const [preview, setPreview] = useState('');
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
-    superCategory: 'select',
     productCategory: 'select',
     productName: '',
     productCode: '',
@@ -135,7 +134,6 @@ const CreateProduct = () => {
   };
   const handleReset = () => {
     setFormData({
-      superCategory: 'select',
       productCategory: 'select',
       productName: '',
       productCode: '',
@@ -168,41 +166,27 @@ const CreateProduct = () => {
                   ))}
                 </select>
               </div>
+
+              <div className="product-details col-md-4 mb-2">
+
+                <label htmlFor="" className='mb-1'>Product Image</label>
+                <input type="file" name='image' id='' accept="image/*" onChange={handleImageChange} className='form-control' />
+                {preview && (
+                  <div style={{ margin: '10px auto' }}>
+                    <img src={preview} alt="Preview" style={{ width: '300px', height: 'auto' }} />
+                  </div>
+                )}
+
+              </div>
             </div>
 
             <div className="row">
               <div className="product-details col-md-4 mb-2">
+
                 <label htmlFor="" className='mb-1'>Product Name</label>
                 <input onChange={handleChange} type="text" name='productName' id='' value={formData.productName} className='form-control' />
               </div>
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Product Code</label>
-                <input onChange={handleChange} type="text" name='productCode' id='' value={formData.productCode} className='form-control' />
-              </div>
-            </div>
 
-            <div className="row">
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Selling Price</label>
-                <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
-              </div>
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Buying price</label>
-                <input onChange={handleChange} type="number" name='buyingPrice' id='' onWheel={(e) => e.target.blur()} value={formData.buyingPrice} className='form-control' />
-              </div>
-            </div>
-            <div className="row">
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Quantity</label>
-                <input onChange={handleChange} type="number" name='qty' onWheel={(e) => e.target.blur()} id='' value={formData.qty} className='form-control' />
-              </div>
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Weight</label>
-                <input onChange={handleChange} type="number" name='weight' id='' onWheel={(e) => e.target.blur()} value={formData.weight} className='form-control' />
-              </div>
-            </div>
-
-            <div className="row">
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Warranty</label>
                 <select name='warranty' id='' value={formData.warranty} className='form-control' onChange={handleChange} >
@@ -245,23 +229,56 @@ const CreateProduct = () => {
                   <option value="36 Months">36 Months</option>
                 </select>
               </div>
+              
+            </div>
+
+            <div className="row">
+              <div className="product-details col-md-4 mb-2">
+
+                <label htmlFor="" className='mb-1'>Product Code</label>
+                <input onChange={handleChange} type="text" name='productCode' id='' value={formData.productCode} className='form-control' />
+
+              </div>
+
+              <div className="product-details col-md-4 mb-2">
+             
+
+              <label htmlFor="" className='mb-1'>Buying price</label>
+                <input onChange={handleChange} type="number" name='buyingPrice' id='' onWheel={(e) => e.target.blur()} value={formData.buyingPrice} className='form-control' />
+             
+
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="product-details col-md-4 mb-2">
+
+                <label htmlFor="" className='mb-1'>Quantity</label>
+                <input onChange={handleChange} type="number" name='qty' onWheel={(e) => e.target.blur()} id='' value={formData.qty} className='form-control' />
+
+              </div>
+
+              <div className="product-details col-md-4 mb-2">
+              <label htmlFor="" className='mb-1'>Selling Price</label>
+                <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="product-details col-md-4 mb-2">
+
+
+                <label htmlFor="" className='mb-1'>Weight</label>
+                <input onChange={handleChange} type="number" name='weight' id='' onWheel={(e) => e.target.blur()} value={formData.weight} className='form-control' />
+
+              </div>
+
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Description</label>
                 <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
               </div>
             </div>
 
-            <div className="row">
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Item Image</label>
-                <input type="file" name='image' id='' accept="image/*" onChange={handleImageChange} className='form-control' />
-                {preview && (
-                  <div style={{ margin: '10px auto' }}>
-                    <img src={preview} alt="Preview" style={{ width: '300px', height: 'auto' }} />
-                  </div>
-                )}
-              </div>
-            </div>
             <div className="sales-add btn d-grid d-md-flex me-md-2 justify-content-end px-5">
               <button type='reset' className="btn btn-danger btn-md mb-2" onReset={handleReset}>Clear</button>
               <button className="btn btn-primary btn-md mb-2">{selectedProd ? 'Update Product' : 'Add Product'}</button>

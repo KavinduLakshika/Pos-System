@@ -14,7 +14,7 @@ const ProductCategory = () => {
   const btnName = "Add Category";
 
   useEffect(() => {
-    fetchCategory(); // Load categories on mount
+    fetchCategory(); 
   }, []);
 
   const fetchCategory = async () => {
@@ -39,7 +39,7 @@ const ProductCategory = () => {
 
   const handleDelete = async (rowIndex) => {
     try {
-      const categoryId = data[rowIndex][0]; // Get categoryId from row
+      const categoryId = data[rowIndex][0]; 
       const response = await fetch(`${config.BASE_URL}/category/${categoryId}`, {
         method: 'DELETE',
       });
@@ -48,7 +48,7 @@ const ProductCategory = () => {
         throw new Error('Failed to delete category');
       }
 
-      // Update the table after deleting the row
+      
       setData((prevData) => prevData.filter((_, index) => index !== rowIndex));
     } catch (err) {
       setError(err.message);
@@ -60,13 +60,13 @@ const ProductCategory = () => {
     setSelectedCategory({
       categoryId: selectedCatData[0],
       categoryName: selectedCatData[1],
-      categoryType: selectedCatData[2],  // Include categoryType for editing
+      categoryType: selectedCatData[2],  
     });
     setShowModal(true);
   };
 
   const openModal = () => {
-    setSelectedCategory(null);  // Clear previous selection if adding a new category
+    setSelectedCategory(null);  
     setShowModal(true);
   };
 
@@ -75,8 +75,8 @@ const ProductCategory = () => {
   };
 
   const handleSave = () => {
-    fetchCategory();  // Refresh categories after saving
-    closeModal();     // Close modal after save
+    fetchCategory();  
+    closeModal();     
   };
 
   return (
@@ -101,8 +101,8 @@ const ProductCategory = () => {
         <CategoryForm
           showModal={showModal}
           closeModal={closeModal}
-          selectedCategory={selectedCategory}  // Pass selectedCategory for edit
-          onSave={handleSave}                  // Refresh the list on save
+          selectedCategory={selectedCategory}  
+          onSave={handleSave}                  
         />
       </div>
     </div>
