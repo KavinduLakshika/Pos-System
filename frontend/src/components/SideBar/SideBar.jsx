@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { File, LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, FileText, Menu } from 'lucide-react';
+import {  LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, FileText, Menu } from 'lucide-react';
 import './SideBar.css';
 
 const Sidebar = () => {
@@ -169,7 +169,7 @@ const Sidebar = () => {
                     }}
                 >
                     <div className="text-center mt-2 p-2">
-                        <h1></h1>
+                        <h1>ලාංඡනය</h1>
                     </div>
                     <div className="position-sticky pt-3">
                         <ul className="nav flex-column">
