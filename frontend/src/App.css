@@ -31,7 +31,6 @@
 .scrolling-container {
   height: calc(100vh - 60px);
   overflow-y:auto;
-  padding: 20px;
   scrollbar-width: none;
 }
 

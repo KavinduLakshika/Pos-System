@@ -43,6 +43,25 @@
   border-bottom: 1px solid rgb(187, 187, 187);
 }
 
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.submenu.expanded {
+  max-height: 300px;
+}
+
+.submenu.collapsed {
+  max-height: 0;
+}
+
+.nav-sub {
+  background-color: rgba(255, 255, 255, 0.309);
+  border-bottom: 1px solid rgb(187, 187, 187);
+}
+
 @media (max-width: 768px) {
   
   .nav-item {

@@ -24,7 +24,7 @@ function Layout() {
   return (
     <div className="d-flex">
       {!isLoginPage && <SideBar />}
-      <div style={{ flexGrow: 1, margin: '20px 0px' }}>
+      <div style={{ flexGrow: 1, margin: '20px 20px' }}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Dashboard />} />

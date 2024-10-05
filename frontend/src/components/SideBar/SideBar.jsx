@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { File, LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, FileText, User, Menu } from 'lucide-react';
+import { File, LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, FileText, Menu } from 'lucide-react';
 import './SideBar.css';
 
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [activeSubmenu, setActiveSubmenu] = useState(null);
 
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth <= 768) {
-                setIsCollapsed(true); 
-            } 
-            else{
-                setIsCollapsed(false); 
+                setIsCollapsed(true);
+            } else {
+                setIsCollapsed(false);
             }
         };
 
@@ -25,6 +25,13 @@ const Sidebar = () => {
         setIsCollapsed(!isCollapsed);
     };
 
+    const handleSubmenuToggle = (index) => {
+        if (activeSubmenu === index) {
+            setActiveSubmenu(null);
+        } else {
+            setActiveSubmenu(index);
+        }
+    };
 
     const menuItems = [
         {
@@ -93,7 +100,7 @@ const Sidebar = () => {
             submenus: [
                 { title: 'New Stock Supply', path: '/supplier/new-stock' },
                 { title: 'Supplier Details', path: '/supplier/supplier' },
-                
+
                 { title: 'Supplier Payment', path: '/supplier/supplier-payments' },
             ]
         },
@@ -138,46 +145,49 @@ const Sidebar = () => {
 
     return (
         <>
-                <button
-                    className="toggle-btn d-md-none rounded bg-warning"
-                    onClick={toggleSidebar}
-                    style={{
-                        position: 'fixed',
-                        top: '10px',
-                        left: '10px',
-                        zIndex: 1030,
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer'
-                    }}
-                >
-                    <Menu size={24} />
-                </button>
-            <nav className={`col-md-3 col-lg-2 d-md-block bg-color sidebar ${isCollapsed ? 'collapsed' : ''}`}
+
+            <button
+                className="toggle-btn d-md-none rounded bg-warning"
+                onClick={toggleSidebar}
                 style={{
-                    transform: isCollapsed ? 'translateX(-100%)' : 'translateX(0)',
-                    transition: 'transform 0.3s ease-in-out'
+                    position: 'fixed',
+                    top: '10px',
+                    left: '10px',
+                    zIndex: 1030,
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer'
                 }}
             >
-                <div className="text-center mt-2 p-2">
-                    <h1></h1>
-                </div>
-                <div className="position-sticky pt-3">
-                    <ul className="nav flex-column">
-                        <li className="nav-item">
-                            <Link to={'/'} className="nav-link d-flex align-items-center ">
-                                <span className="me-2"><LayoutDashboard size={20} /></span>
-                                <span className="fs-8 p-2 menu-link d-md-inline">Dashboard</span>
-                            </Link>
-                        </li>
-                        {menuItems.map((item, index) => (
-                            <li key={index} className="nav-item">
-                                <Link to={item.path} className="nav-link d-flex align-items-center" data-bs-toggle={item.submenus && item.submenus.length > 0 ? "collapse" : ""} data-bs-target={`#submenu-${index}`}>
-                                    <span className="me-2">{item.icon}</span>
-                                    <span className="fs-8 p-2 menu-link d-md-inline">{item.title}</span>
-                                </Link>
-                                {item.submenus && item.submenus.length > 0 && (
-                                    <div className="collapse" id={`submenu-${index}`}>
+                <Menu size={24} />
+            </button>
+            <div className="scrolling-container">
+                <nav className={`col-md-3 col-lg-2 d-md-block bg-color sidebar ${isCollapsed ? 'collapsed' : ''}`}
+                    style={{
+                        transform: isCollapsed ? 'translateX(-100%)' : 'translateX(0)',
+                        transition: 'transform 0.3s ease-in-out'
+                    }}
+                >
+                    <div className="text-center mt-2 p-2">
+                        <h1></h1>
+                    </div>
+                    <div className="position-sticky pt-3">
+                        <ul className="nav flex-column">
+                            <li className="nav-item">
+                                <div onClick={() => handleSubmenuToggle()} style={{ cursor: 'pointer' }}>
+                                    <Link to={'/'} className="nav-link d-flex align-items-center">
+                                        <span className="me-2"><LayoutDashboard size={20} /></span>
+                                        <span className="fs-8 p-2 menu-link d-md-inline">Dashboard</span>
+                                    </Link>
+                                </div>
+                            </li>
+                            {menuItems.map((item, index) => (
+                                <li key={index} className="nav-item">
+                                    <div className="nav-link d-flex align-items-center" onClick={() => handleSubmenuToggle(index)} style={{ cursor: 'pointer' }} >
+                                        <span className="me-2">{item.icon}</span>
+                                        <span className="fs-8 p-2 menu-link d-md-inline">{item.title}</span>
+                                    </div>
+                                    <div className={`submenu ${activeSubmenu === index ? 'expanded' : 'collapsed'}`}>
                                         <ul className="nav flex-column ms-3">
                                             {item.submenus.map((submenu, subIndex) => (
                                                 <li key={subIndex} className="nav-item nav-sub">
@@ -186,12 +196,12 @@ const Sidebar = () => {
                                             ))}
                                         </ul>
                                     </div>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </nav>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </nav>
+            </div>
         </>
     );
 };
