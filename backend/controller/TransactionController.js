@@ -1,6 +1,9 @@
 const Transaction = require("../model/Transaction");
 const Customer = require("../model/Customers");
 const Invoice = require("../model/Invoice");
+const Supplier = require("../model/Supplier");
+const RentalInvoice = require("../model/RentalInvoice");
+
 
 const createTransaction = async (req, res) => {
     try {
@@ -17,10 +20,31 @@ const createTransaction = async (req, res) => {
             return res.status(400).json({ error: "All fields are required." });
         }
 
+        // Validate invoice
+        const invoice = await Invoice.findByPk(invoiceId);
+        if (!invoice) {
+            return res.status(400).json({ message: 'Invalid invoice ID' });
+        }
+
+        // Validate supplier
+        const supplier = await Supplier.findByPk(supplierId);
+        if (!supplier) {
+            return res.status(400).json({ message: 'Invalid supplier ID' });
+        }
+
+        // Validate rentalInvoice
+        const rentalInvoice = await RentalInvoice.findByPk(rentalInvoiceId);
+        if (!rentalInvoice) {
+            return res.status(400).json({ message: 'Invalid rentalInvoice ID' });
+        }
+
         const newTransaction = await Transaction.create({
             transactionType: "cash",
             price,
             dateTime,
+            invoice_invoiceId: invoiceId,
+            supplier_supplierId: supplierId,
+            rentalInvoice_rentalInvoiceId: rentalInvoiceId,
         });
 
         res.status(201).json(newTransaction);

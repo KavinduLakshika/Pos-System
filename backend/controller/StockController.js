@@ -2,75 +2,129 @@ const Stock = require("../model/Stock");
 const Supplier = require("../model/Supplier");
 const Product = require("../model/Products");
 const Store = require("../model/Store");
+const Category = require("../model/Category");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 
-const createStock = async (req, res) => {
-    try {
-        const {
-            stockName,
-            stockQty,
-            stockDate,
-            stockPrice,
-            stockDescription,
-            productId,
-            supplierId,
-            storeId,
-        } = req.body;
-
-        // Check if all required fields are present
-        if (!stockName || !stockQty || !stockDate || !stockPrice || !productId || !supplierId || !storeId) {
-            return res.status(400).json({ error: "All fields are required." });
+// Image upload setup
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadDir = path.join(__dirname, '..', 'uploads', 'stock');
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
         }
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        const stockName = req.body.stockName || 'bill';
+        const timestamp = Date.now();
+        const ext = path.extname(file.originalname);
 
-        // Check if supplier exists
-        const supplier = await Supplier.findByPk(supplierId);
-        if (!supplier) {
-            return res.status(400).json({ message: 'Invalid supplier ID' });
-        }
-
-        // Check if product exists
-        const product = await Product.findByPk(productId);
-        if (!product) {
-            return res.status(400).json({ message: 'Invalid product ID' });
-        }
-
-        // Check if store exists
-        const store = await Store.findByPk(storeId);
-        if (!store) {
-            return res.status(400).json({ message: 'Invalid store ID' });
-        }
-
-        // Check if stock 
-        const existingStock = await Stock.findOne({ where: { stockName } });
-        if (existingStock) {
-            return res.status(400).json({ error: "A Stock with this Name already exists." });
-        }
-
-        // Create new stock
-        const newStock = await Stock.create({
-            stockName,
-            stockQty,
-            stockDate,
-            stockPrice,
-            stockDescription,
-            stockStatus: "In stock",
-            products_productId: productId,
-            supplier_supplierId: supplierId,
-            store_storeId: storeId,
-        });
-
-        // Fetch newly created stock with supplier, product, and store information
-        const stockWithSupplierAndProduct = await Stock.findByPk(newStock.stockId, {
-            include: [
-                { model: Supplier, as: 'supplier' },
-                { model: Product, as: 'product' },
-                { model: Store, as: 'store' },
-            ],
-        });
-
-        res.status(201).json(stockWithSupplierAndProduct);
-    } catch (error) {
-        return res.status(500).json({ message: `An internal error occurred: ${error.message}` });
+        const safeStockName = stockName.replace(/[^a-zA-Z0-9]/g, '_');
+        cb(null, `${safeStockName}_${timestamp}${ext}`);
     }
+});
+
+const upload = multer({ storage: storage }).single('bilImage');
+
+// Create Stock
+const createStock = async (req, res) => {
+    upload(req, res, async function (err) {
+        if (err instanceof multer.MulterError) {
+            return res.status(500).json({ error: 'Image upload failed' });
+        } else if (err) {
+            return res.status(500).json({ error: 'Unknown error: Image upload failed' });
+        }
+
+        try {
+            const {
+                stockName,
+                stockQty,
+                stockDate,
+                mfd,
+                exp,
+                stockPrice,
+                due,
+                vat,
+                total,
+                stockDescription,
+                productId,
+                supplierId,
+                storeId,
+                categoryId,
+            } = req.body;
+
+            // Validate required fields
+            if (!stockName || !stockQty || !stockDate || !stockPrice || !productId || !supplierId || !storeId) {
+                return res.status(400).json({ error: "All fields are required." });
+            }
+
+            // Check existence of related entities
+            const supplier = await Supplier.findByPk(supplierId);
+            if (!supplier) {
+                return res.status(400).json({ message: 'Invalid supplier ID' });
+            }
+
+            const product = await Product.findByPk(productId);
+            if (!product) {
+                return res.status(400).json({ message: 'Invalid product ID' });
+            }
+
+            const store = await Store.findByPk(storeId);
+            if (!store) {
+                return res.status(400).json({ message: 'Invalid store ID' });
+            }
+
+            const category = await Category.findByPk(categoryId);
+            if (!category) {
+                return res.status(400).json({ message: 'Invalid category ID' });
+            }
+
+            // Check if stock already exists
+            const existingStock = await Stock.findOne({ where: { stockName } });
+            if (existingStock) {
+                return res.status(400).json({ error: "A stock with this name already exists." });
+            }
+
+            // Handle image upload
+            let bilImage = null;
+            if (req.file) {
+                bilImage = `${req.protocol}://${req.get('host')}/uploads/stock/${req.file.filename}`;
+            }
+
+            // Create new stock
+            const newStock = await Stock.create({
+                stockName,
+                stockQty,
+                stockDate,
+                mfd,
+                exp,
+                stockPrice,
+                stockDescription,
+                stockStatus: "In stock",
+                bilImage,
+                products_productId: productId,
+                supplier_supplierId: supplierId,
+                store_storeId: storeId,
+                category_categoryId: categoryId,
+            });
+
+            // Fetch and return stock details
+            const stockDetails = await Stock.findByPk(newStock.stockId, {
+                include: [
+                    { model: Supplier, as: 'supplier' },
+                    { model: Product, as: 'product' },
+                    { model: Store, as: 'store' },
+                    { model: Category, as: 'category' },
+                ],
+            });
+
+            res.status(201).json(stockDetails);
+        } catch (error) {
+            return res.status(500).json({ message: `An internal error occurred: ${error.message}` });
+        }
+    });
 };
 
 // Get all stocks
@@ -78,11 +132,11 @@ const getAllStocks = async (req, res) => {
     try {
         const stocks = await Stock.findAll({
             include: [
-                {
-                    model: Supplier,
-                    as: 'supplier'
-                }
-            ]
+                { model: Supplier, as: 'supplier' },
+                { model: Product, as: 'product' },
+                { model: Store, as: 'store' },
+                { model: Category, as: 'category' },
+            ],
         });
         res.status(200).json(stocks);
     } catch (error) {
@@ -90,28 +144,30 @@ const getAllStocks = async (req, res) => {
     }
 };
 
-// Get a stock by ID
+// Get stock by ID
 const getStockById = async (req, res) => {
     try {
         const { id } = req.params;
         const stock = await Stock.findByPk(id, {
             include: [
-                {
-                    model: Supplier,
-                    as: 'supplier'
-                }
-            ]
+                { model: Supplier, as: 'supplier' },
+                { model: Product, as: 'product' },
+                { model: Store, as: 'store' },
+                { model: Category, as: 'category' },
+            ],
         });
 
         if (!stock) {
             return res.status(404).json({ message: "Stock not found" });
         }
+
         res.status(200).json(stock);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
-// Update a Stock
+
+// Update stock
 const updateStock = async (req, res) => {
     try {
         const { id } = req.params;
@@ -125,6 +181,7 @@ const updateStock = async (req, res) => {
             productId,
             supplierId,
             storeId,
+            categoryId
         } = req.body;
 
         const stock = await Stock.findByPk(id);
@@ -142,6 +199,7 @@ const updateStock = async (req, res) => {
             products_productId: productId,
             supplier_supplierId: supplierId,
             store_storeId: storeId,
+            category_categoryId: categoryId
         });
 
         res.status(200).json(stock);
@@ -150,7 +208,7 @@ const updateStock = async (req, res) => {
     }
 };
 
-// Delete a stock
+// Delete stock
 const deleteStock = async (req, res) => {
     try {
         const { id } = req.params;
@@ -158,6 +216,7 @@ const deleteStock = async (req, res) => {
         if (!stock) {
             return res.status(404).json({ message: "Stock not found" });
         }
+
         await stock.destroy();
         res.status(200).json({ message: "Stock deleted successfully" });
     } catch (error) {
@@ -171,4 +230,4 @@ module.exports = {
     getStockById,
     updateStock,
     deleteStock,
-}
+};

@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../dbConfig");
-const Customer = require("./Customers");
 const Invoice = require("./Invoice");
 const Supplier = require("./Supplier");
 const RentalInvoice = require("./RentalInvoice");
