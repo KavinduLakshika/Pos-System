@@ -163,7 +163,7 @@ const NewStock = () => {
             columns={columns}
             showButton={false}
             showActions={true}
-            showSearch={true}
+            showSearch={false}
             showPDF={false}
             showDate={false}
             showRow={false}
