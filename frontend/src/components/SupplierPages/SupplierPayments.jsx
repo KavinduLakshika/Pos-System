@@ -20,7 +20,8 @@ function SupplierPayments() {
           data={data}
           columns={columns}
           btnName={btnName}
-        />
+          showDate={false}
+          />
       </div>
     </div>
   );

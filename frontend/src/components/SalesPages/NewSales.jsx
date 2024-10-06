@@ -213,6 +213,8 @@ const NewSales = ({ invoice }) => {
               showButton={false}
               showActions={false}
               showRow={false}
+              showDate={false}
+              showPDF={false}
             />
           </div>
 

@@ -89,8 +89,6 @@ const Sidebar = () => {
             submenus: [
                 { title: 'Create Product Return', path: '/stock/create' },
                 { title: 'Returned Product List', path: '/stock/list' },
-                { title: 'Stock Adjustment', path: '/stock/adjustment' },
-                { title: 'Stock Adjustment History', path: '/stock/adjustment_history' },
             ]
         },
         {

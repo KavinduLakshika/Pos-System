@@ -95,6 +95,7 @@ const ProductCategory = () => {
             onAdd={openModal}
             onDelete={handleDelete}
             onEdit={handleEdit}
+            showDate={false}
           />
         )}
 

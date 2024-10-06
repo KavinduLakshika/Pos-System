@@ -119,6 +119,7 @@ const CreateStore = () => {
                         onAdd={openModal}
                         onDelete={handleDelete}
                         onEdit={handleEdit}
+                        showDate={false}
                     />
                 )}
                 <StoreForm

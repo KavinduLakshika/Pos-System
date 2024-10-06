@@ -158,6 +158,7 @@ const ProductList = () => {
             onDelete={handleDelete}
             onEdit={handleEdit}
             onMarkOutOfStock={markAsOutOfStock}
+            showDate={false}
           />
         )}
       </div>

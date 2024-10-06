@@ -164,6 +164,9 @@ const NewStock = () => {
             showButton={false}
             showActions={true}
             showSearch={true}
+            showPDF={false}
+            showDate={false}
+            showRow={false}
           />
         </div>
 

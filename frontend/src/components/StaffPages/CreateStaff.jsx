@@ -135,6 +135,7 @@ const CreateStaff = () => {
             onAdd={handleAddNewStaff}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            showDate={false}
           />
         )}
         <StaffModal

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import DatePicker from 'react-datepicker';
 
 const Table = ({
     data,
@@ -18,14 +19,16 @@ const Table = ({
     showDelete = true,
     showRow = true,
     showPDF = true,
-    startDate,
-    endDate,
+    showDate = true,
 }) => {
     const [tableData, setTableData] = useState(data);
     const [tableColumns, setTableColumns] = useState(columns);
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(25);
+
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     useEffect(() => {
         setTableData(data);
@@ -71,14 +74,17 @@ const Table = ({
 
         doc.save("sales_history.pdf");
     };
-
+    const resetFilters = () => {
+        setStartDate(null);
+        setEndDate(null);
+    };
     return (
         <div className="scroll-table">
             <div className="container-fluid p-2">
 
                 <div className="row mb-2">
                     {showSearch && (
-                        <div className="col-md-4 mb-3">
+                        <div className="col-md-3 mb-2">
                             <input
                                 type="text"
                                 className="form-control"
@@ -92,7 +98,7 @@ const Table = ({
                         </div>
                     )}
                     {showRow && (
-                        <div className="col-md-2 mb-3">
+                        <div className="col-md-2 mb-2">
                             <select className="form-control" value={itemsPerPage} onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}>
                                 <option value={25}>25</option>
                                 <option value={50}>50</option>
@@ -101,11 +107,34 @@ const Table = ({
                             </select>
                         </div>
                     )}
+                    {showDate && (
+                        <div className="col-md-4 d-flex mb-2">
+                            <div className="col-md-5 me-2">
+                                <DatePicker
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                    placeholderText="Start Date"
+                                    className="form-control"
+                                    dateFormat="yyyy-MM-dd"
+                                />
+                            </div>
+                            <div className=" col-md-5  me-2">
+                                <DatePicker
+                                    selected={endDate}
+                                    onChange={(date) => setEndDate(date)}
+                                    placeholderText="End Date"
+                                    className="form-control"
+                                    dateFormat="yyyy-MM-dd"
+                                />
+                            </div>
+                            <div className="col-md-2 mb-2">
+                                <button className=" btn btn-danger" onClick={resetFilters}>Reset</button>
+                            </div>
+                        </div>
+                    )}
                     {showPDF && (
-                        <div className="col-md-2 mb-3">
-                            <button className="btn btn-warning " onClick={generatePDF}>
-                                Generate PDF
-                            </button>
+                        <div className="col-md-2 mb-2">
+                            <button className="btn btn-warning " onClick={generatePDF}>Generate PDF</button>
                         </div>
                     )}
                     {showButton && (

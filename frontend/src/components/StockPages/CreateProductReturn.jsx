@@ -19,9 +19,9 @@ const CreateProductReturn = () => {
 
     const [data,] = useState([
         ['1', "MaleeshaPa", "5", '1'],
-      ]);
-      const Columns = ["id", 'product', 'qty', 'price'];
-    
+    ]);
+    const Columns = ["id", 'product', 'qty', 'price'];
+
     return (
         <div>
             <div className="scrolling-container">
@@ -108,6 +108,8 @@ const CreateProductReturn = () => {
                                     showButton={false}
                                     showActions={false}
                                     showRow={false}
+                                    showDate={false}
+                                    showPDF={false}
                                 />
                             </div>
 

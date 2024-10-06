@@ -23,6 +23,7 @@ function DailySales() {
           columns={columns}
           btnName={btnName}
           onAdd={handleNewSale}
+          showDate={false}
         />
       </div>
     </div>

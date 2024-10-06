@@ -137,6 +137,7 @@ const CustomerList = () => {
             onAdd={openModal}
             onDelete={handleDelete}
             onEdit={handleEdit}
+            showDate={false}
           />
         )}
         <Modal
