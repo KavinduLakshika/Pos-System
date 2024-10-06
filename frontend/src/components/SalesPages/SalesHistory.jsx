@@ -24,11 +24,11 @@ const SalesHistory = () => {
       const formattedData = invoices.map(invoice => {
         const invoiceDate = new Date(invoice.invoiceDate);
         const dueDate = new Date(invoice.invoiceDueDate);
-        
+
         // Format dates to "YYYY-MM-DD HH:mm"
         const formattedInvoiceDate = `${invoiceDate.getFullYear()}-${String(invoiceDate.getMonth() + 1).padStart(2, '0')}-${String(invoiceDate.getDate()).padStart(2, '0')} ${String(invoiceDate.getHours()).padStart(2, '0')}:${String(invoiceDate.getMinutes()).padStart(2, '0')}`;
         const formattedDueDate = `${dueDate.getFullYear()}-${String(dueDate.getMonth() + 1).padStart(2, '0')}-${String(dueDate.getDate()).padStart(2, '0')} `;
-        
+
         return [
           invoice.invoiceId,
           formattedInvoiceDate, // Date and time
@@ -49,8 +49,8 @@ const SalesHistory = () => {
       setIsLoading(false);
     }
   };
-  
-
+  const title = 'Sales History';
+  const invoice = 'Sales History.pdf';
 
   return (
     <div>
@@ -67,6 +67,8 @@ const SalesHistory = () => {
               data={data}
               columns={columns}
               btnName={btnName}
+              title={title}
+              invoice={invoice}
             />
           )}
         </div>

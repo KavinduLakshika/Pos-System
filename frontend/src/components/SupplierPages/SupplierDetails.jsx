@@ -68,6 +68,9 @@ function SupplierDetails() {
     }
   };
 
+  const title='Supplier Details';
+  const invoice='Supplier Details.pdf';
+
   return (
     <div>
       <div className="scrolling-container">
@@ -82,6 +85,8 @@ function SupplierDetails() {
             data={data}
             columns={columns}
             btnName={btnName}
+            title={title}
+            invoice={invoice}
           />
         )}
       </div>

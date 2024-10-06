@@ -8,6 +8,8 @@ import './Table.css'
 
 const Table = ({
     data,
+    title,
+    invoice,
     columns,
     onAdd,
     btnName,
@@ -54,27 +56,28 @@ const Table = ({
             currentPage * itemsPerPage
         );
 
-    const generatePDF = () => {
-        const doc = new jsPDF();
-        doc.text("Sales History", 20, 20);
-
-        const headers = columns.map(column => ({ content: column, styles: { halign: 'center' } }));
-        const tableData = filteredData.map(row => row.map(cell => ({ content: cell, styles: { halign: 'center' } })));
-
-        doc.autoTable({
-            head: [headers],
-            body: tableData,
-            startY: 30,
-            theme: 'striped',
-            margin: { top: 10, right: 10, bottom: 10, left: 10 },
-            styles: { fontSize: 5, halign: 'center', valign: 'middle' },
-            headStyles: { fillColor: [255, 216, 126], textColor: 0, fontSize: 5 },
-            bodyStyles: { textColor: 50 },
-            alternateRowStyles: { fillColor: [250, 250, 250] }
-        });
-
-        doc.save("invoice.pdf");
-    };
+        const generatePDF = () => {
+            const doc = new jsPDF();
+            doc.text(title, 20, 20);
+        
+            const headers = columns.map(column => ({ content: column, styles: { halign: 'center' } }));
+            const tableData = filteredData.map(row => row.map(cell => ({ content: cell, styles: { halign: 'center' } })));
+        
+            doc.autoTable({
+                head: [headers],
+                body: tableData,
+                startY: 30,
+                theme: 'striped',
+                margin: { top: 10, right: 10, bottom: 10, left: 10 },
+                styles: { fontSize: 5, halign: 'center', valign: 'middle' },
+                headStyles: { fillColor: [255, 216, 126], textColor: 0, fontSize: 5 },
+                bodyStyles: { textColor: 50 },
+                alternateRowStyles: { fillColor: [250, 250, 250] }
+            });
+        
+            doc.save(invoice);
+        };
+        
     const resetFilters = () => {
         setStartDate(null);
         setEndDate(null);

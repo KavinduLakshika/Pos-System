@@ -10,6 +10,9 @@ const data = [
 
 const btnName = ' + New Payment To Supplier ';
 
+const title = 'Supplier Payment Details';
+const invoice = 'Supplier Payment Details.pdf';
+
 function SupplierPayments() {
   return (
     <div>
@@ -21,7 +24,9 @@ function SupplierPayments() {
           columns={columns}
           btnName={btnName}
           showDate={false}
-          />
+          title={title}
+          invoice={invoice}
+        />
       </div>
     </div>
   );

@@ -38,6 +38,10 @@ function StockHistory() {
       setIsLoading(false);
     }
   };
+
+  const title='Stock History';
+  const invoice='Stock History.pdf';
+
   return (
     <div>
       <div className="scrolling-container">
@@ -53,6 +57,8 @@ function StockHistory() {
             columns={columns}
             btnName={btnName}
             showDelete={false}
+            title={title}
+            invoice={invoice}
           />
         )}
       </div>

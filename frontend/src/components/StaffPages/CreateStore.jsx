@@ -103,6 +103,9 @@ const CreateStore = () => {
         setShowModal(false);
     };
 
+    const title = 'Department';
+    const invoice = 'Department.pdf';
+
     return (
         <div>
             <div className="scrolling-container">
@@ -120,6 +123,8 @@ const CreateStore = () => {
                         onDelete={handleDelete}
                         onEdit={handleEdit}
                         showDate={false}
+                        title={title}
+                        invoice={invoice}
                     />
                 )}
                 <StoreForm

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Table from '../Table/Table';
 import Form from '../../Models/Form/Form';
 import Modal from 'react-modal';
@@ -121,6 +121,8 @@ const CustomerList = () => {
     fetchCustomer();
   };
 
+  const title='Customer List';
+  const invoice='customer_list.pdf';
   return (
     <div>
       <div className="scrolling-container">
@@ -138,6 +140,8 @@ const CustomerList = () => {
             onDelete={handleDelete}
             onEdit={handleEdit}
             showDate={false}
+            title={title}
+            invoice={invoice}
           />
         )}
         <Modal

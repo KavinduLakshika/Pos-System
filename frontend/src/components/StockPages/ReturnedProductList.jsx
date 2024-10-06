@@ -45,6 +45,9 @@ const ReturnedProductList = () => {
         }
     };
 
+    const title = 'Returned Product List';
+    const invoice = 'Returned Product List.pdf';
+
     return (
         <div>
             <div className="scrolling-container">
@@ -61,6 +64,8 @@ const ReturnedProductList = () => {
                             btnName={btnName}
                             onAdd={handleCreateReturn}
                             showActions={false}
+                            title={title}
+                            invoice={invoice}
                         />
                     </div>
                 )}
