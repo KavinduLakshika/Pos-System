@@ -98,7 +98,7 @@ const Table = ({
                         </div>
                     )}
                     {showRow && (
-                        <div className="col-md-2 mb-2">
+                        <div className="col-md-1 mb-2">
                             <select className="form-control" value={itemsPerPage} onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}>
                                 <option value={25}>25</option>
                                 <option value={50}>50</option>
@@ -107,45 +107,52 @@ const Table = ({
                             </select>
                         </div>
                     )}
-                    {showDate && (
-                        <div className="col-md-4 d-flex mb-2">
-                            <div className="col-md-5 me-2">
-                                <DatePicker
-                                    selected={startDate}
-                                    onChange={(date) => setStartDate(date)}
-                                    placeholderText="Start Date"
-                                    className="form-control"
-                                    dateFormat="yyyy-MM-dd"
-                                />
-                            </div>
-                            <div className=" col-md-5  me-2">
-                                <DatePicker
-                                    selected={endDate}
-                                    onChange={(date) => setEndDate(date)}
-                                    placeholderText="End Date"
-                                    className="form-control"
-                                    dateFormat="yyyy-MM-dd"
-                                />
-                            </div>
-                            <div className="col-md-2 mb-2">
-                                <button className=" btn btn-danger" onClick={resetFilters}>Reset</button>
-                            </div>
-                        </div>
-                    )}
-                    {showPDF && (
-                        <div className="col-md-2 mb-2">
-                            <button className="btn btn-warning " onClick={generatePDF}>Generate PDF</button>
-                        </div>
-                    )}
-                    {showButton && (
-                        <div className="col-md- d-flex justify-content-end">
-                            <button className="btn btn-info text-white" onClick={onAdd}>
-                                {btnName}
-                            </button>
-                        </div>
-                    )}
-
                 </div>
+
+                <div className="row mb-2">
+                    <div className="d-flex justify-content-end">
+                        {showDate && (
+                            <div className="d-flex mb-2 col-md-3">
+                                <div className=" me-2">
+                                    <DatePicker
+                                        selected={startDate}
+                                        onChange={(date) => setStartDate(date)}
+                                        placeholderText="Start Date"
+                                        className="form-control"
+                                        dateFormat="yyyy-MM-dd"
+                                    />
+                                </div>
+                                <div className="me-2">
+                                    <DatePicker
+                                        selected={endDate}
+                                        onChange={(date) => setEndDate(date)}
+                                        placeholderText="End Date"
+                                        className="form-control"
+                                        dateFormat="yyyy-MM-dd"
+                                    />
+                                </div>
+                                <div>
+                                    <button className="btn btn-danger" onClick={resetFilters}>Reset</button>
+                                </div>
+                            </div>
+                        )}
+                        {showPDF && (
+                            <div>
+                                <button className="btn btn-warning" onClick={generatePDF}>Generate PDF</button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+
+                {showButton && (
+                    <div className=" d-flex justify-content-end">
+                        <button className="btn btn-info text-white" onClick={onAdd}>
+                            {btnName}
+                        </button>
+                    </div>
+                )}
+
 
                 <div className="mt-2">
                     <div className="col-md-12">
