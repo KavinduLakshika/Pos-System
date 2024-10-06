@@ -117,9 +117,9 @@ const Table = ({
                         </div>
                     )}
 
-                    <div className="d-flex ms-auto ">
+                    <div className="d-flex ms-auto  flex-se">
                         {showDate && (
-                            <div className="d-flex me-2">
+                            <div className="d-flex me-2 date">
                                 <div className="mb-2 me-2">
                                     <DatePicker
                                         selected={startDate}

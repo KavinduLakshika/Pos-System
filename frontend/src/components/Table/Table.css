@@ -14,4 +14,10 @@
     .form-con-row{
         width: 10%;
     }
+    .flex-se{
+        justify-content: end;
+    }
+    .date{
+        width:40%;
+    }
 }
