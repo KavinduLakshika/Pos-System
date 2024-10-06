@@ -78,8 +78,8 @@ const Dashboard = () => {
   }, [base_url]);
 
   
-  const stockDistribution = [65, 59, 80, 81, 56];
-  const productLabels = ['Ring', 'Necklace', 'Bangle', 'Earring', 'Bracelet'];
+  const stockDistribution = [65, 59, 80, 81];
+  const productLabels = ['Expenses', 'Supplier Payments', 'Salaray Payment', 'Income'];
 
   return (
     <div className="scrolling-container">
