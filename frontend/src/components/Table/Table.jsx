@@ -82,13 +82,13 @@ const Table = ({
         <div className="scroll-table">
             <div className="container-fluid p-2">
 
-                <div className="row mb-2">
+                <div className="d-flex align-items-center mb-2">
                     {showSearch && (
-                        <div className="col-md-3 mb-2">
+                        <div className="me-2">
                             <input
                                 type="text"
                                 className="form-control"
-                                placeholder='Search'
+                                placeholder="Search"
                                 value={searchQuery}
                                 onChange={(e) => {
                                     setSearchQuery(e.target.value);
@@ -97,9 +97,17 @@ const Table = ({
                             />
                         </div>
                     )}
+
                     {showRow && (
-                        <div className="col-md-2 mb-2">
-                            <select className="form-control" value={itemsPerPage} onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}>
+                        <div className="me-2">
+                            <select
+                                className="form-control"
+                                value={itemsPerPage}
+                                onChange={(e) => {
+                                    setItemsPerPage(Number(e.target.value));
+                                    setCurrentPage(1);
+                                }}
+                            >
                                 <option value={25}>25</option>
                                 <option value={50}>50</option>
                                 <option value={100}>100</option>
@@ -107,9 +115,10 @@ const Table = ({
                             </select>
                         </div>
                     )}
+
                     {showDate && (
-                        <div className="col-md-4 d-flex mb-2">
-                            <div className="col-md-5 me-2">
+                        <div className="d-flex me-2">
+                            <div className="me-2">
                                 <DatePicker
                                     selected={startDate}
                                     onChange={(date) => setStartDate(date)}
@@ -118,7 +127,7 @@ const Table = ({
                                     dateFormat="yyyy-MM-dd"
                                 />
                             </div>
-                            <div className=" col-md-5  me-2">
+                            <div className="me-2">
                                 <DatePicker
                                     selected={endDate}
                                     onChange={(date) => setEndDate(date)}
@@ -127,25 +136,41 @@ const Table = ({
                                     dateFormat="yyyy-MM-dd"
                                 />
                             </div>
-                            <div className="col-md-2 mb-2">
-                                <button className=" btn btn-danger" onClick={resetFilters}>Reset</button>
+                            <div>
+                                <button className="btn btn-danger" onClick={resetFilters}>
+                                    Reset
+                                </button>
                             </div>
                         </div>
                     )}
+
                     {showPDF && (
-                        <div className="col-md-2 mb-2">
-                            <button className="btn btn-warning " onClick={generatePDF}>Generate PDF</button>
-                        </div>
-                    )}
-                    {showButton && (
-                        <div className="col-md- d-flex justify-content-end">
-                            <button className="btn btn-info text-white" onClick={onAdd}>
-                                {btnName}
+                        <div className="me-2">
+                            <button className="btn btn-warning" onClick={generatePDF}>
+                                Generate PDF
                             </button>
                         </div>
                     )}
-
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+                {showButton && (
+                    <div className=" d-flex justify-content-end">
+                        <button className="btn btn-info text-white" onClick={onAdd}>
+                            {btnName}
+                        </button>
+                    </div>
+                )}
+
 
                 <div className="mt-2">
                     <div className="col-md-12">

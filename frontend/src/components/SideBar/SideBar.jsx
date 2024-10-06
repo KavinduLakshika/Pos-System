@@ -43,7 +43,7 @@ const Sidebar = () => {
                 { title: 'Sales History', path: '/sales/history' },
             ]
         },
-        {
+        /*{
             title: 'Rental Invoice',
             icon: <ShoppingCart size={20} />,
             path: '/sales',
@@ -51,15 +51,15 @@ const Sidebar = () => {
                 { title: 'Create Rental Invoice', path: '/Rental/new' },
                 { title: 'Sales History', path: '/Rental/history' },
             ]
-        },
+        },*/
         {
             title: 'Customer',
             icon: <Users size={20} />,
             path: '/customer',
             submenus: [
                 { title: 'Customer List', path: '/customer/customer-list' },
-                { title: 'Job Due Payment', path: '/customer/jobDue-payment' },
-                { title: 'Sale Due Payment', path: '/customer/sale-due-payment' },
+                // { title: 'Job Due Payment', path: '/customer/jobDue-payment' },
+                // { title: 'Sale Due Payment', path: '/customer/sale-due-payment' },
             ]
         },
         {
