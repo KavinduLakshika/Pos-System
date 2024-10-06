@@ -168,23 +168,15 @@ const CreateProduct = () => {
               </div>
 
               <div className="product-details col-md-4 mb-2">
-
-                <label htmlFor="" className='mb-1'>Product Image</label>
-                <input type="file" name='image' id='' accept="image/*" onChange={handleImageChange} className='form-control' />
-                {preview && (
-                  <div style={{ margin: '10px auto' }}>
-                    <img src={preview} alt="Preview" style={{ width: '300px', height: 'auto' }} />
-                  </div>
-                )}
-
+                <label htmlFor="" className='mb-1'>Product Name</label>
+                <input onChange={handleChange} type="text" name='productName' id='' value={formData.productName} className='form-control' />
               </div>
             </div>
 
             <div className="row">
               <div className="product-details col-md-4 mb-2">
-
-                <label htmlFor="" className='mb-1'>Product Name</label>
-                <input onChange={handleChange} type="text" name='productName' id='' value={formData.productName} className='form-control' />
+                <label htmlFor="" className='mb-1'>Product Code</label>
+                <input onChange={handleChange} type="text" name='productCode' id='' value={formData.productCode} className='form-control' />
               </div>
 
               <div className="product-details col-md-4 mb-2">
@@ -229,53 +221,42 @@ const CreateProduct = () => {
                   <option value="36 Months">36 Months</option>
                 </select>
               </div>
-              
+
             </div>
 
             <div className="row">
               <div className="product-details col-md-4 mb-2">
-
-                <label htmlFor="" className='mb-1'>Product Code</label>
-                <input onChange={handleChange} type="text" name='productCode' id='' value={formData.productCode} className='form-control' />
-
-              </div>
-
-              <div className="product-details col-md-4 mb-2">
-             
-
-              <label htmlFor="" className='mb-1'>Buying price</label>
+                <label htmlFor="" className='mb-1'>Buying price</label>
                 <input onChange={handleChange} type="number" name='buyingPrice' id='' onWheel={(e) => e.target.blur()} value={formData.buyingPrice} className='form-control' />
-             
-
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="product-details col-md-4 mb-2">
-
-                <label htmlFor="" className='mb-1'>Quantity</label>
-                <input onChange={handleChange} type="number" name='qty' onWheel={(e) => e.target.blur()} id='' value={formData.qty} className='form-control' />
-
               </div>
 
               <div className="product-details col-md-4 mb-2">
-              <label htmlFor="" className='mb-1'>Selling Price</label>
-                <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="product-details col-md-4 mb-2">
-
-
                 <label htmlFor="" className='mb-1'>Weight</label>
                 <input onChange={handleChange} type="number" name='weight' id='' onWheel={(e) => e.target.blur()} value={formData.weight} className='form-control' />
+              </div>
+            </div>
 
+            <div className="row">
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Selling Price</label>
+                <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
               </div>
 
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Description</label>
                 <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Product Image</label>
+                <input type="file" name='image' id='' accept="image/*" onChange={handleImageChange} className='form-control' />
+                {preview && (
+                  <div style={{ margin: '10px auto' }}>
+                    <img src={preview} alt="Preview" style={{ width: '100px', height: 'auto' }} />
+                  </div>
+                )}
               </div>
             </div>
 

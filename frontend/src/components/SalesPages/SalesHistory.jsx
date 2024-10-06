@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import Table from '../Table/Table';
-import config from '../../config'
+import config from '../../config';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const SalesHistory = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const columns = ["ID", "Date/time", "Due Date", "Paid Amount", "Payable Amount", "Due Amount", "Total Amount", "Discount", "Customer", "Products"];
-
-  const btnName = 'Add New Sale'
+  const btnName = 'Add New Sale';
 
   useEffect(() => {
     fetchSalesHistory();
@@ -42,22 +44,54 @@ const SalesHistory = () => {
     }
   };
 
+  const resetFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+  };
+
   return (
     <div>
       <div className="scrolling-container">
         <div className="new-sales-container">
-          <h4>SalesHistory</h4>
-          <div>
+          <h4>Sales History</h4>
+          <div className="d-flex mb-2">
+            <div className="me-2">
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                placeholderText="Start Date"
+                className="form-control"
+                dateFormat="yyyy-MM-dd"
+              />
+            </div>
+            <div className="me-2">
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                placeholderText="End Date"
+                className="form-control"
+                dateFormat="yyyy-MM-dd"
+              />
+            </div>
+            <button className="btn btn-danger" onClick={resetFilters}>Reset</button>
+          </div>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>Error: {error}</p>
+          ) : (
             <Table
               data={data}
               columns={columns}
               btnName={btnName}
+              startDate={startDate}
+              endDate={endDate}
             />
-          </div>
+          )}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SalesHistory
+export default SalesHistory;
