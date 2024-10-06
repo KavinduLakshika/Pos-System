@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {  LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, FileText, Menu } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, FileText, Menu } from 'lucide-react';
 import './SideBar.css';
 
 const Sidebar = () => {
@@ -87,6 +87,7 @@ const Sidebar = () => {
             icon: <Boxes size={20} />,
             path: '/stock',
             submenus: [
+                { title: 'Add New Stock', path: '/stock/new-stock' },
                 { title: 'Create Product Return', path: '/stock/create' },
                 { title: 'Returned Product List', path: '/stock/list' },
             ]
@@ -96,9 +97,7 @@ const Sidebar = () => {
             icon: <Truck size={20} />,
             path: '/Supplier',
             submenus: [
-                { title: 'New Stock Supply', path: '/supplier/new-stock' },
                 { title: 'Supplier Details', path: '/supplier/supplier' },
-
                 { title: 'Supplier Payment', path: '/supplier/supplier-payments' },
             ]
         },

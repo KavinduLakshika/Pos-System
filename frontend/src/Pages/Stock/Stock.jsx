@@ -4,11 +4,13 @@ import CreateProductReturn from '../../components/StockPages/CreateProductReturn
 import ReturnedProductList from '../../components/StockPages/ReturnedProductList';
 import StockAdjustment from '../../components/StockPages/StockAdjustment';
 import StockAdjustmentHistory from '../../components/StockPages/StockAdjustmentHistory';
+import NewStock from '../../components/StockPages/NewStock';
 
 const Stock = () => {
   return (
     <div>
       <Routes>
+      <Route path='new-stock' element={<NewStock/>}/>
         <Route path="create" element={<CreateProductReturn />} />
         <Route path="list" element={<ReturnedProductList />} />
         <Route path="adjustment" element={<StockAdjustment />} />
