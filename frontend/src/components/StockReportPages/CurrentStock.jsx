@@ -16,7 +16,7 @@ function CurrentStock() {
   const navigate = useNavigate();
 
   const handleNewStockClick = () => {
-    navigate('/supplier/new-stock');
+    navigate('/stock/new-stock');
   };
 
 
