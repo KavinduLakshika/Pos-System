@@ -161,7 +161,7 @@ const Sidebar = () => {
             >
                 <Menu size={24} />
             </button>
-            <div className="scrolling-container">
+            <div className="scrolling-sidebar">
                 <nav className={`col-md-3 col-lg-2 d-md-block bg-color sidebar ${isCollapsed ? 'collapsed' : ''}`}
                     style={{
                         transform: isCollapsed ? 'translateX(-100%)' : 'translateX(0)',
