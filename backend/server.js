@@ -18,7 +18,8 @@ const ExpenseController = require("./controller/ExpensesController");
 const ExpensesCatController = require("./controller/ExpensesCatController");
 const GRNController = require("./controller/GRNController");
 const RentalInvoiceController = require("./controller/RentalInvoiceController");
-const ReportController = require("./controller/ReportController");
+const ReportController = require("./controller/Reports/ReportController");
+const ProductNStockController = require("./controller/Reports/ProductStockController");
 
 const app = express();
 const PORT = process.env.PORT;
@@ -124,6 +125,8 @@ app.delete("/grn/:id", GRNController.deleteGrn);
 
 //get reports
 app.get("/getReports", ReportController.getReports);
+app.get("/productStock", ProductNStockController.getStockReports);
+
 // Sync the database
 sequelize
     .sync()

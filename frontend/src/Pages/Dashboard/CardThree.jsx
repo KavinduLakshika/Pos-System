@@ -1,18 +1,26 @@
 import React, { useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Use Bootstrap for layout
 
-const CardThree = ({ stockSize,lables }) => {
+const getRandomColor = () => {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    const a = Math.random().toFixed(2);
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
+};
+
+const CardThree = ({ stockSize, labels }) => {
     const chartRef = useRef(null);
 
     useEffect(() => {
         const data = {
-            labels: lables,
+            labels: labels,
             datasets: [
                 {
                     label: 'Stock',
-                    data: stockSize, // Use the data passed as props
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    data: stockSize,
+                    backgroundColor: getRandomColor(),
+                    borderColor: getRandomColor(),
                     borderWidth: 1,
                 },
             ],
@@ -23,10 +31,10 @@ const CardThree = ({ stockSize,lables }) => {
             data: data,
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // Allow the chart to scale properly
+                maintainAspectRatio: false,
                 scales: {
                     y: {
-                        beginAtZero: true, // Ensure Y axis starts at zero
+                        beginAtZero: true,
                     },
                 },
                 plugins: {
@@ -35,7 +43,7 @@ const CardThree = ({ stockSize,lables }) => {
                     },
                     title: {
                         display: true,
-                        text: 'Stock',
+                        color: getRandomColor(),
                     },
                 },
             },
@@ -43,17 +51,16 @@ const CardThree = ({ stockSize,lables }) => {
 
         const myBarChart = new window.Chart(chartRef.current, config);
 
-        // Cleanup chart when component unmounts
         return () => {
             myBarChart.destroy();
         };
-    }, [stockSize]);
+    }, [stockSize, labels]);
 
     return (
-        <div className=" bg-white mb-3 " style={{ height: '400px' }}>
+        <div className="bg-white mb-3" style={{ height: '400px' }}>
             <div className="card-header">Current Stock Bar Chart</div>
             <div className="card-body">
-                <div style={{ position: 'relative', height: '300px', width: '100%' }}>
+                <div style={{ position: 'relative', height: '400px', width: '100%' }}>
                     <canvas ref={chartRef}></canvas>
                 </div>
             </div>

@@ -1,25 +1,33 @@
 const { Op } = require("sequelize");
-const Invoice = require("../model/Invoice");
+const Invoice = require("../../model/Invoice");
 
 async function getReports(req, res) {
   try {
     const report = {
       lifetimeRevenue: await lifetimeRevenue(),
-      revenueToday: await revenueToday(),
-      revenueYesterday: await revenueYesterday(),
-      revenueWeek: await revenueWeek(),
-      revenueLastMonth: await revenueLastMonth(),
-      revenueMonth: await revenueMonth(),
       lifetimeSales: await lifetimeSales(),
+
+      revenueToday: await revenueToday(),
       salesToday: await salesToday(),
+
+      revenueYesterday: await revenueYesterday(),
       salesYesterday: await salesYesterday(),
+
+      revenueWeek: await revenueWeek(),
       salesWeek: await salesWeek(),
+
+      revenueLastMonth: await revenueLastMonth(),
       salesLastMonth: await salesLastMonth(),
+
+      revenueMonth: await revenueMonth(),
       salesMonth: await salesMonth(),
+
       // dailyRevenue: await dailyRevenue(),
       // dailySales: await dailySales(),
+
       // dailyRevenueLast30Days: await dailyRevenueLast30Days(),
       // dailySalesLast30Days: await dailySalesLast30Days(),
+
       monthlyRevenue: await monthlyRevenue(),
       monthlySales: await monthlySales()
     };
@@ -340,13 +348,13 @@ async function monthlyRevenue() {
     });
 
     result.push({
-      month: monthStart.toLocaleString('default', { month: 'long' }), // E.g., "January"
+      month: monthStart.toLocaleString('default', { month: 'long' }), 
       year: monthStart.getFullYear(),
       revenue: revenue || 0,
     });
   }
 
-  return result.reverse(); // Reverse to get the data from oldest to newest month
+  return result.reverse(); 
 }
 
 // Month-wise Sales for the Last 12 Months
@@ -368,13 +376,13 @@ async function monthlySales() {
     });
 
     result.push({
-      month: monthStart.toLocaleString('default', { month: 'long' }), // E.g., "January"
+      month: monthStart.toLocaleString('default', { month: 'long' }), 
       year: monthStart.getFullYear(),
       sales: sales || 0,
     });
   }
 
-  return result.reverse(); // Reverse to get the data from oldest to newest month
+  return result.reverse(); 
 }
 
 module.exports = {
