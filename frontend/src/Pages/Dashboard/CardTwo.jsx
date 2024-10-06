@@ -1,6 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
+const getRandomColor = () => {
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  const a = (Math.random()).toFixed(2);
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+};
+
 function CardTwo({ monthlyRevenue, monthlySales }) {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
@@ -25,6 +33,10 @@ function CardTwo({ monthlyRevenue, monthlySales }) {
 
       const labels = sortedRevenueData.map(item => `${item.month} ${item.year}`);
 
+      // Get random colors for datasets
+      const revenueColor = getRandomColor();
+      const salesColor = getRandomColor();
+
       chartInstance.current = new Chart(ctx, {
         type: 'line',
         data: {
@@ -34,14 +46,16 @@ function CardTwo({ monthlyRevenue, monthlySales }) {
               label: 'Monthly Revenue',
               data: sortedRevenueData.map(item => item.revenue),
               fill: false,
-              borderColor: 'rgb(75, 192, 192)',
+              borderColor: revenueColor,
+              backgroundColor: revenueColor,
               tension: 0.1,
             },
             {
               label: 'Monthly Sales',
-              data: sortedSalesData.map(item => item.sales), 
+              data: sortedSalesData.map(item => item.sales),
               fill: false,
-              borderColor: 'rgb(192, 75, 192)',
+              borderColor: salesColor,
+              backgroundColor: salesColor,
               tension: 0.1,
             },
           ],

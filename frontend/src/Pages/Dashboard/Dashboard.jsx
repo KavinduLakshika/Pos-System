@@ -16,7 +16,14 @@ const Dashboard = () => {
     LastMonthTotal: '0',
     todayTotalSales: [],
     monthTotalSales: [],
+    monthlyRevenue: [],
+    monthlySales: [],
   });
+
+  const [stockSize, setStockSize] = useState([]);
+  const [labels, setLabels] = useState([]);
+
+  // Fetch report data
   useEffect(() => {
     const fetchReports = async () => {
       try {
@@ -41,58 +48,83 @@ const Dashboard = () => {
     fetchReports();
   }, [base_url]);
 
-  //card three bar chart stock
-  const lables = ['Ring', 'Neckless', 'Bangle', 'Earing']
-  const stockSize = [65, 59, 80, 81, 56, 55];
+  // Fetch stock data
+  useEffect(() => {
+    const fetchStockData = async () => {
+      try {
+        const response = await fetch(`${base_url}/productStock`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-  //Card Four doughnut pie chart
+        const result = await response.json();
+
+        if (result.message_type === "success") {
+          const stock = result.message;
+          const stockLabels = stock.map(item => item['product.productName']);
+          const stockQty = stock.map(item => item.totalQty);
+
+          setLabels(stockLabels);
+          setStockSize(stockQty);
+        }
+      } catch (error) {
+        console.error('Error fetching stock data:', error);
+      }
+    };
+
+    fetchStockData();
+  }, [base_url]);
+
+  
   const stockDistribution = [65, 59, 80, 81, 56];
   const productLabels = ['Ring', 'Necklace', 'Bangle', 'Earring', 'Bracelet'];
 
-
   return (
     <div className="scrolling-container">
-    <div className="container-fluid my-4">
-      <h1 className="h2 mb-4">Dashboard</h1>
+      <div className="container-fluid my-4">
+        <h1 className="h2 mb-4">Dashboard</h1>
 
-      <div className="row">
-        <div className="col-lg-3 col-md-12 mb-4">
+        <div className="row">
+          <div className="col-lg-3 col-md-12 mb-4">
+            <div className="h-100">
+              <CardOne
+                TodayTotal={reportData.revenueToday}
+                YesterdayTotal={reportData.revenueYesterday}
+                ThisMonthTotal={reportData.revenueMonth}
+                LastMonthTotal={reportData.revenueLastMonth}
+                todayTotalSales={reportData.salesToday}
+                monthTotalSales={reportData.salesMonth}
+              />
+            </div>
+          </div>
 
-          <div className="h-100">
-            <CardOne
-              TodayTotal={reportData.revenueToday}
-              YesterdayTotal={reportData.revenueYesterday}
-              ThisMonthTotal={reportData.revenueMonth}
-              LastMonthTotal={reportData.revenueLastMonth}
-              todayTotalSales={reportData.salesToday}
-              monthTotalSales={reportData.salesMonth}
-            />
+          <div className="col-lg-9 col-md-12 mb-4">
+            <div className="h-100">
+              <CardTwo
+                monthlyRevenue={reportData.monthlyRevenue}
+                monthlySales={reportData.monthlySales}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="col-lg-9 col-md-12 mb-4">
-          <div className="h-100">
-            <CardTwo
-              monthlyRevenue={reportData.monthlyRevenue}
-              monthlySales={reportData.monthTotalSales}
+        <div className='row'>
+          <div className="col-lg-6 col-sm-12">
+            <CardThree
+              stockSize={stockSize}
+              labels={labels}
+            />
+          </div>
+          <div className="col-lg-6 col-sm-12">
+            <CardFour
+              dataValues={stockDistribution}
+              labels={productLabels}
             />
           </div>
         </div>
       </div>
-
-      <div className='row'>
-        <div className="col-lg-6 col-sm-12 ">
-          <CardThree
-            stockSize={stockSize}
-            lables={lables} />
-        </div>
-        <div className="col-lg-6 col-sm-12 ">
-          <CardFour
-            dataValues={stockDistribution}
-            labels={productLabels} />
-        </div>
-      </div>
-    </div>
     </div>
   );
 };
