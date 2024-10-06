@@ -3,6 +3,7 @@ const sequelize = require("../dbConfig");
 const Supplier = require("./Supplier");
 const Product = require("./Products");
 const Store = require("./Store");
+const Category = require("./Category");
 
 const Stock = sequelize.define(
     "Stock",
@@ -24,7 +25,31 @@ const Stock = sequelize.define(
             type: DataTypes.DATE,
             allowNull: false,
         },
+        mfd: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        exp: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        bilImage: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         stockPrice: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        due: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        vat: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        total: {
             type: DataTypes.FLOAT,
             allowNull: false,
         },
@@ -58,6 +83,13 @@ const Stock = sequelize.define(
                 key: "storeId",
             },
         },
+        category_categoryId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: Category,
+                key: "categoryId",
+            },
+        },
     },
     {
         tableName: "stock",
@@ -75,6 +107,10 @@ Stock.belongsTo(Supplier, {
 Stock.belongsTo(Store, {
     foreignKey: 'store_storeId',
     as: 'store'
+});
+Stock.belongsTo(Category, {
+    foreignKey: 'category_categoryId',
+    as: 'category'
 });
 
 module.exports = Stock;

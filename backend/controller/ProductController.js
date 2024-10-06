@@ -39,18 +39,17 @@ const createProduct = async (req, res) => {
             const {
                 productName,
                 productCode,
-                productWeight,
+                productUnit,
                 productBuyingPrice,
                 productSellingPrice,
-                productQty,
                 productDescription,
                 productWarranty,
                 categoryId
             } = req.body;
 
             // Validate required fields
-            if (!productName || !productCode || !productWeight || !productBuyingPrice ||
-                !productSellingPrice || !productQty || !productDescription) {
+            if (!productName || !productCode || !productUnit || !productBuyingPrice ||
+                !productSellingPrice || !productDescription) {
                 return res.status(400).json({ error: "All fields are required." });
             }
 
@@ -77,11 +76,10 @@ const createProduct = async (req, res) => {
             const newProduct = await Product.create({
                 productName,
                 productCode,
-                productWeight,
+                productUnit,
                 productBuyingPrice,
                 productSellingPrice,
                 productWarranty,
-                productQty,
                 productProfit,
                 productDescription,
                 productImage,
@@ -169,11 +167,10 @@ const updateProduct = async (req, res) => {
             const {
                 productName,
                 productCode,
-                productWeight,
+                productUnit,
                 productBuyingPrice,
                 productSellingPrice,
                 productWarranty,
-                productQty,
                 productProfit,
                 productEmi,
                 productStatus,
@@ -214,11 +211,10 @@ const updateProduct = async (req, res) => {
             await product.update({
                 productName,
                 productCode,
-                productWeight,
+                productUnit,
                 productBuyingPrice,
                 productSellingPrice,
                 productWarranty,
-                productQty,
                 productProfit,
                 productEmi,
                 productStatus,

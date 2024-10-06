@@ -17,10 +17,6 @@ const Invoice = sequelize.define(
             type: DataTypes.DATE,
             allowNull: false,
         },
-        invoiceDueDate: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
         invoiceQty: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -37,11 +33,11 @@ const Invoice = sequelize.define(
             type: DataTypes.FLOAT,
             allowNull: false,
         },
-        totalAmount: {
+        discount: {
             type: DataTypes.FLOAT,
             allowNull: false,
         },
-        discount: {
+        totalAmount: {
             type: DataTypes.FLOAT,
             allowNull: false,
         },
@@ -53,7 +49,7 @@ const Invoice = sequelize.define(
             type: DataTypes.INTEGER,
             references: {
                 model: Product,
-                key: "product",
+                key: "productId",
             },
             allowNull: false,
         },
@@ -62,14 +58,6 @@ const Invoice = sequelize.define(
             references: {
                 model: Customer,
                 key: "cusId",
-            },
-            allowNull: false,
-        },
-        transaction_transactionId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Transaction,
-                key: "transactionId",
             },
             allowNull: false,
         },
@@ -95,10 +83,6 @@ Invoice.belongsTo(Product, {
 Invoice.belongsTo(Customer, {
     foreignKey: "customer_cusId",
     as: "customer",
-});
-Invoice.belongsTo(Transaction, {
-    foreignKey: "transaction_transactionId",
-    as: "transaction",
 });
 Invoice.belongsTo(User, {
     foreignKey: "user_userId",
