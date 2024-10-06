@@ -91,6 +91,8 @@ const NewRental = () => {
             showButton={false}
             showActions={false}
             showRow={false}
+            showDate={false}
+            showPDF={false}
           />
 
         </div>
