@@ -72,7 +72,7 @@ const Table = ({
             alternateRowStyles: { fillColor: [250, 250, 250] }
         });
 
-        doc.save("sales_history.pdf");
+        doc.save("invoice.pdf");
     };
     const resetFilters = () => {
         setStartDate(null);
