@@ -4,6 +4,7 @@ import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import DatePicker from 'react-datepicker';
+import './Table.css'
 
 const Table = ({
     data,
@@ -82,26 +83,26 @@ const Table = ({
         <div className="scroll-table">
             <div className="container-fluid p-2">
 
-                <div className="d-flex align-items-center mb-2">
+                <div className="flex-t-h">
                     {showSearch && (
-                        <div className="me-2">
+                        <div className="mb-2 me-2">
                             <input
                                 type="text"
-                                className="form-control"
+                                className="form-control form-con"
                                 placeholder="Search"
                                 value={searchQuery}
                                 onChange={(e) => {
                                     setSearchQuery(e.target.value);
-                                    setCurrentPage(1);
+                                    setCurrentPage(1);  
                                 }}
                             />
                         </div>
                     )}
 
                     {showRow && (
-                        <div className="me-2">
+                        <div className="mb-2 me-2">
                             <select
-                                className="form-control"
+                                className="form-control form-con-row"
                                 value={itemsPerPage}
                                 onChange={(e) => {
                                     setItemsPerPage(Number(e.target.value));
@@ -116,42 +117,45 @@ const Table = ({
                         </div>
                     )}
 
-                    {showDate && (
-                        <div className="d-flex me-2">
-                            <div className="me-2">
-                                <DatePicker
-                                    selected={startDate}
-                                    onChange={(date) => setStartDate(date)}
-                                    placeholderText="Start Date"
-                                    className="form-control"
-                                    dateFormat="yyyy-MM-dd"
-                                />
+                    <div className="d-flex ms-auto ">
+                        {showDate && (
+                            <div className="d-flex me-2">
+                                <div className="mb-2 me-2">
+                                    <DatePicker
+                                        selected={startDate}
+                                        onChange={(date) => setStartDate(date)}
+                                        placeholderText="Start Date"
+                                        className="form-control"
+                                        dateFormat="yyyy-MM-dd"
+                                    />
+                                </div>
+                                <div className="mb-2 me-2">
+                                    <DatePicker
+                                        selected={endDate}
+                                        onChange={(date) => setEndDate(date)}
+                                        placeholderText="End Date"
+                                        className="form-control"
+                                        dateFormat="yyyy-MM-dd"
+                                    />
+                                </div>
+                                <div>
+                                    <button className="btn btn-danger" onClick={resetFilters}>
+                                        Reset
+                                    </button>
+                                </div>
                             </div>
+                        )}
+
+                        {showPDF && (
                             <div className="me-2">
-                                <DatePicker
-                                    selected={endDate}
-                                    onChange={(date) => setEndDate(date)}
-                                    placeholderText="End Date"
-                                    className="form-control"
-                                    dateFormat="yyyy-MM-dd"
-                                />
-                            </div>
-                            <div>
-                                <button className="btn btn-danger" onClick={resetFilters}>
-                                    Reset
+                                <button className="btn btn-warning btn-sm" onClick={generatePDF}>
+                                    Generate PDF
                                 </button>
                             </div>
-                        </div>
-                    )}
-
-                    {showPDF && (
-                        <div className="me-2">
-                            <button className="btn btn-warning" onClick={generatePDF}>
-                                Generate PDF
-                            </button>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
+
 
 
 
