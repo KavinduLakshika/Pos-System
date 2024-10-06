@@ -9,17 +9,15 @@ const createInvoice = async (req, res) => {
     try {
         const {
             invoiceDate,
-            invoiceDueDate,
             invoiceQty,
             paidAmount,
             payableAmount,
             dueAmount,
-            totalAmount,
             discount,
+            totalAmount,
             invoiceNote,
             productId,
             cusId,
-            transactionId,
             userId,
         } = req.body;
 
@@ -27,13 +25,8 @@ const createInvoice = async (req, res) => {
         if (!invoiceDate ||
             !invoiceQty ||
             !paidAmount ||
-            !payableAmount ||
-            !dueAmount ||
             !totalAmount ||
-            !invoiceNote ||
-            !productId ||
-            !cusId||
-            !userId) {
+            !invoiceNote) {
             return res.status(400).json({ error: "All fields are required." });
         }
 
@@ -49,12 +42,6 @@ const createInvoice = async (req, res) => {
             return res.status(400).json({ message: 'Invalid customer ID' });
         }
 
-        // Check if transaction exists
-        const transaction = await Transaction.findByPk(transactionId);
-        if (!transaction) {
-            return res.status(400).json({ message: 'Invalid transaction ID' });
-        }
-
         // Check if user exists
         const user = await User.findByPk(userId);
         if (!user) {
@@ -64,7 +51,6 @@ const createInvoice = async (req, res) => {
         // Create a new invoice
         const newInvoice = await Invoice.create({
             invoiceDate,
-            invoiceDueDate,
             invoiceQty,
             paidAmount,
             payableAmount,
@@ -74,7 +60,6 @@ const createInvoice = async (req, res) => {
             invoiceNote,
             products_productId: productId,
             customer_cusId: cusId,
-            transaction_transactionId: transactionId,
             user_userId: userId,
         });
 
@@ -83,7 +68,6 @@ const createInvoice = async (req, res) => {
             include: [
                 { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
-                { model: Transaction, as: 'transaction' },
                 { model: User, as: 'user' },
             ],
         });
@@ -103,7 +87,6 @@ const getAllInvoice = async (req, res) => {
             include: [
                 { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
-                { model: Transaction, as: 'transaction' },
                 { model: User, as: 'user' },
             ],
         });
@@ -126,7 +109,6 @@ const getInvoiceById = async (req, res) => {
             include: [
                 { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
-                { model: Transaction, as: 'transaction' },
                 { model: User, as: 'user' },
             ],
         });
@@ -147,7 +129,6 @@ const updateInvoice = async (req, res) => {
         const { id } = req.params;
         const {
             invoiceDate,
-            invoiceDueDate,
             invoiceQty,
             paidAmount,
             payableAmount,
@@ -157,7 +138,6 @@ const updateInvoice = async (req, res) => {
             invoiceNote,
             productId,
             cusId,
-            transactionId,
             userId,
         } = req.body;
 
@@ -173,12 +153,6 @@ const updateInvoice = async (req, res) => {
                 return res.status(400).json({ message: "Invalid product ID" });
             }
         }
-        // Check if transaction exists
-        const transaction = await Transaction.findByPk(transactionId);
-        if (!transaction) {
-            return res.status(400).json({ message: 'Invalid transaction ID' });
-        }
-
         // Check if user exists
         const user = await User.findByPk(userId);
         if (!user) {
@@ -199,7 +173,6 @@ const updateInvoice = async (req, res) => {
                 invoiceNote,
                 products_productId: productId,
                 customer_cusId: cusId,
-                transaction_transactionId: transactionId,
                 user_userId: userId,
             });
             res.status(200).json(invoice);

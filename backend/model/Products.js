@@ -18,7 +18,7 @@ const Product = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    productWeight: {
+    productUnit: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -33,10 +33,6 @@ const Product = sequelize.define(
     productWarranty: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
-    productQty: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
     productProfit: {
       type: DataTypes.FLOAT,

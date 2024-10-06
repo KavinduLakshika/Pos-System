@@ -5,11 +5,15 @@ const Invoice = require("../model/Invoice");
 const createTransaction = async (req, res) => {
     try {
         const {
+            transactionType,
             price,
             dateTime,
+            invoiceId,
+            supplierId,
+            rentalInvoiceId,
         } = req.body;
 
-        if (!price || !dateTime) {
+        if (!transactionType || !price || !dateTime) {
             return res.status(400).json({ error: "All fields are required." });
         }
 
