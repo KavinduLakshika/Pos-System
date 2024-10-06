@@ -17,6 +17,7 @@ const Table = ({
     showEdit = true,
     showDelete = true,
     showRow = true,
+    showPDF = true,
     startDate,
     endDate,
 }) => {
@@ -36,7 +37,7 @@ const Table = ({
 
     const filteredData = tableData.filter((tableDatum) => {
         const query = searchQuery.toLowerCase();
-        const isWithinDateRange = !startDate && !endDate || (new Date(tableDatum[1]) >= new Date(startDate) && new Date(tableDatum[1]) <= new Date(endDate));
+        const isWithinDateRange = (!startDate && !endDate) || (new Date(tableDatum[1]) >= new Date(startDate) && new Date(tableDatum[1]) <= new Date(endDate));
         return isWithinDateRange && tableDatum.some((item) => {
             return item != null && item.toString().toLowerCase().includes(query);
         });
@@ -74,6 +75,7 @@ const Table = ({
     return (
         <div className="scroll-table">
             <div className="container-fluid p-2">
+
                 <div className="row mb-2">
                     {showSearch && (
                         <div className="col-md-4 mb-3">
@@ -99,6 +101,13 @@ const Table = ({
                             </select>
                         </div>
                     )}
+                    {showPDF && (
+                        <div className="col-md-2 mb-3">
+                            <button className="btn btn-warning " onClick={generatePDF}>
+                                Generate PDF
+                            </button>
+                        </div>
+                    )}
                     {showButton && (
                         <div className="col-md- d-flex justify-content-end">
                             <button className="btn btn-info text-white" onClick={onAdd}>
@@ -106,11 +115,7 @@ const Table = ({
                             </button>
                         </div>
                     )}
-                    <div className="col-md-2 mb-3">
-                        <button className="btn btn-info text-white" onClick={generatePDF}>
-                            Generate PDF
-                        </button>
-                    </div>
+
                 </div>
 
                 <div className="mt-2">
