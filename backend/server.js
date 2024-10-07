@@ -16,7 +16,6 @@ const StoreController = require("./controller/StoreController");
 const ReturnController = require("./controller/ReturnController");
 const ExpenseController = require("./controller/ExpensesController");
 const ExpensesCatController = require("./controller/ExpensesCatController");
-const GRNController = require("./controller/GRNController");
 const RentalInvoiceController = require("./controller/RentalInvoiceController");
 const ReportController = require("./controller/Reports/ReportController");
 const ProductNStockController = require("./controller/Reports/ProductStockController");
@@ -115,13 +114,6 @@ app.get("/expensesCats", ExpensesCatController.getAllExpensesCats);
 app.get("/expensesCat/:id", ExpensesCatController.getExpensesCatById);
 app.put("/expensesCat/:id", ExpensesCatController.updateExpensesCat);
 app.delete("/expensesCat/:id", ExpensesCatController.deleteExpensesCat);
-
-//GRN routes
-app.post("/grn", GRNController.createGrn);
-app.get("/grn", GRNController.getAllGrn);
-app.get("/grn/:id", GRNController.getGrnById);
-app.put("/grn/:id", GRNController.updateGrn);
-app.delete("/grn/:id", GRNController.deleteGrn);
 
 //get reports
 app.get("/getReports", ReportController.getReports);

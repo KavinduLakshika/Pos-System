@@ -101,6 +101,9 @@ const createStock = async (req, res) => {
                 mfd,
                 exp,
                 stockPrice,
+                due,
+                vat,
+                total,
                 stockDescription,
                 stockStatus: "In stock",
                 bilImage,
@@ -175,13 +178,17 @@ const updateStock = async (req, res) => {
             stockName,
             stockQty,
             stockDate,
+            mfd,
+            exp,
             stockPrice,
+            due,
+            vat,
+            total,
             stockDescription,
-            stockStatus,
             productId,
             supplierId,
             storeId,
-            categoryId
+            categoryId,
         } = req.body;
 
         const stock = await Stock.findByPk(id);
@@ -193,13 +200,19 @@ const updateStock = async (req, res) => {
             stockName,
             stockQty,
             stockDate,
+            mfd,
+            exp,
             stockPrice,
+            due,
+            vat,
+            total,
             stockDescription,
             stockStatus,
+            bilImage,
             products_productId: productId,
             supplier_supplierId: supplierId,
             store_storeId: storeId,
-            category_categoryId: categoryId
+            category_categoryId: categoryId,
         });
 
         res.status(200).json(stock);
