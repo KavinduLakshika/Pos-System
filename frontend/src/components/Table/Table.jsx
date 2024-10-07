@@ -56,7 +56,7 @@ const Table = ({
 
     const generatePDF = () => {
         const doc = new jsPDF();
-        doc.text("Sales History", 20, 20);
+        doc.text( 20, 20);
 
         const headers = columns.map(column => ({ content: column, styles: { halign: 'center' } }));
         const tableData = filteredData.map(row => row.map(cell => ({ content: cell, styles: { halign: 'center' } })));

@@ -14,7 +14,6 @@ import SalesReports from './Pages/SalesReport/SalesReports';
 import Supplier from './Pages/Supplier/Supplier';
 import Rental from './Pages/Rental/Rental';
 import Login from './Pages/Login';
-import Test from './components/Table/test';
 
 function Layout() {
   const location = useLocation();
@@ -39,7 +38,6 @@ function Layout() {
           <Route path="/sales-reports/*" element={<SalesReports />} />
           <Route path="/stock-reports/*" element={<StockReports />} />
           <Route path="/staff/*" element={<Staff />} />
-          <Route path="/test/*" element={<Test />} />
         </Routes>
       </div>
     </div>
