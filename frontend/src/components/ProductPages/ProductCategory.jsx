@@ -79,6 +79,9 @@ const ProductCategory = () => {
     closeModal();     
   };
 
+  const title='Product Category List';
+  const invoice='product_category_list.pdf';
+
   return (
     <div>
       <div className="scrolling-container">
@@ -96,6 +99,8 @@ const ProductCategory = () => {
             onDelete={handleDelete}
             onEdit={handleEdit}
             showDate={false}
+            title={title}
+            invoice={invoice}
           />
         )}
 

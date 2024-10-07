@@ -13,6 +13,9 @@ function DailySales() {
   const handleNewSale = () => {
     navigate('/sales/new');
   }
+  const title='Day Job Report';
+  const invoice='Day Job Report.pdf';
+
   return (
     <div>
       <div className="scrolling-container">
@@ -24,6 +27,8 @@ function DailySales() {
           btnName={btnName}
           onAdd={handleNewSale}
           showDate={false}
+          title={title}
+          invoice={invoice}
         />
       </div>
     </div>

@@ -119,6 +119,9 @@ const CreateStaff = () => {
     setShowModal(true);
   };
 
+  const title='Staff List';
+  const invoice='Staff List.pdf';
+
   return (
     <div>
       <div className='scrolling-container'>
@@ -136,6 +139,8 @@ const CreateStaff = () => {
             onEdit={handleEdit}
             onDelete={handleDelete}
             showDate={false}
+            title={title}
+            invoice={invoice}
           />
         )}
         <StaffModal

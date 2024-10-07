@@ -19,6 +19,8 @@ function CurrentStock() {
     navigate('/stock/new-stock');
   };
 
+  const title = 'Current Stock';
+  const invoice = 'Current Stock.pdf';
 
   return (
 
@@ -31,6 +33,8 @@ function CurrentStock() {
           columns={columns}
           btnName={btnName}
           onAdd={handleNewStockClick}
+          title={title}
+          invoice={invoice}
         />
       </div>
     </div>

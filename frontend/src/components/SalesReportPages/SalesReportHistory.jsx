@@ -7,6 +7,9 @@ const SalesHistory = () => {
   const btnName = 'Generate Report';
   const data = [['1', '2024-08-09 10.11AM', 'Gold', 'Ring', '24K', 'Shiranthi Rajapaksha', '123', '50 000', '80 000', 'Admin', '30 000', 'Note']];
 
+  const title = 'Sales History Report';
+  const invoice = 'Sales History Report.pdf';
+
   return (
     <div>
       <div className="scrolling-container">
@@ -16,6 +19,8 @@ const SalesHistory = () => {
           data={data}
           columns={columns}
           btnName={btnName}
+          title={title}
+          invoice={invoice}
         />
       </div>
     </div>

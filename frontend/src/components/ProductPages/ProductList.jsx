@@ -138,6 +138,9 @@ const ProductList = () => {
     }
   };
 
+  const title='Product List';
+  const invoice='product_list.pdf';
+
   return (
     <div>
       <div className="scrolling-container">
@@ -159,6 +162,8 @@ const ProductList = () => {
             onEdit={handleEdit}
             onMarkOutOfStock={markAsOutOfStock}
             showDate={false}
+            title={title}
+            invoice={invoice}
           />
         )}
       </div>
