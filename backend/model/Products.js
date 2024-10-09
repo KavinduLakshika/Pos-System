@@ -18,6 +18,10 @@ const Product = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    productQty: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     productUnit: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -73,5 +77,6 @@ Product.belongsTo(Category, {
   foreignKey: "category_categoryId",
   as: "category",
 });
+
 
 module.exports = Product;
