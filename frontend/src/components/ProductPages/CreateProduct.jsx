@@ -19,7 +19,7 @@ const CreateProduct = () => {
     qty: '',
     warranty: '',
     description: '',
-    weight: '',
+    unit: '',
     image: '',
   });
 
@@ -34,7 +34,7 @@ const CreateProduct = () => {
         qty: selectedProd.productQty || '',
         warranty: selectedProd.productWarranty || '',
         description: selectedProd.productDescription || '',
-        weight: selectedProd.productWeight || '',
+        unit: selectedProd.productUnit || '',
         image: '',
       });
     }
@@ -85,7 +85,7 @@ const CreateProduct = () => {
     formDataToSend.append('productWarranty', formData.warranty);
     formDataToSend.append('categoryId', formData.productCategory);
     formDataToSend.append('productQty', formData.qty);
-    formDataToSend.append('productWeight', formData.weight);
+    formDataToSend.append('productUnit', formData.unit);
 
     // Append the image file
     if (image) {

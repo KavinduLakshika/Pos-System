@@ -17,9 +17,7 @@ const storage = multer.diskStorage({
         const productName = req.body.productName || 'product';
         const timestamp = Date.now();
         const ext = path.extname(file.originalname);
-
         const safeProductName = productName.replace(/[^a-zA-Z0-9]/g, '_');
-
         cb(null, `${safeProductName}_${timestamp}${ext}`);
     }
 });
@@ -59,7 +57,7 @@ const createProduct = async (req, res) => {
                 return res.status(400).json({ message: 'Invalid category ID' });
             }
 
-            // Check if product 
+            // Check if product exists by productCode
             const existingProduct = await Product.findOne({ where: { productCode } });
             if (existingProduct) {
                 return res.status(400).json({ error: "A Product with this code already exists." });
@@ -96,22 +94,6 @@ const createProduct = async (req, res) => {
 
             res.status(201).json(productWithCategory);
         } catch (error) {
-            // Handle validation errors
-            if (error.name === "SequelizeValidationError") {
-                return res.status(400).json({
-                    error: "Validation error: Please check the provided data.",
-                });
-            }
-
-            // Handle unique constraint errors
-            if (error.name === "SequelizeUniqueConstraintError") {
-                return res.status(400).json({
-                    error:
-                        "Duplicate field value: A package with this name already exists.",
-                });
-            }
-
-            // General error handling
             res.status(500).json({ error: `An error occurred: ${error.message}` });
         }
     });
@@ -121,10 +103,7 @@ const createProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
     try {
         const products = await Product.findAll({
-            include: [{
-                model: Category,
-                as: 'category'
-            }]
+            include: [{ model: Category, as: 'category' }]
         });
         res.status(200).json(products);
     } catch (error) {
@@ -137,10 +116,7 @@ const getProductById = async (req, res) => {
     try {
         const { id } = req.params;
         const product = await Product.findByPk(id, {
-            include: [{
-                model: Category,
-                as: 'category'
-            }]
+            include: [{ model: Category, as: 'category' }]
         });
 
         if (!product) {
@@ -157,7 +133,7 @@ const getProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
     upload(req, res, async function (err) {
         if (err instanceof multer.MulterError) {
-            return res.status(500).json({ error: 'Multer error: Image upload failed' });
+            return res.status(500).json({ error: 'Image upload failed' });
         } else if (err) {
             return res.status(500).json({ error: 'Unknown error: Image upload failed' });
         }
@@ -185,29 +161,24 @@ const updateProduct = async (req, res) => {
                 }
             }
 
-            // Find the product
             const product = await Product.findByPk(id);
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
             }
 
-            // Check if a new image is uploaded and delete the old one
             let productImage = product.productImage;
             if (req.file) {
-                // If an old image exists, delete it
                 const oldImagePath = productImage
                     ? path.join(__dirname, '..', 'uploads', 'products', path.basename(productImage))
                     : null;
 
                 if (oldImagePath && fs.existsSync(oldImagePath)) {
-                    fs.unlinkSync(oldImagePath); // Remove old image from server
+                    fs.unlinkSync(oldImagePath);
                 }
 
-                // Update the product image with the new one
                 productImage = `${req.protocol}://${req.get('host')}/uploads/products/${req.file.filename}`;
             }
 
-            // Update the product details
             await product.update({
                 productName,
                 productCode,
@@ -233,7 +204,6 @@ const updateProduct = async (req, res) => {
     });
 };
 
-
 // Delete a product
 const deleteProduct = async (req, res) => {
     try {
@@ -244,16 +214,14 @@ const deleteProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Delete product image if exists
         const productImagePath = product.productImage
             ? path.join(__dirname, '..', 'uploads', 'products', path.basename(product.productImage))
             : null;
 
         if (productImagePath && fs.existsSync(productImagePath)) {
-            fs.unlinkSync(productImagePath); // Synchronously remove the image
+            fs.unlinkSync(productImagePath);
         }
 
-        // Delete the product
         await product.destroy();
         res.status(200).json({ message: 'Product deleted successfully' });
     } catch (error) {

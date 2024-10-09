@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage }).single('bilImage');
+const upload = multer({ storage: storage }).single('billImage');
 
 // Create Stock
 const createStock = async (req, res) => {
@@ -76,11 +76,6 @@ const createStock = async (req, res) => {
                 return res.status(400).json({ message: 'Invalid store ID' });
             }
 
-            const category = await Category.findByPk(categoryId);
-            if (!category) {
-                return res.status(400).json({ message: 'Invalid category ID' });
-            }
-
             // Check if stock already exists
             const existingStock = await Stock.findOne({ where: { stockName } });
             if (existingStock) {
@@ -88,9 +83,9 @@ const createStock = async (req, res) => {
             }
 
             // Handle image upload
-            let bilImage = null;
+            let billImage = null;
             if (req.file) {
-                bilImage = `${req.protocol}://${req.get('host')}/uploads/stock/${req.file.filename}`;
+                billImage = `${req.protocol}://${req.get('host')}/uploads/stock/${req.file.filename}`;
             }
 
             // Create new stock
@@ -106,7 +101,7 @@ const createStock = async (req, res) => {
                 total,
                 stockDescription,
                 stockStatus: "In stock",
-                bilImage,
+                billImage,
                 products_productId: productId,
                 supplier_supplierId: supplierId,
                 store_storeId: storeId,
@@ -172,53 +167,110 @@ const getStockById = async (req, res) => {
 
 // Update stock
 const updateStock = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const {
-            stockName,
-            stockQty,
-            stockDate,
-            mfd,
-            exp,
-            stockPrice,
-            due,
-            vat,
-            total,
-            stockDescription,
-            productId,
-            supplierId,
-            storeId,
-            categoryId,
-        } = req.body;
-
-        const stock = await Stock.findByPk(id);
-        if (!stock) {
-            return res.status(404).json({ message: "Stock not found" });
+    upload(req, res, async function (err) {
+        if (err instanceof multer.MulterError) {
+            return res.status(500).json({ error: 'Multer error: Image upload failed' });
+        } else if (err) {
+            return res.status(500).json({ error: 'Unknown error: Image upload failed' });
         }
+        try {
+            const { id } = req.params;
+            const {
+                stockName,
+                stockQty,
+                stockDate,
+                mfd,
+                exp,
+                stockPrice,
+                due,
+                vat,
+                total,
+                stockDescription,
+                stockStatus,
+                productId,
+                supplierId,
+                storeId,
+                categoryId,
+            } = req.body;
 
-        await stock.update({
-            stockName,
-            stockQty,
-            stockDate,
-            mfd,
-            exp,
-            stockPrice,
-            due,
-            vat,
-            total,
-            stockDescription,
-            stockStatus,
-            bilImage,
-            products_productId: productId,
-            supplier_supplierId: supplierId,
-            store_storeId: storeId,
-            category_categoryId: categoryId,
-        });
+            // Validate product
+            if (productId) {
+                const product = await Product.findByPk(productId);
+                if (!product) {
+                    return res.status(400).json({ message: 'Invalid product ID' });
+                }
+            }
 
-        res.status(200).json(stock);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
+            // Validate supplier
+            if (supplierId) {
+                const supplier = await Supplier.findByPk(supplierId);
+                if (!supplier) {
+                    return res.status(400).json({ message: 'Invalid supplier ID' });
+                }
+            }
+
+            // Validate store
+            if (storeId) {
+                const store = await Store.findByPk(storeId);
+                if (!store) {
+                    return res.status(400).json({ message: 'Invalid store ID' });
+                }
+            }
+
+            // Validate category
+            if (categoryId) {
+                const category = await Category.findByPk(categoryId);
+                if (!category) {
+                    return res.status(400).json({ message: 'Invalid category ID' });
+                }
+            }
+
+            // Find the stock
+            const stock = await Stock.findByPk(id);
+            if (!stock) {
+                return res.status(404).json({ message: 'Stock not found' });
+            }
+
+            // Check if a new image is uploaded and delete the old one
+            let billImage = stock.billImage;
+            if (req.file) {
+                // If an old image exists, delete it
+                const oldImagePath = billImage
+                    ? path.join(__dirname, '..', 'uploads', 'stock', path.basename(billImage))
+                    : null;
+
+                if (oldImagePath && fs.existsSync(oldImagePath)) {
+                    fs.unlinkSync(oldImagePath); // Remove old image from server
+                }
+
+                // Update the stock image with the new one
+                billImage = `${req.protocol}://${req.get('host')}/uploads/stock/${req.file.filename}`;
+            }
+
+            await stock.update({
+                stockName,
+                stockQty,
+                stockDate,
+                mfd,
+                exp,
+                stockPrice,
+                due,
+                vat,
+                total,
+                stockDescription,
+                stockStatus,
+                billImage,
+                products_productId: productId,
+                supplier_supplierId: supplierId,
+                store_storeId: storeId,
+                category_categoryId: categoryId,
+            });
+
+            res.status(200).json(stock);
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    });
 };
 
 // Delete stock
@@ -228,6 +280,14 @@ const deleteStock = async (req, res) => {
         const stock = await Stock.findByPk(id);
         if (!stock) {
             return res.status(404).json({ message: "Stock not found" });
+        }
+
+        // If the stock has an associated image, delete it from the file system
+        if (stock.billImage) {
+            const imagePath = path.join(__dirname, '..', 'uploads', 'stock', path.basename(stock.billImage));
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath); // Remove image from server
+            }
         }
 
         await stock.destroy();

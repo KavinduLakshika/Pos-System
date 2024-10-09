@@ -1,7 +1,6 @@
 const Invoice = require("../model/Invoice");
 const Customer = require("../model/Customers");
 const Product = require("../model/Products");
-const Transaction = require("../model/Transaction");
 const User = require("../model/User");
 
 // Create invoice

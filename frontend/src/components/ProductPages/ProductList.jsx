@@ -8,13 +8,13 @@ const ProductList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const columns = ['id', 'Product', 'Product Code', 'Weight(g/Kg)', 'Buying Price', 'Selling Price', 'Warranty (months)', 'Quantity', 'Profit', 'Description', 'Category', 'Status'];
+  const columns = ['id', 'Product', 'Product Code', 'Weight(g/Kg)', 'Buying Price', 'Selling Price', 'Warranty (months)', 'Profit', 'Description', 'Category', 'Status'];
 
   const btnName = ['Add Product'];
 
   useEffect(() => {
     fetchProductList();
-  }, []);
+  },);
 
   const fetchProductList = async () => {
     try {
@@ -27,11 +27,10 @@ const ProductList = () => {
         prod.productId,
         prod.productName,
         prod.productCode,
-        prod.productWeight,
+        prod.productUnit,
         prod.productBuyingPrice,
         prod.productSellingPrice,
         prod.productWarranty,
-        prod.productQty,
         prod.productProfit,
         prod.productDescription,
         prod.category?.categoryName,
@@ -98,14 +97,13 @@ const ProductList = () => {
       category: selectedProdData[10],
       productName: selectedProdData[1],
       productCode: selectedProdData[2],
-      productWeight: selectedProdData[3],
+      productUnit: selectedProdData[3],
       productBuyingPrice: selectedProdData[4],
       productSellingPrice: selectedProdData[5],
       productWarranty: selectedProdData[6],
-      productQty: selectedProdData[7],
-      productProfit: selectedProdData[8],
-      productDescription: selectedProdData[9],
-      productStatus: selectedProdData[11].props.value,
+      productProfit: selectedProdData[7],
+      productDescription: selectedProdData[8],
+      productStatus: selectedProdData[10].props.value,
     };
 
     navigate('/product/create', { state: { selectedProd } });
@@ -138,8 +136,8 @@ const ProductList = () => {
     }
   };
 
-  const title='Product List';
-  const invoice='product_list.pdf';
+  const title = 'Product List';
+  const invoice = 'product_list.pdf';
 
   return (
     <div>

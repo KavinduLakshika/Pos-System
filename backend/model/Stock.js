@@ -27,15 +27,15 @@ const Stock = sequelize.define(
         },
         mfd: {
             type: DataTypes.DATE,
-            allowNull: false,
+            allowNull: true,
         },
         exp: {
             type: DataTypes.DATE,
-            allowNull: false,
+            allowNull: true,
         },
-        bilImage: {
+        billImage: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         stockPrice: {
             type: DataTypes.FLOAT,
