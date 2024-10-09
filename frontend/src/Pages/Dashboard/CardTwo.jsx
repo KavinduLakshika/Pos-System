@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
 const getRandomColor = () => {
-  const r = Math.floor(Math.random() * 256);
-  const g = Math.floor(Math.random() * 256);
-  const b = Math.floor(Math.random() * 256);
+  const r = Math.floor(Math.random() * 100);
+  const g = Math.floor(Math.random() * 100);
+  const b = Math.floor(Math.random() * 100);
   const a = (Math.random()).toFixed(2);
   return `rgba(${r}, ${g}, ${b}, ${a})`;
 };
