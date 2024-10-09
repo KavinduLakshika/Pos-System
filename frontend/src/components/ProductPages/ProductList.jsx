@@ -8,7 +8,7 @@ const ProductList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const columns = ['id', 'Product', 'Product Code', 'Weight(g/Kg)', 'Buying Price', 'Selling Price', 'Warranty (months)', 'Profit', 'Description', 'Category', 'Status'];
+  const columns = ['id', 'Product', 'Product Code', 'Weight(g/Kg)', 'Quantity', 'Buying Price', 'Selling Price', 'Warranty (months)', 'Profit', 'Description', 'Category', 'Status'];
 
   const btnName = ['Add Product'];
 
@@ -28,6 +28,7 @@ const ProductList = () => {
         prod.productName,
         prod.productCode,
         prod.productUnit,
+        prod.productQty,
         prod.productBuyingPrice,
         prod.productSellingPrice,
         prod.productWarranty,
@@ -98,12 +99,13 @@ const ProductList = () => {
       productName: selectedProdData[1],
       productCode: selectedProdData[2],
       productUnit: selectedProdData[3],
-      productBuyingPrice: selectedProdData[4],
-      productSellingPrice: selectedProdData[5],
-      productWarranty: selectedProdData[6],
-      productProfit: selectedProdData[7],
-      productDescription: selectedProdData[8],
-      productStatus: selectedProdData[10].props.value,
+      productQty: selectedProdData[4],
+      productBuyingPrice: selectedProdData[5],
+      productSellingPrice: selectedProdData[6],
+      productWarranty: selectedProdData[7],
+      productProfit: selectedProdData[8],
+      productDescription: selectedProdData[9],
+      productStatus: selectedProdData[11].props.value,
     };
 
     navigate('/product/create', { state: { selectedProd } });

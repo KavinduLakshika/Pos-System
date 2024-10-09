@@ -7,7 +7,7 @@ const SalesHistory = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const columns = ["ID", "Date/time", "Due Date", "Paid Amount", "Payable Amount", "Due Amount", "Total Amount", "Discount", "Customer", "Products"];
+  const columns = ["ID", "Date/time", "Paid Amount", "Payable Amount", "Due Amount", "Total Amount", "Discount", "Customer", "Products"];
   const btnName = 'Add New Sale';
 
   useEffect(() => {
@@ -23,16 +23,13 @@ const SalesHistory = () => {
       const invoices = await response.json();
       const formattedData = invoices.map(invoice => {
         const invoiceDate = new Date(invoice.invoiceDate);
-        const dueDate = new Date(invoice.invoiceDueDate);
 
         // Format dates to "YYYY-MM-DD HH:mm"
         const formattedInvoiceDate = `${invoiceDate.getFullYear()}-${String(invoiceDate.getMonth() + 1).padStart(2, '0')}-${String(invoiceDate.getDate()).padStart(2, '0')} ${String(invoiceDate.getHours()).padStart(2, '0')}:${String(invoiceDate.getMinutes()).padStart(2, '0')}`;
-        const formattedDueDate = `${dueDate.getFullYear()}-${String(dueDate.getMonth() + 1).padStart(2, '0')}-${String(dueDate.getDate()).padStart(2, '0')} `;
 
         return [
           invoice.invoiceId,
-          formattedInvoiceDate, // Date and time
-          formattedDueDate, // Date and time
+          formattedInvoiceDate,
           invoice.paidAmount,
           invoice.payableAmount,
           invoice.dueAmount,

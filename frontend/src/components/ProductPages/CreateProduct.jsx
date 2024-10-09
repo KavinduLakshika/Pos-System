@@ -231,8 +231,8 @@ const CreateProduct = () => {
               </div>
 
               <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Weight</label>
-                <input onChange={handleChange} type="number" name='weight' id='' onWheel={(e) => e.target.blur()} value={formData.weight} className='form-control' />
+                <label htmlFor="" className='mb-1'>Unit</label>
+                <input onChange={handleChange} type="number" name='unit' id='' onWheel={(e) => e.target.blur()} value={formData.unit} className='form-control' />
               </div>
             </div>
 
@@ -243,8 +243,8 @@ const CreateProduct = () => {
               </div>
 
               <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Description</label>
-                <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
+                <label htmlFor="" className='mb-1'>Quantity</label>
+                <input onChange={handleChange} type="number" name='qty' onWheel={(e) => e.target.blur()} id='' value={formData.qty} className='form-control' />
               </div>
             </div>
 
@@ -257,6 +257,10 @@ const CreateProduct = () => {
                     <img src={preview} alt="Preview" style={{ width: '100px', height: 'auto' }} />
                   </div>
                 )}
+              </div>
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Description</label>
+                <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
               </div>
             </div>
 
