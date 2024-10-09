@@ -9,6 +9,7 @@ import config from '../../config';
 const NewSales = ({ invoice }) => {
   const [data,] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [customerCreated, setCustomerCreated] = useState(false);
 
   const Columns = ["id", 'product', 'qty', 'price'];
   const [formData, setFormData] = useState({
@@ -28,20 +29,30 @@ const NewSales = ({ invoice }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    
+  };
+
+  const handleCustomerCreated = (customerData) => {
+    setFormData(prevData => ({
+      ...prevData,
+      cusName: customerData.cusName,
+      cusNic: customerData.cusNIC,
+      cusCode: customerData.cusCode
+    }));
+    setCustomerCreated(true);
+    closeModal();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      // Fetch the customer based on cusName or refNo
-      const customerResponse = await fetch(`${config.BASE_URL}/customer?name=${formData.cusName}&code=${formData.refNo}`);
-      if (!customerResponse.ok) {
-        const customerError = await customerResponse.json();
-        throw new Error(customerError.message || 'Failed to fetch customer.');
-      }
-      const customerData = await customerResponse.json();
+    // if (!customerCreated) {
+    //   alert('Check Again');
+    //   return;
+    // }
 
+    try {
+      
       // Fetch the product based on productNo or productName
       const productResponse = await fetch(`${config.BASE_URL}/product?code=${formData.productNo}&name=${formData.productName}`);
       if (!productResponse.ok) {
@@ -51,7 +62,7 @@ const NewSales = ({ invoice }) => {
       const productData = await productResponse.json();
 
       const invoiceData = {
-        cusId: customerData.customerId,
+        // cusId: customerData.customerId,
         productId: productData.productId,
         invoiceDate: new Date().toISOString(),
         cusName: formData.cusName,
@@ -142,7 +153,7 @@ const NewSales = ({ invoice }) => {
                   onRequestClose={closeModal}
                   contentLabel="New Customer Form"
                 >
-                  <Form closeModal={closeModal} />
+                  <Form closeModal={closeModal} onSave={handleCustomerCreated} />
                 </Modal>
 
                 <div className="customer-details">
