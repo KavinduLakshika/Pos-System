@@ -41,6 +41,7 @@ app.get("/customers", CustomerController.getAllCustomers);
 app.get("/customer/:id", CustomerController.getCustomerById);
 app.put("/customer/:id", CustomerController.updateCustomer);
 app.delete("/customer/:id", CustomerController.deleteCustomer);
+app.get("/customer/cusNIC/:nic", CustomerController.getCustomerByNic);
 
 //supplier routes
 app.post("/supplier", SupplierController.createSupplier);
