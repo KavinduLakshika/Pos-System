@@ -94,9 +94,8 @@ const getCustomerById = async (req, res) => {
 
 const getCustomerByNic = async (req, res) => {
     try {
-        const { nic } = req.params; // Extract NIC from request params
+        const { nic } = req.params; 
 
-        // Use Sequelize's `findOne` method to find a customer by cusNIC
         const customer = await Customer.findOne({
             where: { cusNIC: nic }
         });
@@ -105,10 +104,8 @@ const getCustomerByNic = async (req, res) => {
             return res.status(404).json({ message: "Customer not found" });
         }
 
-        // Return the customer if found
         res.status(200).json(customer);
     } catch (error) {
-        // Handle any server errors
         res.status(500).json({ error: error.message });
     }
 };
