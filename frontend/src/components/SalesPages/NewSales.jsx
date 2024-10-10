@@ -26,10 +26,28 @@ const NewSales = ({ invoice }) => {
     emi: '',
   });
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     
+    if (name === 'cusNic' && value.length === 10) { 
+      try {
+        const response = await fetch(`${config.BASE_URL}/customer/cusNIC/${value}`);
+        if (response.ok) {
+          const customerData = await response.json();
+          setFormData(prevData => ({
+            ...prevData,
+            cusName: customerData.cusName,
+            cusCode: customerData.cusCode
+          }));
+          setCustomerCreated(true);
+        } else {
+          console.log('Customer not found');
+        }
+      } catch (error) {
+        console.error('Error fetching customer data:', error);
+      }
+    }
   };
 
   const handleCustomerCreated = (customerData) => {
@@ -53,7 +71,7 @@ const NewSales = ({ invoice }) => {
 
     try {
       
-      // Fetch the product based on productNo or productName
+    
       const productResponse = await fetch(`${config.BASE_URL}/product?code=${formData.productNo}&name=${formData.productName}`);
       if (!productResponse.ok) {
         const productError = await productResponse.json();
@@ -62,7 +80,7 @@ const NewSales = ({ invoice }) => {
       const productData = await productResponse.json();
 
       const invoiceData = {
-        // cusId: customerData.customerId,
+       
         productId: productData.productId,
         invoiceDate: new Date().toISOString(),
         cusName: formData.cusName,
@@ -97,7 +115,7 @@ const NewSales = ({ invoice }) => {
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while creating the invoice.');
+      // alert('An error occurred while creating the invoice.');
     }
   };
 
