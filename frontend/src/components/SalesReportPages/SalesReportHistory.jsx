@@ -1,11 +1,54 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import Table from '../Table/Table';
+import config from '../../config';
 
 const SalesHistory = () => {
-
-  const columns = ['#', 'Date & Time', 'Product Category', 'Product Name', 'Size', 'Customer Name', 'Customer Nic', 'Value', 'Sold Price', 'Job Done By', 'Profit/Loss', 'Note'];
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const columns = ['Date & Time', 'Product Name', 'Size', 'Customer Name', 'Customer Nic', 'Value', 'Sold Price', 'Job Done By', 'Profit/Loss'];
   const btnName = 'Generate Report';
-  const data = [['1', '2024-08-09 10.11AM', 'Gold', 'Ring', '24K', 'Shiranthi Rajapaksha', '123', '50 000', '80 000', 'Admin', '30 000', 'Note']];
+
+  useEffect(() => {
+    fetchSummery();
+  }, []);
+
+  const fetchSummery = async () => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/invoices`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch Sales Invoices');
+      }
+      const invoices = await response.json();
+      const formattedData = invoices.map(invoice => {
+        const invoiceDate = new Date(invoice.invoiceDate);
+
+        // Format dates to "YYYY-MM-DD HH:mm"
+        const formattedInvoiceDate = `${invoiceDate.getFullYear()}-${String(invoiceDate.getMonth() + 1).padStart(2, '0')}-${String(invoiceDate.getDate()).padStart(2, '0')} ${String(invoiceDate.getHours()).padStart(2, '0')}:${String(invoiceDate.getMinutes()).padStart(2, '0')}`;
+
+        // Calculate total profit
+        const totalProfit = (invoice.product?.productProfit || 0) * (invoice.invoiceQty || 0);
+
+        return [
+          // invoice.invoiceId,
+          formattedInvoiceDate,
+          invoice.product?.productName || "Unknown",
+          invoice.invoiceQty,
+          invoice.customer?.cusName || "Unknown",
+          invoice.customer?.cusNIC || "Unknown",
+          invoice.totalAmount,
+          invoice.product?.productSellingPrice || "Unknown",
+          invoice.user?.userName || "Unknown",
+          totalProfit
+        ];
+      });
+      setData(formattedData);
+      setIsLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setIsLoading(false);
+    }
+  };
 
   const title = 'Sales History Report';
   const invoice = 'Sales History Report.pdf';
@@ -14,14 +57,21 @@ const SalesHistory = () => {
     <div>
       <div className="scrolling-container">
         <h4>Sales History Report</h4>
-        <Table
-          search={'Search by Customer Name , Product Name'}
-          data={data}
-          columns={columns}
-          btnName={btnName}
-          title={title}
-          invoice={invoice}
-        />
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : (
+          <Table
+            search={'Search by Customer Name , Product Name'}
+            data={data}
+            columns={columns}
+            btnName={btnName}
+            title={title}
+            showActions={false}
+            invoice={invoice}
+          />
+        )}
       </div>
     </div>
   )

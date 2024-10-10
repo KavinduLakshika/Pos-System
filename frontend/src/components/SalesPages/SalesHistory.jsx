@@ -18,7 +18,7 @@ const SalesHistory = () => {
     try {
       const response = await fetch(`${config.BASE_URL}/invoices`);
       if (!response.ok) {
-        throw new Error('Failed to fetch Sales Invoices');
+        setError('Failed to fetch Sales Invoices');
       }
       const invoices = await response.json();
       const formattedData = invoices.map(invoice => {

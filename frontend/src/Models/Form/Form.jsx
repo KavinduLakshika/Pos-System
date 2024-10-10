@@ -101,7 +101,7 @@ const Form = ({ closeModal, onSave, cus }) => {
         cusCity: 'Unknown',
     };
 
-    console.log('Customer data:', customerData); // Log the customer data
+    console.log('Customer data:', customerData); 
 
     try {
         const url = cus
@@ -117,10 +117,10 @@ const Form = ({ closeModal, onSave, cus }) => {
             body: JSON.stringify(customerData),
         });
 
-        console.log('Response status:', response.status); // Log response status
+        console.log('Response status:', response.status); 
 
-        const responseData = await response.json(); // Always parse response to JSON
-        console.log('Response data:', responseData); // Log response data
+        const responseData = await response.json(); 
+        console.log('Response data:', responseData);
 
         if (response.ok) {
             console.log(cus ? 'Customer updated:' : 'Customer created:', responseData);
@@ -128,8 +128,8 @@ const Form = ({ closeModal, onSave, cus }) => {
             onSave();
             closeModal();
         } else {
-            console.error('Failed to save customer:', responseData); // Log complete response data
-            setError(responseData.error || 'An error occurred while saving the customer.'); // Use a fallback error message
+            console.error('Failed to save customer:', responseData); 
+            setError(responseData.error || 'An error occurred while saving the customer.'); 
         }
     } catch (error) {
         console.error('Error:', error);

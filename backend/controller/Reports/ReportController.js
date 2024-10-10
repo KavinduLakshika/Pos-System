@@ -1,5 +1,7 @@
 const { Op } = require("sequelize");
 const Invoice = require("../../model/Invoice");
+const Product = require("../../model/Products");
+const User = require("../../model/User");
 
 async function getReports(req, res) {
   try {
@@ -29,7 +31,9 @@ async function getReports(req, res) {
       // dailySalesLast30Days: await dailySalesLast30Days(),
 
       monthlyRevenue: await monthlyRevenue(),
-      monthlySales: await monthlySales()
+      monthlySales: await monthlySales(),
+
+      getInvoiceSummaryByDate: await getInvoiceSummaryByDate()
     };
 
     res.json({ message_type: "success", message: report });
@@ -348,13 +352,13 @@ async function monthlyRevenue() {
     });
 
     result.push({
-      month: monthStart.toLocaleString('default', { month: 'long' }), 
+      month: monthStart.toLocaleString('default', { month: 'long' }),
       year: monthStart.getFullYear(),
       revenue: revenue || 0,
     });
   }
 
-  return result.reverse(); 
+  return result.reverse();
 }
 
 // Month-wise Sales for the Last 12 Months
@@ -376,14 +380,51 @@ async function monthlySales() {
     });
 
     result.push({
-      month: monthStart.toLocaleString('default', { month: 'long' }), 
+      month: monthStart.toLocaleString('default', { month: 'long' }),
       year: monthStart.getFullYear(),
       sales: sales || 0,
     });
   }
 
-  return result.reverse(); 
+  return result.reverse();
 }
+
+const getInvoiceSummaryByDate = async (date) => {
+  try {
+      const startOfDay = new Date(date);
+      const endOfDay = new Date(date);
+      endOfDay.setHours(23, 59, 59, 999);  // Set end of day
+
+      const summary = await Invoice.findAll({
+          where: {
+              invoiceDate: {
+                  [Op.between]: [startOfDay, endOfDay],  // Filter by date range
+              },
+          },
+          include: [
+              {
+                  model: Product,
+                  as: "product",
+                  attributes: ["productId", "productName"],
+              },
+              {
+                  model: User,
+                  as: "user",
+                  attributes: ["userId", "userName"],
+              },
+          ],
+          attributes: ["invoiceId", "invoiceQty", "paidAmount", "totalAmount"],
+      });
+      return summary;
+  } catch (error) {
+      console.error("Error fetching invoice summary:", error);
+  }
+};
+
+// Example usage
+getInvoiceSummaryByDate("2024-10-08").then((summary) => {
+});
+
 
 module.exports = {
   getReports,

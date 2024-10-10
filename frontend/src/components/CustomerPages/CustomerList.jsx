@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '../Table/Table';
 import Form from '../../Models/Form/Form';
 import Modal from 'react-modal';
@@ -22,7 +22,7 @@ const CustomerList = () => {
     try {
       const response = await fetch(`${config.BASE_URL}/customers`);
       if (!response.ok) {
-        throw new Error('Failed to fetch Customer list');
+        setError('Failed to fetch Customer list');
       }
       const cus = await response.json();
       const formattedData = cus.map(cus => [
@@ -121,8 +121,8 @@ const CustomerList = () => {
     fetchCustomer();
   };
 
-  const title='Customer List';
-  const invoice='customer_list.pdf';
+  const title = 'Customer List';
+  const invoice = 'customer_list.pdf';
   return (
     <div>
       <div className="scrolling-container">
