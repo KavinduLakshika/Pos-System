@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import './Product.css'
+import React, { useState, useEffect } from 'react';
+import './Product.css';
 import config from '../../config';
 import { useLocation } from 'react-router-dom';
 
@@ -23,6 +23,41 @@ const CreateProduct = () => {
     image: '',
   });
 
+  // Fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${config.BASE_URL}/categories`);
+        if (response.ok) {
+          const data = await response.json();
+          setCategories(data);
+        } else {
+          console.error('Failed to fetch categories');
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Fetch products
+  const fetchProducts = () => {
+    fetch(`${config.BASE_URL}/products`)
+      .then(response => response.json())
+      .then(data => {
+        setProducts(data);
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  // Pre-fill form if editing a product
   useEffect(() => {
     if (selectedProd) {
       setFormData({
@@ -40,42 +75,10 @@ const CreateProduct = () => {
     }
   }, [selectedProd]);
 
-  //product Category
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(`${config.BASE_URL}/categories`);
-        if (response.ok) {
-          const data = await response.json();
-          setCategories(data);
-        } else {
-          console.error('Failed to fetch categories');
-        }
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  //product list
-  useEffect(() => {
-    fetch(`${config.BASE_URL}/products`)
-      .then(response => response.json())
-      .then(data => {
-        setProducts(data);
-      })
-      .catch(error => {
-        console.error('Error fetching products:', error);
-      });
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formDataToSend = new FormData();
-
     // Append all text fields
     formDataToSend.append('productName', formData.productName);
     formDataToSend.append('productCode', formData.productCode);
@@ -87,13 +90,15 @@ const CreateProduct = () => {
     formDataToSend.append('productQty', formData.qty);
     formDataToSend.append('productUnit', formData.unit);
 
-    // Append the image file
+    // Append the image file if provided
     if (image) {
       formDataToSend.append('productImage', image);
     }
 
     try {
-      const url = selectedProd ? `${config.BASE_URL}/product/${selectedProd.productId}` : `${config.BASE_URL}/product`;
+      const url = selectedProd
+        ? `${config.BASE_URL}/product/${selectedProd.productId}`
+        : `${config.BASE_URL}/product`;
       const method = selectedProd ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -105,6 +110,8 @@ const CreateProduct = () => {
         const data = await response.json();
         alert(`${selectedProd ? 'Product updated' : 'Product created'} successfully`);
         handleReset();
+        // Auto-refresh the product list
+        fetchProducts();
       } else {
         const errorData = await response.json();
         alert(errorData.error || `Failed to ${selectedProd ? 'update' : 'create'} product`);
@@ -114,12 +121,11 @@ const CreateProduct = () => {
       alert('An error occurred while processing the product.');
     }
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -132,6 +138,7 @@ const CreateProduct = () => {
       reader.readAsDataURL(file);
     }
   };
+
   const handleReset = () => {
     setFormData({
       productCategory: 'select',
@@ -142,7 +149,7 @@ const CreateProduct = () => {
       qty: '',
       warranty: '',
       description: '',
-      weight: '',
+      unit: '',
       image: '',
     });
     setImage(null);
