@@ -162,18 +162,7 @@ const Table = ({
                         )}
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
+                
                 {showButton && (
                     <div className=" d-flex justify-content-end">
                         <button className="btn btn-info text-white" onClick={onAdd}>
@@ -181,7 +170,6 @@ const Table = ({
                         </button>
                     </div>
                 )}
-
 
                 <div className="mt-2">
                     <div className="col-md-12">
