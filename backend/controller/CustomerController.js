@@ -92,6 +92,24 @@ const getCustomerById = async (req, res) => {
     }
 };
 
+const getCustomerByNic = async (req, res) => {
+    try {
+        const { nic } = req.params; 
+
+        const customer = await Customer.findOne({
+            where: { cusNIC: nic }
+        });
+
+        if (!customer) {
+            return res.status(404).json({ message: "Customer not found" });
+        }
+
+        res.status(200).json(customer);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Update a customer
 const updateCustomer = async (req, res) => {
     try {
@@ -162,4 +180,5 @@ module.exports = {
     getCustomerById,
     updateCustomer,
     deleteCustomer,
+    getCustomerByNic
 }

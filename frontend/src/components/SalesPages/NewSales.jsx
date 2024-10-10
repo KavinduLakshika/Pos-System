@@ -9,6 +9,7 @@ import config from '../../config';
 const NewSales = ({ invoice }) => {
   const [data,] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [customerCreated, setCustomerCreated] = useState(false);
 
   const Columns = ["id", 'product', 'qty', 'price'];
   const [formData, setFormData] = useState({
@@ -25,24 +26,52 @@ const NewSales = ({ invoice }) => {
     emi: '',
   });
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    
+    if ((name === 'cusNic' && value.length === 10) || value.length===12) { 
+      try {
+        const response = await fetch(`${config.BASE_URL}/customer/cusNIC/${value}`);
+        if (response.ok) {
+          const customerData = await response.json();
+          setFormData(prevData => ({
+            ...prevData,
+            cusName: customerData.cusName,
+            cusCode: customerData.cusCode
+          }));
+          setCustomerCreated(true);
+        } else {
+          console.log('Customer not found');
+        }
+      } catch (error) {
+        console.error('Error fetching customer data:', error);
+      }
+    }
+  };
+
+  const handleCustomerCreated = (customerData) => {
+    setFormData(prevData => ({
+      ...prevData,
+      cusName: customerData.cusName,
+      cusNic: customerData.cusNIC,
+      cusCode: customerData.cusCode
+    }));
+    setCustomerCreated(true);
+    closeModal();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      // Fetch the customer based on cusName or refNo
-      const customerResponse = await fetch(`${config.BASE_URL}/customer?name=${formData.cusName}&code=${formData.refNo}`);
-      if (!customerResponse.ok) {
-        const customerError = await customerResponse.json();
-        throw new Error(customerError.message || 'Failed to fetch customer.');
-      }
-      const customerData = await customerResponse.json();
+    // if (!customerCreated) {
+    //   alert('Check Again');
+    //   return;
+    // }
 
-      // Fetch the product based on productNo or productName
+    try {
+      
+    
       const productResponse = await fetch(`${config.BASE_URL}/product?code=${formData.productNo}&name=${formData.productName}`);
       if (!productResponse.ok) {
         const productError = await productResponse.json();
@@ -51,7 +80,7 @@ const NewSales = ({ invoice }) => {
       const productData = await productResponse.json();
 
       const invoiceData = {
-        cusId: customerData.customerId,
+       
         productId: productData.productId,
         invoiceDate: new Date().toISOString(),
         cusName: formData.cusName,
@@ -86,7 +115,7 @@ const NewSales = ({ invoice }) => {
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while creating the invoice.');
+      // alert('An error occurred while creating the invoice.');
     }
   };
 
@@ -142,7 +171,7 @@ const NewSales = ({ invoice }) => {
                   onRequestClose={closeModal}
                   contentLabel="New Customer Form"
                 >
-                  <Form closeModal={closeModal} />
+                  <Form closeModal={closeModal} onSave={handleCustomerCreated} />
                 </Modal>
 
                 <div className="customer-details">

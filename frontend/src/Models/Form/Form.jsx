@@ -125,7 +125,7 @@ const Form = ({ closeModal, onSave, cus }) => {
         if (response.ok) {
             console.log(cus ? 'Customer updated:' : 'Customer created:', responseData);
             setError(cus ? 'Successfully Updated!' : 'Successfully Created!');
-            onSave();
+            onSave(customerData);
             closeModal();
         } else {
             console.error('Failed to save customer:', responseData); 
