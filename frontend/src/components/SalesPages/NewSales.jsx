@@ -11,7 +11,7 @@ const NewSales = ({ invoice }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [customerCreated, setCustomerCreated] = useState(false);
 
-  const Columns = ["id", 'product', 'qty', 'price'];
+  const Columns = ["Customer Code", 'Customer Name', 'Customer Nic', 'Product Code','Product Name','Product Price','Quantity','Discount','Total Price'];
   const [formData, setFormData] = useState({
     cusName: '',
     cusNic: '',
@@ -48,8 +48,29 @@ const NewSales = ({ invoice }) => {
         console.error('Error fetching customer data:', error);
       }
     }
+    if (name === 'productNo' || name === 'productName') {
+      fetchProductDetails(name, value);
+    }
   };
 
+  const fetchProductDetails = async (field, value) => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/product?${field === 'productNo' ? 'code' : 'name'}=${value}`);
+      if (response.ok) {
+        const productData = await response.json();
+        setFormData(prevData => ({
+          ...prevData,
+          productNo: productData.productCode,
+          productName: productData.productName,
+          productPrice: productData.sellingPrice
+        }));
+      } else {
+        console.log('Product not found');
+      }
+    } catch (error) {
+      console.error('Error fetching product data:', error);
+    }
+  }; 
   const handleCustomerCreated = (customerData) => {
     setFormData(prevData => ({
       ...prevData,
@@ -86,7 +107,7 @@ const NewSales = ({ invoice }) => {
         cusName: formData.cusName,
         cusNIC: formData.cusNic,
         cusCode: formData.cusCode,
-        productCode: formData.productNo,
+        productCode: formData.productCode,
         productName: formData.productName,
         productSellingPrice: formData.productPrice,
         invoiceQty: formData.qty,
@@ -195,15 +216,40 @@ const NewSales = ({ invoice }) => {
                   <p><ShoppingCart /> Product Details</p>
                 </div>
                 <div className="row">
-                  <div className="product-details col-md-4 mb-2">
-                    <input onChange={handleChange} value={formData.productNo} type="text" name="productNo" className="form-control" id="productNo" placeholder="Product No" />
-                  </div>
-                  <div className="product-details col-md-8 mb-2">
-                    <input onChange={handleChange} value={formData.productName} type="text" name="productName" className="form-control" id="productName" placeholder="Product Name" />
-                  </div>
-                  <div className="product-details col-md-3 mb-2">
-                    <input onChange={handleChange} value={formData.productPrice} type="number" name="productPrice" className="form-control" id="price" placeholder="Cash Price" onWheel={(e) => e.target.blur()} />
-                  </div>
+          <div className="product-details col-md-4 mb-2">
+            <input 
+              onChange={handleChange} 
+              value={formData.productNo} 
+              type="text" 
+              name="productNo" 
+              className="form-control" 
+              id="productNo" 
+              placeholder="Product Code" 
+            />
+          </div>
+          <div className="product-details col-md-8 mb-2">
+            <input 
+              onChange={handleChange} 
+              value={formData.productName} 
+              type="text" 
+              name="productName" 
+              className="form-control" 
+              id="productName" 
+              placeholder="Product Name" 
+            />
+          </div>
+          <div className="product-details col-md-3 mb-2">
+            <input 
+              onChange={handleChange} 
+              value={formData.productPrice} 
+              type="number" 
+              name="productPrice" 
+              className="form-control" 
+              id="price" 
+              placeholder="Product Price" 
+              onWheel={(e) => e.target.blur()} 
+            />
+          </div>
                   <div className="product-details col-md-3 mb-2">
                     <input onChange={handleChange} value={formData.qty} type="number" onWheel={(e) => e.target.blur()} name="qty" className="form-control" id="qty" placeholder="Enter Quantity" />
                   </div>
@@ -218,11 +264,11 @@ const NewSales = ({ invoice }) => {
                   </div>
                   <div className="product-details-checkbox col-md-1 mb-2">
                     <input type="checkbox" id="emi" name="emi" value="EMI" onChange={handleEmi} />
-                    <label htmlFor="emi">EMI</label>
+                    <label htmlFor="emi">Imei</label>
                   </div>
                   {Emi && (
                     <div className="product-details col-md-5">
-                      <input onChange={handleChange} value={formData.emi} type="text" name="emi" className="form-control" id="emi" placeholder="EMI/Serial Number" />
+                      <input onChange={handleChange} value={formData.emi} type="text" name="emi" className="form-control" id="emi" placeholder="Imei/Serial Number" />
                     </div>
                   )}
 
