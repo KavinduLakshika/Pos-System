@@ -30,7 +30,7 @@ const NewSales = ({ invoice }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     
-    if (name === 'cusNic' && value.length === 10) { 
+    if ((name === 'cusNic' && value.length === 10) || value.length===12) { 
       try {
         const response = await fetch(`${config.BASE_URL}/customer/cusNIC/${value}`);
         if (response.ok) {
