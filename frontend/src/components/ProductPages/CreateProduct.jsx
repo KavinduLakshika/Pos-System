@@ -21,6 +21,8 @@ const CreateProduct = () => {
     description: '',
     unit: '',
     image: '',
+    mfd: '',
+    exp: '',
   });
 
   // Fetch categories
@@ -89,6 +91,8 @@ const CreateProduct = () => {
     formDataToSend.append('categoryId', formData.productCategory);
     formDataToSend.append('productQty', formData.qty);
     formDataToSend.append('productUnit', formData.unit);
+    formDataToSend.append('mfd', formData.mfd);
+    formDataToSend.append('exp', formData.exp);
 
     // Append the image file if provided
     if (image) {
@@ -151,6 +155,8 @@ const CreateProduct = () => {
       description: '',
       unit: '',
       image: '',
+      mfd: '',
+      exp: '',
     });
     setImage(null);
     setPreview('');
@@ -245,8 +251,22 @@ const CreateProduct = () => {
                 <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
               </div>
             </div>
+            <div className="row">
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Manufacture Date </label>
+                <input onChange={handleChange} type="date" name='mfd' id='' onWheel={(e) => e.target.blur()} value={formData.mfd} className='form-control' />
+              </div>
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Expiration date</label>
+                <input onChange={handleChange} type="date" name='exp' id='' onWheel={(e) => e.target.blur()} value={formData.exp} className='form-control' />
+              </div>
+            </div>
 
             <div className="row">
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Quantity</label>
+                <input onChange={handleChange} type="number" name='qty' onWheel={(e) => e.target.blur()} id='' value={formData.qty} className='form-control' />
+              </div>
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Unit (G/KG/K24/K30)</label>
                 <input onChange={handleChange} type="text" name='unit' id='' onWheel={(e) => e.target.blur()} value={formData.unit} className='form-control' />
@@ -255,10 +275,7 @@ const CreateProduct = () => {
                 <label htmlFor="" className='mb-1'>Description</label>
                 <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
               </div>
-              {/* <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Quantity</label>
-                <input onChange={handleChange} type="number" name='qty' onWheel={(e) => e.target.blur()} id='' value={formData.qty} className='form-control' />
-              </div> */}
+
             </div>
 
             <div className="row">
@@ -282,17 +299,17 @@ const CreateProduct = () => {
 
           <div className="showProduct col-md-4">
             <h4>Products With Category</h4>
-           
-              {products.length > 0 ? (
-                products.map(product => ( <div className="mb-1">
-                  <div key={product.productId} className="showProduct-group">
-                    <p>{product.productName}</p>
-                    <p>{product.category ? product.category.categoryName : 'No Category'}</p>
-                    </div>
+
+            {products.length > 0 ? (
+              products.map(product => (<div className="mb-1">
+                <div key={product.productId} className="showProduct-group">
+                  <p>{product.productName}</p>
+                  <p>{product.category ? product.category.categoryName : 'No Category'}</p>
                 </div>
-            ))
+              </div>
+              ))
             ) : (
-            <p>No products available</p>
+              <p>No products available</p>
             )}
           </div>
         </div>

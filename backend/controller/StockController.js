@@ -32,7 +32,7 @@ const upload = multer({ storage: storage }).single('billImage');
 const createStock = async (req, res) => {
     upload(req, res, async function (err) {
         if (err instanceof multer.MulterError) {
-            return res.status(500).json({ error: 'Image upload failed' });
+            return res.status(500).json({ error: 'Image upload failed due to Multer error' });
         } else if (err) {
             return res.status(500).json({ error: 'Unknown error: Image upload failed' });
         }
@@ -40,14 +40,10 @@ const createStock = async (req, res) => {
         try {
             const {
                 stockName,
-                stockQty,
                 stockDate,
-                mfd,
-                exp,
                 stockPrice,
                 due,
                 vat,
-                total,
                 stockDescription,
                 productId,
                 supplierId,
@@ -56,27 +52,27 @@ const createStock = async (req, res) => {
             } = req.body;
 
             // Validate required fields
-            if (!stockName || !stockQty || !stockDate || !stockPrice || !productId || !supplierId || !storeId) {
-                return res.status(400).json({ error: "All fields are required." });
+            if (!stockName || !stockDate || !stockPrice || !productId || !supplierId || !storeId) {
+                return res.status(400).json({ error: "All required fields must be filled." });
             }
 
             // Check existence of related entities
             const supplier = await Supplier.findByPk(supplierId);
             if (!supplier) {
-                return res.status(400).json({ message: 'Invalid supplier ID' });
+                return res.status(400).json({ error: 'Invalid supplier ID' });
             }
 
             const product = await Product.findByPk(productId);
             if (!product) {
-                return res.status(400).json({ message: 'Invalid product ID' });
+                return res.status(400).json({ error: 'Invalid product ID' });
             }
 
             const store = await Store.findByPk(storeId);
             if (!store) {
-                return res.status(400).json({ message: 'Invalid store ID' });
+                return res.status(400).json({ error: 'Invalid store ID' });
             }
 
-            // Check if stock already exists
+            // Check if stock with the same name exists
             const existingStock = await Stock.findOne({ where: { stockName } });
             if (existingStock) {
                 return res.status(400).json({ error: "A stock with this name already exists." });
@@ -88,16 +84,22 @@ const createStock = async (req, res) => {
                 billImage = `${req.protocol}://${req.get('host')}/uploads/stock/${req.file.filename}`;
             }
 
+            // Validate numeric fields
+            if (isNaN(stockPrice) || isNaN(vat)) {
+                return res.status(400).json({ error: "Stock price and VAT must be valid numbers." });
+            }
+
+            // Calculate total (stock price + VAT)
+            const total = parseFloat(stockPrice) + parseFloat(vat || 0);
+
+
             // Create new stock
             const newStock = await Stock.create({
                 stockName,
-                stockQty,
                 stockDate,
-                mfd,
-                exp,
-                stockPrice,
-                due,
-                vat,
+                stockPrice: parseFloat(stockPrice),
+                due: parseFloat(due || 0),
+                vat: parseFloat(vat || 0),
                 total,
                 stockDescription,
                 stockStatus: "In stock",
@@ -108,7 +110,7 @@ const createStock = async (req, res) => {
                 category_categoryId: categoryId,
             });
 
-            // Fetch and return stock details
+            // Fetch and return detailed stock info
             const stockDetails = await Stock.findByPk(newStock.stockId, {
                 include: [
                     { model: Supplier, as: 'supplier' },
@@ -120,10 +122,11 @@ const createStock = async (req, res) => {
 
             res.status(201).json(stockDetails);
         } catch (error) {
-            return res.status(500).json({ message: `An internal error occurred: ${error.message}` });
+            return res.status(500).json({ error: `An internal error occurred: ${error.message}` });
         }
     });
 };
+
 
 // Get all stocks
 const getAllStocks = async (req, res) => {
@@ -177,15 +180,13 @@ const updateStock = async (req, res) => {
             const { id } = req.params;
             const {
                 stockName,
-                stockQty,
                 stockDate,
-                mfd,
-                exp,
                 stockPrice,
                 due,
                 vat,
-                total,
                 stockDescription,
+                cashAmount,
+                chequeAmount,
                 stockStatus,
                 productId,
                 supplierId,
@@ -247,17 +248,24 @@ const updateStock = async (req, res) => {
                 billImage = `${req.protocol}://${req.get('host')}/uploads/stock/${req.file.filename}`;
             }
 
+            // Validate numeric fields
+            if (isNaN(stockPrice) || isNaN(vat)) {
+                return res.status(400).json({ error: "Stock price and VAT must be valid numbers." });
+            }
+
+            // Calculate total (stock price + VAT)
+            const total = parseFloat(stockPrice) + parseFloat(vat || 0);
+
             await stock.update({
                 stockName,
-                stockQty,
                 stockDate,
-                mfd,
-                exp,
-                stockPrice,
-                due,
-                vat,
+                stockPrice: parseFloat(stockPrice),
+                due: parseFloat(due || 0),
+                vat: parseFloat(vat || 0),
                 total,
                 stockDescription,
+                cashAmount,
+                chequeAmount,
                 stockStatus,
                 billImage,
                 products_productId: productId,

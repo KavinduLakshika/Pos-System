@@ -22,6 +22,14 @@ const Product = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    mfd: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    exp: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     productUnit: {
       type: DataTypes.STRING,
       allowNull: true,

@@ -22,13 +22,13 @@ function StockHistory() {
       }
       const stock = await response.json();
 
-      // Filter out items where stockStatus is "Out of Stock"
-      const inStockItems = stock.filter(stock => stock.stockStatus !== "In stock");
+      // Filter to show only out-of-stock items
+      const outOfStockItems = stock.filter(stock => stock.stockStatus === "Out of Stock");
 
-      const formattedData = inStockItems.map(stock => [
+      const formattedData = outOfStockItems.map(stock => [
         stock.stockId,
         stock.stockName,
-        stock.stockQty,
+        stock.stockQty || 0,
         stock.stockDate,
         stock.stockPrice,
         stock.product?.productName || 'Unknown',
@@ -50,25 +50,44 @@ function StockHistory() {
       setIsLoading(false);
     }
   };
+
   const handleStatusChange = async (stockId, newStatus) => {
     try {
-      const response = await fetch(`${config.BASE_URL}/stock/${stockId}`, {
+
+      const fetchResponse = await fetch(`${config.BASE_URL}/stock/${stockId}`);
+      if (!fetchResponse.ok) {
+        throw new Error(`Failed to fetch stock data: ${fetchResponse.status} ${fetchResponse.statusText}`);
+      }
+      const currentStock = await fetchResponse.json();
+
+      const updatePayload = {
+        ...currentStock,
+        stockStatus: newStatus
+      };
+
+      if (newStatus === "In stock" && updatePayload.stockQty === 0) {
+        updatePayload.stockQty = 1;
+      }
+
+      const updateResponse = await fetch(`${config.BASE_URL}/stock/${stockId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ stockStatus: newStatus }),
+        body: JSON.stringify(updatePayload),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Failed to update stock status: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
+      if (!updateResponse.ok) {
+        const errorData = await updateResponse.json();
+        throw new Error(`Failed to update stock status: ${updateResponse.status} ${updateResponse.statusText}. ${errorData.message || ''}`);
       }
+
       await fetchStock();
     } catch (error) {
       setError(`Error updating stock status: ${error.message}`);
     }
   };
+
   const handleDelete = async (rowIndex) => {
     try {
       const stockId = data[rowIndex][0];
@@ -115,4 +134,4 @@ function StockHistory() {
   )
 }
 
-export default StockHistory
+export default StockHistory;
