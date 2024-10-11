@@ -20,7 +20,7 @@ const Product = sequelize.define(
     },
     productQty: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     mfd: {
       type: DataTypes.DATE,
