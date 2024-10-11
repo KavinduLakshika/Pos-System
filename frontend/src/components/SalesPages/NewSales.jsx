@@ -67,6 +67,7 @@ const NewSales = ({ invoice }) => {
             qty: 1,
             totalPrice: productData.productSellingPrice,
             productNote: productData.productWarranty + ' ' + productData.productDescription,
+            emi:productData.productEmi
           }));
         } else {
           setFormData(prevData => ({
