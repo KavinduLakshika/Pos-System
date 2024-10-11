@@ -263,6 +263,28 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const getProductByCodeOrName = async (req, res) => {
+    try {
+        const { value } = req.params;
+        const product = await Product.findOne({
+            where: {
+                [Sequelize.Op.or]: [
+                    { productCode: value },
+                    { productName: value }
+                ]
+            }
+        });
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.status(200).json(product);
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
 
 
 module.exports = {
