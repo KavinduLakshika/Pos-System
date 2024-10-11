@@ -3,6 +3,7 @@ const Category = require("../model/Category");
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { Sequelize } = require('sequelize');
 
 // Image upload setup
 const storage = multer.diskStorage({
@@ -237,29 +238,10 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-const getProductByName = async (req, res) => {
-    try {
-        const { name } = req.params;
-
-        const product = await Product.findOne({
-            where: { productName: name }
-        });
-
-        if (!product) {
-            return res.status(404).json({ message: "product not found" });
-        }
-
-        res.status(200).json(product);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
 module.exports = {
     createProduct,
     getAllProducts,
     getProductById,
     updateProduct,
-    deleteProduct,
-    getProductByName,
+    deleteProduct
 };
