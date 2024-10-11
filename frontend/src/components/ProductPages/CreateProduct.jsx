@@ -180,17 +180,21 @@ const CreateProduct = () => {
                 </select>
               </div>
 
-
               <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Product Code</label>
-                <input onChange={handleChange} type="text" name='productCode' id='' value={formData.productCode} className='form-control' />
+                <label htmlFor="" className='mb-1'>Product Image</label>
+                <input type="file" name='image' id='' accept="image/*" onChange={handleImageChange} className='form-control' />
+                {preview && (
+                  <div style={{ margin: '10px auto' }}>
+                    <img src={preview} alt="Preview" style={{ width: '100px', height: 'auto' }} />
+                  </div>
+                )}
               </div>
             </div>
 
             <div className="row">
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Product Name</label>
-                <input onChange={handleChange} type="text" name='productName' id='' value={formData.productName} className='form-control' />
+            <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Product Code</label>
+                <input onChange={handleChange} type="text" name='productCode' id='' value={formData.productCode} className='form-control' />
               </div>
 
 
@@ -202,7 +206,49 @@ const CreateProduct = () => {
             </div>
 
             <div className="row">
+              
+           
+           
+            <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Product Name</label>
+                <input onChange={handleChange} type="text" name='productName' id='' value={formData.productName} className='form-control' />
+              </div>
+
+
               <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Selling Price (Per Unit)</label>
+                <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
+              </div>
+            </div>
+            {/* <div className="row">
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Manufacture Date </label>
+                <input onChange={handleChange} type="date" name='mfd' id='' onWheel={(e) => e.target.blur()} value={formData.mfd} className='form-control' />
+              </div>
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Expiration date</label>
+                <input onChange={handleChange} type="date" name='exp' id='' onWheel={(e) => e.target.blur()} value={formData.exp} className='form-control' />
+              </div>
+            </div> */}
+
+            <div className="row">
+              {/* <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Quantity</label>
+                <input onChange={handleChange} type="number" name='qty' onWheel={(e) => e.target.blur()} id='' value={formData.qty} className='form-control' />
+              </div> */}
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Unit (G/KG/K24/K30)</label>
+                <input onChange={handleChange} type="text" name='unit' id='' onWheel={(e) => e.target.blur()} value={formData.unit} className='form-control' />
+              </div>
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Description</label>
+                <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
+              </div>
+
+            </div>
+
+            <div className="row">
+            <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Warranty</label>
                 <select name='warranty' id='' value={formData.warranty} className='form-control' onChange={handleChange} >
                   <option value="No Warranty">No Warranty</option>
@@ -243,50 +289,6 @@ const CreateProduct = () => {
                   <option value="35 Months">35 Months</option>
                   <option value="36 Months">36 Months</option>
                 </select>
-              </div>
-
-
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Selling Price (Per Unit)</label>
-                <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
-              </div>
-            </div>
-            <div className="row">
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Manufacture Date </label>
-                <input onChange={handleChange} type="date" name='mfd' id='' onWheel={(e) => e.target.blur()} value={formData.mfd} className='form-control' />
-              </div>
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Expiration date</label>
-                <input onChange={handleChange} type="date" name='exp' id='' onWheel={(e) => e.target.blur()} value={formData.exp} className='form-control' />
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Quantity</label>
-                <input onChange={handleChange} type="number" name='qty' onWheel={(e) => e.target.blur()} id='' value={formData.qty} className='form-control' />
-              </div>
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Unit (G/KG/K24/K30)</label>
-                <input onChange={handleChange} type="text" name='unit' id='' onWheel={(e) => e.target.blur()} value={formData.unit} className='form-control' />
-              </div>
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Description</label>
-                <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
-              </div>
-
-            </div>
-
-            <div className="row">
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Product Image</label>
-                <input type="file" name='image' id='' accept="image/*" onChange={handleImageChange} className='form-control' />
-                {preview && (
-                  <div style={{ margin: '10px auto' }}>
-                    <img src={preview} alt="Preview" style={{ width: '100px', height: 'auto' }} />
-                  </div>
-                )}
               </div>
 
             </div>

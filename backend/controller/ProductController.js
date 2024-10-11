@@ -264,11 +264,13 @@ const deleteProduct = async (req, res) => {
 };
 
 
+
 module.exports = {
     createProduct,
     getAllProducts,
     getProductById,
     getProductByName,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getProductByCodeOrName
 };
