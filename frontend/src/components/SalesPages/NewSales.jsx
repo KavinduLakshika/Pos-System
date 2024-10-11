@@ -7,7 +7,8 @@ import Table from '../Table/Table'
 import config from '../../config';
 
 const NewSales = ({ invoice }) => {
-  const [data,] = useState([]);
+  
+  const [tableData, setTableData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [customerCreated, setCustomerCreated] = useState(false);
 
@@ -97,6 +98,44 @@ const NewSales = ({ invoice }) => {
     closeModal();
   };
 
+  const handleAddProduct = (e) => {
+    e.preventDefault();
+    
+    if (!formData.productNo || !formData.productName || !formData.productPrice || !formData.qty) {
+      alert("Please fill in all the product details.");
+      return;
+    }
+     
+    const newRow = [
+      formData.cusCode,
+      formData.cusName,
+      formData.cusNic,
+      formData.productNo,
+      formData.productName,
+      formData.productPrice,
+      formData.qty,
+      formData.discount,
+      formData.totalPrice
+    ];
+  
+    setTableData(prevData => [...prevData, newRow]);
+  
+     
+    setFormData(prevData => ({
+      ...prevData,
+      productNo: '',
+      productName: '',
+      productPrice: '',
+      qty: '',
+      discount: '',
+      totalPrice: '',
+      productNote: '',
+      emi: ''
+    }));
+
+    console.log("Added new row:", newRow);
+    console.log("Updated table data:", [...tableData, newRow]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -187,6 +226,8 @@ const NewSales = ({ invoice }) => {
     setBank(e.target.checked)
   }
 
+
+  
   return (
     <div>
       <div className="scrolling-container">
@@ -289,13 +330,13 @@ const NewSales = ({ invoice }) => {
               </div>
             </div>
             <div className="sales-addbtn d-grid d-md-flex me-md-2 justify-content-end px-5">
-              <button className="btn btn-primary btn-md">Add Product</button>
+              <button className="btn btn-primary btn-md" onClick={handleAddProduct}>Add Product</button>
             </div>
           </div>
 
           <div className="product-table">
             <Table
-              data={data}
+              data={tableData}
               columns={Columns}
               showSearch={false}
               showButton={false}

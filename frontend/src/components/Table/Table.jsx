@@ -29,13 +29,14 @@ const Table = ({
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(25);
-
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    
 
     useEffect(() => {
-        setTableData(data);
+        setTableData(Array.isArray(data) ? data : []);
     }, [data]);
+    
 
     useEffect(() => {
         setTableColumns(columns);
@@ -44,7 +45,9 @@ const Table = ({
     const filteredData = tableData.filter((tableDatum) => {
         const query = searchQuery.toLowerCase();
         const isWithinDateRange = (!startDate && !endDate) || (new Date(tableDatum[1]) >= new Date(startDate) && new Date(tableDatum[1]) <= new Date(endDate));
-        return isWithinDateRange && tableDatum.some((item) => {
+        
+        
+        return isWithinDateRange && Array.isArray(tableDatum) && tableDatum.some((item) => {
             return item != null && item.toString().toLowerCase().includes(query);
         });
     });
