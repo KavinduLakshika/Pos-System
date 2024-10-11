@@ -30,6 +30,10 @@ const Product = sequelize.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    productDiscount: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
     productUnit: {
       type: DataTypes.STRING,
       allowNull: true,

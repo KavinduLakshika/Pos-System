@@ -142,6 +142,15 @@ const NewStock = () => {
 
     setFormData(prevData => {
       const newData = { ...prevData, [name]: value };
+
+      if (name === 'vat' || name === 'totalPrice') {
+        const vatAmount = (parseFloat(newData.vat) / 100) * parseFloat(newData.totalPrice);
+        newData.totalPriceVAT = (parseFloat(newData.totalPrice) + vatAmount).toFixed(2);
+      }
+
+      // Calculate due based on totalPriceVAT minus either cashAmount or chequeAmount
+      const paidAmount = parseFloat(newData.cashAmount) || parseFloat(newData.chequeAmount) || 0;
+      newData.due = (paidAmount - parseFloat(newData.totalPriceVAT)).toFixed(2);
       return newData;
     });
   };
@@ -213,16 +222,14 @@ const NewStock = () => {
           <div className="row">
             {/* Left Column */}
             <div className="col-md-6">
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="stockName" className="form-label">Stock Name / Stock Number</label>
-                  <input type="text" name="stockName" value={formData.stockName} className="form-control" onChange={handleChange} />
-                </div>
-                <div className="col-md-6 mb-3">
+
+              <label htmlFor="stockName" className="form-label">Stock Name / Stock Number</label>
+              <input type="text" name="stockName" value={formData.stockName} className="form-control" onChange={handleChange} />
+
+              {/* <div className="col-md-6 mb-3">
                   <label htmlFor="refNo" className="form-label">Reference Number (ID)</label>
                   <input type="text" name="refNo" value={formData.refNo} className="form-control" onChange={handleChange} />
-                </div>
-              </div>
+                </div> */}
 
               <div className="row">
                 <div className="col-md-6 mb-3">

@@ -40,10 +40,13 @@ const createProduct = async (req, res) => {
                 productCode,
                 productQty,
                 productUnit,
+                mfd,
+                exp,
                 productBuyingPrice,
                 productSellingPrice,
                 productDescription,
                 productWarranty,
+                productDiscount,
                 categoryId
             } = req.body;
 
@@ -78,8 +81,11 @@ const createProduct = async (req, res) => {
                 productCode,
                 productUnit,
                 productQty,
+                mfd,
+                exp,
                 productBuyingPrice,
                 productSellingPrice,
+                productDiscount,
                 productWarranty,
                 productProfit,
                 productDescription,
@@ -167,6 +173,7 @@ const updateProduct = async (req, res) => {
                 productQty,
                 mfd,
                 exp,
+                productDiscount,
                 productBuyingPrice,
                 productSellingPrice,
                 productWarranty,
@@ -209,6 +216,7 @@ const updateProduct = async (req, res) => {
                 productQty,
                 mfd,
                 exp,
+                productDiscount,
                 productBuyingPrice,
                 productSellingPrice,
                 productWarranty,
@@ -254,7 +262,6 @@ const deleteProduct = async (req, res) => {
         res.status(500).json({ error: `An error occurred: ${error.message}` });
     }
 };
-
 
 
 module.exports = {
