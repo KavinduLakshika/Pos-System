@@ -11,7 +11,7 @@ const NewSales = ({ invoice }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [customerCreated, setCustomerCreated] = useState(false);
 
-  const Columns = ["Customer Code", 'Customer Name', 'Customer Nic', 'Product Code','Product Name','Product Price','Quantity','Discount','Total Price'];
+  const Columns = ["Customer Code", 'Customer Name', 'Customer Nic', 'Product Code', 'Product Name', 'Product Price', 'Quantity', 'Discount', 'Total Price'];
   const [formData, setFormData] = useState({
     cusName: '',
     cusNic: '',
@@ -29,47 +29,63 @@ const NewSales = ({ invoice }) => {
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    if ((name === 'cusNic' && value.length === 10) || value.length===12) { 
+    if (name === 'cusNic') {
       try {
         const response = await fetch(`${config.BASE_URL}/customer/cusNIC/${value}`);
         if (response.ok) {
           const customerData = await response.json();
           setFormData(prevData => ({
             ...prevData,
+            cusNic: customerData.cusNIC || prevData.cusNic,
             cusName: customerData.cusName,
             cusCode: customerData.cusCode
           }));
           setCustomerCreated(true);
         } else {
+          setFormData(prevData => ({
+            ...prevData,
+            cusName: '',
+            cusCode: ''
+          }));
           console.log('Customer not found');
         }
       } catch (error) {
         console.error('Error fetching customer data:', error);
       }
     }
+  
     if (name === 'productNo' || name === 'productName') {
-      fetchProductDetails(name, value);
+      try {
+        const response = await fetch(`${config.BASE_URL}/product/codeOrName/${value}`);
+        if (response.ok) {
+          const productData = await response.json();
+          setFormData(prevData => ({
+            ...prevData,
+            productNo: productData.productCode || prevData.productNo,
+            productName: productData.productName || prevData.productName,
+            productPrice: productData.productSellingPrice,
+            qty: 1,
+            totalPrice: productData.productSellingPrice,
+            productNote: productData.productWarranty + ' ' + productData.productDescription,
+          }));
+        } else {
+          setFormData(prevData => ({
+            ...prevData,
+            productNo: '',
+            productPrice: '',
+            qty: '',
+            totalPrice: '',
+            productNote: ''
+          }));
+          console.log('Product not found');
+        }
+      } catch (error) {
+        console.error('Error fetching product data:', error);
+      }
     }
   };
+  
 
-  const fetchProductDetails = async (field, value) => {
-    try {
-      const response = await fetch(`${config.BASE_URL}/product?${field === 'productNo' ? 'code' : 'name'}=${value}`);
-      if (response.ok) {
-        const productData = await response.json();
-        setFormData(prevData => ({
-          ...prevData,
-          productNo: productData.productCode,
-          productName: productData.productName,
-          productPrice: productData.sellingPrice
-        }));
-      } else {
-        console.log('Product not found');
-      }
-    } catch (error) {
-      console.error('Error fetching product data:', error);
-    }
-  }; 
   const handleCustomerCreated = (customerData) => {
     setFormData(prevData => ({
       ...prevData,
@@ -81,6 +97,7 @@ const NewSales = ({ invoice }) => {
     closeModal();
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -90,8 +107,8 @@ const NewSales = ({ invoice }) => {
     // }
 
     try {
-      
-    
+
+
       const productResponse = await fetch(`${config.BASE_URL}/product?code=${formData.productNo}&name=${formData.productName}`);
       if (!productResponse.ok) {
         const productError = await productResponse.json();
@@ -100,7 +117,7 @@ const NewSales = ({ invoice }) => {
       const productData = await productResponse.json();
 
       const invoiceData = {
-       
+
         productId: productData.productId,
         invoiceDate: new Date().toISOString(),
         cusName: formData.cusName,
@@ -170,9 +187,6 @@ const NewSales = ({ invoice }) => {
     setBank(e.target.checked)
   }
 
-
-
-
   return (
     <div>
       <div className="scrolling-container">
@@ -215,40 +229,40 @@ const NewSales = ({ invoice }) => {
                   <p><ShoppingCart /> Product Details</p>
                 </div>
                 <div className="row">
-          <div className="product-details col-md-4 mb-2">
-            <input 
-              onChange={handleChange} 
-              value={formData.productNo} 
-              type="text" 
-              name="productNo" 
-              className="form-control" 
-              id="productNo" 
-              placeholder="Product Code" 
-            />
-          </div>
-          <div className="product-details col-md-8 mb-2">
-            <input 
-              onChange={handleChange} 
-              value={formData.productName} 
-              type="text" 
-              name="productName" 
-              className="form-control" 
-              id="productName" 
-              placeholder="Product Name" 
-            />
-          </div>
-          <div className="product-details col-md-3 mb-2">
-            <input 
-              onChange={handleChange} 
-              value={formData.productPrice} 
-              type="number" 
-              name="productPrice" 
-              className="form-control" 
-              id="price" 
-              placeholder="Product Price" 
-              onWheel={(e) => e.target.blur()} 
-            />
-          </div>
+                  <div className="product-details col-md-4 mb-2">
+                    <input
+                      onChange={handleChange}
+                      value={formData.productNo}
+                      type="text"
+                      name="productNo"
+                      className="form-control"
+                      id="productNo"
+                      placeholder="Product Code"
+                    />
+                  </div>
+                  <div className="product-details col-md-8 mb-2">
+                    <input
+                      onChange={handleChange}
+                      value={formData.productName}
+                      type="text"
+                      name="productName"
+                      className="form-control"
+                      id="productName"
+                      placeholder="Product Name"
+                    />
+                  </div>
+                  <div className="product-details col-md-3 mb-2">
+                    <input
+                      onChange={handleChange}
+                      value={formData.productPrice}
+                      type="number"
+                      name="productPrice"
+                      className="form-control"
+                      id="price"
+                      placeholder="Product Price"
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
                   <div className="product-details col-md-3 mb-2">
                     <input onChange={handleChange} value={formData.qty} type="number" onWheel={(e) => e.target.blur()} name="qty" className="form-control" id="qty" placeholder="Enter Quantity" />
                   </div>
