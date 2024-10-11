@@ -132,6 +132,23 @@ const getProductById = async (req, res) => {
     }
 };
 
+const getProductByName = async (req, res) => {
+    try {
+        const { name } = req.params;
+
+        const product = await Product.findOne({
+            where: { productName: name }
+        });
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        } product
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Update a product
 const updateProduct = async (req, res) => {
     upload(req, res, async function (err) {
@@ -238,10 +255,13 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+
+
 module.exports = {
     createProduct,
     getAllProducts,
     getProductById,
+    getProductByName,
     updateProduct,
     deleteProduct
 };
