@@ -61,7 +61,7 @@ const NewSales = ({ invoice }) => {
           const productData = await response.json();
           setFormData(prevData => ({
             ...prevData,
-            productNo: productData.productCode || prevData.productNo,
+            productNo: productData.productCode ,
             productName: productData.productName || prevData.productName,
             productPrice: productData.productSellingPrice,
             qty: 1,
@@ -72,7 +72,6 @@ const NewSales = ({ invoice }) => {
         } else {
           setFormData(prevData => ({
             ...prevData,
-            productNo: '',
             productPrice: '',
             qty: '',
             totalPrice: '',
