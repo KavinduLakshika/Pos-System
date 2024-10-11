@@ -7,11 +7,11 @@ import Table from '../Table/Table'
 import config from '../../config';
 
 const NewSales = ({ invoice }) => {
-  const [data,] = useState([]);
+  const [data, setData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [customerCreated, setCustomerCreated] = useState(false);
 
-  const Columns = ["Customer Code", 'Customer Name', 'Customer Nic', 'Product Code','Product Name','Product Price','Quantity','Discount','Total Price'];
+  const Columns = ["Customer Code", 'Customer Name', 'Customer Nic', 'Product Code', 'Product Name', 'Product Price', 'Quantity', 'Discount', 'Total Price', 'Note'];
   const [formData, setFormData] = useState({
     cusName: '',
     cusNic: '',
@@ -29,8 +29,8 @@ const NewSales = ({ invoice }) => {
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
-    if ((name === 'cusNic' && value.length === 10) || value.length===12) { 
+
+    if ((name === 'cusNic' && value.length === 10) || value.length === 12) {
       try {
         const response = await fetch(`${config.BASE_URL}/customer/cusNIC/${value}`);
         if (response.ok) {
@@ -51,6 +51,18 @@ const NewSales = ({ invoice }) => {
     if (name === 'productNo' || name === 'productName') {
       fetchProductDetails(name, value);
     }
+
+    
+    setFormData((prevData) => {
+      const newData = { ...prevData, [name]: value };
+      if (name === 'qty' || name === 'productPrice' || name === 'discount') {
+        const qty = newData.qty ? parseFloat(newData.qty) : 0;
+        const price = newData.productPrice ? parseFloat(newData.productPrice) : 0;
+        const discount = newData.discount ? parseFloat(newData.discount) : 0;
+        newData.totalPrice = (qty * price) - discount;
+      }
+      return newData;
+    });
   };
 
   const fetchProductDetails = async (field, value) => {
@@ -70,7 +82,7 @@ const NewSales = ({ invoice }) => {
     } catch (error) {
       console.error('Error fetching product data:', error);
     }
-  }; 
+  };
   const handleCustomerCreated = (customerData) => {
     setFormData(prevData => ({
       ...prevData,
@@ -91,8 +103,8 @@ const NewSales = ({ invoice }) => {
     // }
 
     try {
-      
-    
+
+
       const productResponse = await fetch(`${config.BASE_URL}/product?code=${formData.productNo}&name=${formData.productName}`);
       if (!productResponse.ok) {
         const productError = await productResponse.json();
@@ -101,7 +113,7 @@ const NewSales = ({ invoice }) => {
       const productData = await productResponse.json();
 
       const invoiceData = {
-       
+
         productId: productData.productId,
         invoiceDate: new Date().toISOString(),
         cusName: formData.cusName,
@@ -153,6 +165,33 @@ const NewSales = ({ invoice }) => {
     setEmi(e.target.checked)
   }
 
+  const handleAddProduct = (e) => {
+    e.preventDefault();
+
+    const newProduct = {
+      cusCode: formData.cusCode,
+      cusName: formData.cusName,
+      cusNic: formData.cusNic,
+      productCode: formData.productNo,
+      productName: formData.productName,
+      productPrice: formData.productPrice,
+      qty: formData.qty,
+      discount: formData.discount,
+      totalPrice: formData.totalPrice,
+      note: formData.productNote
+    };
+    setData(prevData => [...prevData, newProduct]);
+    setFormData({
+      productNo: '',
+      productName: '',
+      productPrice: '',
+      qty: '',
+      discount: '',
+      totalPrice: '',
+      productNote: '',
+      emi: '',
+    });
+  };
   const [showCard, setCard] = useState(false);
   const [showCash, setCash] = useState(false);
   const [showCheque, setCheque] = useState(false);
@@ -216,40 +255,40 @@ const NewSales = ({ invoice }) => {
                   <p><ShoppingCart /> Product Details</p>
                 </div>
                 <div className="row">
-          <div className="product-details col-md-4 mb-2">
-            <input 
-              onChange={handleChange} 
-              value={formData.productNo} 
-              type="text" 
-              name="productNo" 
-              className="form-control" 
-              id="productNo" 
-              placeholder="Product Code" 
-            />
-          </div>
-          <div className="product-details col-md-8 mb-2">
-            <input 
-              onChange={handleChange} 
-              value={formData.productName} 
-              type="text" 
-              name="productName" 
-              className="form-control" 
-              id="productName" 
-              placeholder="Product Name" 
-            />
-          </div>
-          <div className="product-details col-md-3 mb-2">
-            <input 
-              onChange={handleChange} 
-              value={formData.productPrice} 
-              type="number" 
-              name="productPrice" 
-              className="form-control" 
-              id="price" 
-              placeholder="Product Price" 
-              onWheel={(e) => e.target.blur()} 
-            />
-          </div>
+                  <div className="product-details col-md-4 mb-2">
+                    <input
+                      onChange={handleChange}
+                      value={formData.productNo}
+                      type="text"
+                      name="productNo"
+                      className="form-control"
+                      id="productNo"
+                      placeholder="Product Code"
+                    />
+                  </div>
+                  <div className="product-details col-md-8 mb-2">
+                    <input
+                      onChange={handleChange}
+                      value={formData.productName}
+                      type="text"
+                      name="productName"
+                      className="form-control"
+                      id="productName"
+                      placeholder="Product Name"
+                    />
+                  </div>
+                  <div className="product-details col-md-3 mb-2">
+                    <input
+                      onChange={handleChange}
+                      value={formData.productPrice}
+                      type="number"
+                      name="productPrice"
+                      className="form-control"
+                      id="price"
+                      placeholder="Product Price"
+                      onWheel={(e) => e.target.blur()}
+                    />
+                  </div>
                   <div className="product-details col-md-3 mb-2">
                     <input onChange={handleChange} value={formData.qty} type="number" onWheel={(e) => e.target.blur()} name="qty" className="form-control" id="qty" placeholder="Enter Quantity" />
                   </div>
@@ -282,8 +321,7 @@ const NewSales = ({ invoice }) => {
 
           <div className="product-table">
             <Table
-              data={data}
-              columns={Columns}
+              data={data} columns={Columns}
               showSearch={false}
               showButton={false}
               showActions={false}
