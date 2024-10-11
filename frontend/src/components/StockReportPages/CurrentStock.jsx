@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import Table from '../../components/Table/Table';
 import { useNavigate } from 'react-router-dom';
 import config from '../../config';
@@ -12,7 +12,7 @@ function CurrentStock() {
 
   useEffect(() => {
     fetchStock();
-  });
+  },);
 
   const fetchStock = async () => {
     try {
@@ -22,8 +22,16 @@ function CurrentStock() {
       }
       const stock = await response.json();
 
-      // Filter out items where stockStatus is "Out of Stock"
-      const inStockItems = stock.filter(stock => stock.stockStatus !== "Out of Stock");
+      const updatedStock = await Promise.all(stock.map(async (item) => {
+        if (item.product?.productQty === 0 && item.stockStatus !== 'Out of Stock') {
+          await handleStatusChange(item.stockId, 'Out of Stock');
+          return { ...item, stockStatus: 'Out of Stock' };
+        }
+        return item;
+      }));
+
+      // Filter out "Out of Stock" items
+      const inStockItems = updatedStock.filter(item => item.stockStatus !== 'Out of Stock');
 
       const formattedData = inStockItems.map(stock => [
         stock.stockId,
@@ -31,7 +39,7 @@ function CurrentStock() {
         stock.product?.productName || 'Unknown',
         stock.product?.productUnit || 'Unknown',
         stock.stockName,
-        stock.stockQty,
+        stock.product?.productQty || 'Unknown',
         stock.stockDate,
         stock.stockPrice,
         stock.stockDescription,
@@ -41,11 +49,13 @@ function CurrentStock() {
           className='form-control'
           value={stock.stockStatus}
           onChange={(e) => handleStatusChange(stock.stockId, e.target.value)}
+          disabled={stock.product?.productQty === 0}
         >
           <option value="In stock">In stock</option>
           <option value="Out of Stock">Out of Stock</option>
         </select>
       ]);
+
       setData(formattedData);
       setIsLoading(false);
     } catch (err) {
@@ -56,42 +66,38 @@ function CurrentStock() {
 
   const handleStatusChange = async (stockId, newStatus) => {
     try {
+      // Fetch the current stock item to get all its details
+      const stockResponse = await fetch(`${config.BASE_URL}/stock/${stockId}`);
+      if (!stockResponse.ok) {
+        throw new Error(`Failed to fetch stock details: ${stockResponse.status} ${stockResponse.statusText}`);
+      }
+      const stockItem = await stockResponse.json();
+
+      // Prepare the update payload
+      const updatePayload = {
+        ...stockItem,
+        stockStatus: newStatus,
+        stockQty: newStatus === 'Out of Stock' ? 0 : stockItem.stockQty
+      };
+
+      // Send the update request
       const response = await fetch(`${config.BASE_URL}/stock/${stockId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ stockStatus: newStatus }),
+        body: JSON.stringify(updatePayload),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(`Failed to update stock status: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
       }
+
+      // Refetch the stock data to update the UI
       await fetchStock();
     } catch (error) {
       setError(`Error updating stock status: ${error.message}`);
-    }
-  };
-
-  const markAsOutOfStock = async (rowIndex) => {
-    try {
-      const stockId = data[rowIndex][0];
-      const response = await fetch(`${config.BASE_URL}/stock/${stockId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ stockStatus: 'Out of Stock', stockQty: 0 }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Failed to update stock to out of stock: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
-      }
-      await fetchStock();
-    } catch (err) {
-      setError(`Error marking stock as out of stock: ${err.message}`);
     }
   };
 
@@ -120,7 +126,7 @@ function CurrentStock() {
             btnName={btnName}
             onAdd={handleNewStockClick}
             showDelete={false}
-            onMarkOutOfStock={markAsOutOfStock}
+            onMarkOutOfStock={null}
             title={title}
             invoice={invoice}
           />

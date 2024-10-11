@@ -132,6 +132,23 @@ const getProductById = async (req, res) => {
     }
 };
 
+const getProductByName = async (req, res) => {
+    try {
+        const { name } = req.params;
+
+        const product = await Product.findOne({
+            where: { productName: name }
+        });
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        } product
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Update a product
 const updateProduct = async (req, res) => {
     upload(req, res, async function (err) {
@@ -148,6 +165,8 @@ const updateProduct = async (req, res) => {
                 productCode,
                 productUnit,
                 productQty,
+                mfd,
+                exp,
                 productBuyingPrice,
                 productSellingPrice,
                 productWarranty,
@@ -188,6 +207,8 @@ const updateProduct = async (req, res) => {
                 productCode,
                 productUnit,
                 productQty,
+                mfd,
+                exp,
                 productBuyingPrice,
                 productSellingPrice,
                 productWarranty,
@@ -234,36 +255,13 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-const getProductByCodeOrName = async (req, res) => {
-    try {
-      const { value } = req.params; // Dynamic parameter value
-  
-      // Search for product by productCode or productName
-      const product = await Product.findOne({
-        where: {
-          [Sequelize.Op.or]: [
-            { productCode: value },
-            { productName: value }
-          ]
-        }
-      });
-  
-      if (!product) {
-        return res.status(404).json({ message: 'Product not found' });
-      }
-  
-      res.status(200).json(product);
-    } catch (error) {
-      console.error('Error fetching product:', error);
-      res.status(500).json({ error: error.message });
-    }
-  };
+
 
 module.exports = {
     createProduct,
     getAllProducts,
     getProductById,
+    getProductByName,
     updateProduct,
-    deleteProduct,
-    getProductByCodeOrName
+    deleteProduct
 };

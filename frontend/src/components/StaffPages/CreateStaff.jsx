@@ -11,7 +11,7 @@ const CreateStaff = () => {
   const [error, setError] = useState(null);
   const [selectedStaff, setSelectedStaff] = useState(null);
 
-  const columns = ["#", "Title", "Department / Job Position", "Full Name", "User Type", "User Name", "Email", "Contact 1", "Contact 2", "Address", "Nic", "Status"];
+  const columns = ["#", "Title",  "Full Name","Department / Job Position", "User Type", "User Name", "Email", "Contact 1", "Contact 2", "Address", "Nic", "Status"];
   const btnName = 'Add New Staff Member';
 
   useEffect(() => {
@@ -28,8 +28,8 @@ const CreateStaff = () => {
       const formattedData = user.map(user => [
         user.userId,
         user.userTitle,
-        user.store?.storeName || "unknown",
         user.userFullName,
+        user.store?.storeName || "unknown",
         user.userType,
         user.userName,
         user.userEmail,

@@ -1,39 +1,179 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './NewStock.css';
 import Table from '../Table/Table';
 import { useNavigate } from 'react-router-dom';
+import config from '../../config';
 
 const NewStock = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState([]);
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState('');
+  const [stores, setStores] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+  const [productSearch, setProductSearch] = useState('');
+
+  const columns = [
+    '#', 'Supplier Name/Position', 'Product Name', 'Supplied Date & Time', 'Supplied Quantity', 'Price Per Item', 'Total Price Before VAT', 'VAT %', 'Total Amount + VAT'
+  ];
+
   const [formData, setFormData] = useState({
-    store: '',
-    date: '',
+    stockName: '',
     refNo: '',
     supplier: '',
+    storeId: '',
+    date: '',
     cashAmount: '',
     chequeAmount: '',
     due: '',
+    productId: '',
+    category: '',
+    price: '',
+    qty: '',
+    totalPrice: '',
+    vat: '',
+    totalPriceVAT: '',
   });
+
+  useEffect(() => {
+    fetchStock();
+    fetchStores();
+    fetchCategories();
+    fetchSuppliers();
+  }, []);
+
+  const fetchStock = async () => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/stocks`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch stock list');
+      }
+      const stockList = await response.json();
+
+      const formattedData = stockList.map(stock => {
+        return [
+          stock.stockId,
+          stock.supplier?.supplierName || "Unknown",
+          stock.product?.productName || 'Unknown',
+          stock.stockDate,
+          stock.product?.productQty,
+          stock.product?.productBuyingPrice,
+          stock.stockPrice,
+          stock.vat,
+          stock.total,
+        ];
+      });
+
+      setData(formattedData);
+      setIsLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setIsLoading(false);
+    }
+  };
+
+  const fetchStores = async () => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/stores`);
+      if (response.ok) {
+        const data = await response.json();
+        setStores(data);
+      } else {
+        console.error('Failed to fetch stores');
+      }
+    } catch (error) {
+      console.error('Error fetching stores:', error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/categories`);
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(data);
+      } else {
+        console.error('Failed to fetch categories');
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchSuppliers = async () => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/suppliers`);
+      if (response.ok) {
+        const data = await response.json();
+        setSuppliers(data);
+      } else {
+        console.error('Failed to fetch suppliers');
+      }
+    } catch (error) {
+      console.error('Error fetching suppliers:', error);
+    }
+  };
+
+  const fetchProductByName = async (name) => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/product/productName/${name}`);
+      if (response.ok) {
+        const product = await response.json();
+        setFormData(prevData => ({
+          ...prevData,
+          productId: product.productId,
+          category: product.categoryName,
+          price: product.productBuyingPrice,
+          qty: product.productQty,
+          totalPrice: (product.productBuyingPrice) * (product.productQty),
+        }));
+      } else {
+        console.error('Product not found');
+      }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    setFormData(prevData => {
+      const newData = { ...prevData, [name]: value };
+      return newData;
+    });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    const formDataToSend = new FormData();
+
+    for (const key in formData) {
+      formDataToSend.append(key, formData[key]);
+    }
+
+    if (image) {
+      formDataToSend.append('billImage', image);
+    }
+
+    try {
+      const response = await fetch(`${config.BASE_URL}/stock`, {
+        method: 'POST',
+        body: formDataToSend,
+      });
+      if (!response.ok) {
+        throw new Error('Failed to save stock');
+      }
+      const result = await response.json();
+      console.log('Stock saved successfully:', result);
+    } catch (error) {
+      console.error('Error:', error);
+      setError('An error occurred while saving the stock.');
+    }
   };
-
-  const [data, setData] = useState([]);
-
-  const columns = [
-    '#', 'Store Name', 'Supplier Name/Position', 'Category', 'Product Name',
-    'Supplied Date & Time', 'Supplied Quantity', 'Price Per Item',
-    'Total Price Before VAT', 'VAT %', 'Total Amount + VAT'
-  ];
-
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState('');
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -47,15 +187,23 @@ const NewStock = () => {
     }
   };
 
+  const handleProductSearch = (e) => {
+    setProductSearch(e.target.value);
+    if (e.target.value.length > 2) {
+      fetchProductByName(e.target.value);
+    }
+  };
+
   const navigate = useNavigate();
 
   const handleNewStockClick = () => {
     navigate('/stock-reports/current-stock');
   };
+
   return (
     <div className="scrolling-container">
       <div className="container-fluid my-5 mt-2">
-        <h4 className=" mb-4">Create New Stock</h4>
+        <h4 className="mb-4">Create New Stock</h4>
 
         <div className="d-flex justify-content-end mt-4">
           <button className='btn btn-warning' onClick={handleNewStockClick}>Current Stock</button>
@@ -65,17 +213,41 @@ const NewStock = () => {
           <div className="row">
             {/* Left Column */}
             <div className="col-md-6">
-              <div className="mb-3">
-                <label htmlFor="refNo" className="form-label">Reference Number (ID)</label>
-                <input type="text" name="refNo" value={formData.refNo} className="form-control" onChange={handleChange} />
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="stockName" className="form-label">Stock Name / Stock Number</label>
+                  <input type="text" name="stockName" value={formData.stockName} className="form-control" onChange={handleChange} />
+                </div>
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="refNo" className="form-label">Reference Number (ID)</label>
+                  <input type="text" name="refNo" value={formData.refNo} className="form-control" onChange={handleChange} />
+                </div>
               </div>
 
-              <div className="mb-3">
-                <label htmlFor="store" className="form-label">Store / Supplier / Supplier Name</label>
-                <select name="store" value={formData.store} className="form-select" onChange={handleChange}>
-                  <option value="Main">Main</option>
-                  <option value="Sub">Sub</option>
-                </select>
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="supplier" className="form-label">Supplier Name</label>
+                  <select name="supplier" value={formData.supplier} className="form-select" onChange={handleChange}>
+                    <option value="">Select Supplier</option>
+                    {suppliers.map((supplier) => (
+                      <option key={supplier.supplierId} value={supplier.supplierId}>
+                        {supplier.supplierName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="storeId" className="form-label">Store</label>
+                  <select name="storeId" value={formData.storeId} onChange={handleChange} className="form-select">
+                    <option value="">Select Store</option>
+                    {stores.map((store) => (
+                      <option key={store.storeId} value={store.storeId}>
+                        {store.storeName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="mb-3">
@@ -90,7 +262,7 @@ const NewStock = () => {
                 </div>
                 <div className="col-md-6 mb-3">
                   <label htmlFor="chequeAmount" className="form-label">Cheque Amount</label>
-                  <input type="text" name="chequeAmount" value={formData.chequeAmount} className="form-control" onChange={handleChange} />
+                  <input type="number" name="chequeAmount" value={formData.chequeAmount} className="form-control" onChange={handleChange} />
                 </div>
               </div>
 
@@ -114,60 +286,69 @@ const NewStock = () => {
             <div className="col-md-6">
               <div className="row">
                 <div className="col-md-6 mb-3">
-                  <label htmlFor="ProductName" className="form-label">Product Name</label>
-                  <input type="text" name="ProductName" className="form-control" />
+                  <label htmlFor="productSearch" className="form-label">Product Name</label>
+                  <input type="text" name="productSearch" className="form-control" value={productSearch} onChange={handleProductSearch} />
                 </div>
                 <div className="col-md-6 mb-3">
                   <label htmlFor="category" className="form-label">Product Category</label>
-                  <select name="category" className="form-select">
-                    <option value="">Select</option>
-                    <option value="c1">Category 1</option>
-                    <option value="c2">Category 2</option>
+                  <select name="category" value={formData.category} onChange={handleChange} className="form-select">
+                    <option value="">Select Category</option>
+                    {categories.map((category) => (
+                      <option key={category.categoryId} value={category.categoryId}>
+                        {category.categoryName}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 <div className="col-md-4 mb-3">
                   <label htmlFor="price" className="form-label">Price</label>
-                  <input type="text" name="price" className="form-control" />
+                  <input type="number" name="price" value={formData.price} className="form-control" onChange={handleChange} />
                 </div>
                 <div className="col-md-4 mb-3">
                   <label htmlFor="qty" className="form-label">Quantity</label>
-                  <input type="text" name="qty" className="form-control" />
+                  <input type="number" name="qty" value={formData.qty} className="form-control" onChange={handleChange} />
                 </div>
                 <div className="col-md-4 mb-3">
                   <label htmlFor="totalPrice" className="form-label">Total Price</label>
-                  <input type="text" name="totalPrice" className="form-control" readOnly />
+                  <input type="text" name="totalPrice" value={formData.totalPrice} className="form-control" readOnly />
                 </div>
 
                 <div className="col-md-6 mb-3">
                   <label htmlFor="vat" className="form-label">VAT %</label>
-                  <input type="text" name="vat" className="form-control" />
+                  <input type="number" name="vat" value={formData.vat} className="form-control" onChange={handleChange} />
                 </div>
                 <div className="col-md-6 mb-3">
                   <label htmlFor="totalPriceVAT" className="form-label">Total Price + VAT</label>
-                  <input type="text" name="totalPriceVAT" className="form-control" readOnly />
+                  <input type="text" name="totalPriceVAT" value={formData.totalPriceVAT} className="form-control" readOnly />
                 </div>
               </div>
 
               <div className="d-flex justify-content-end mt-4">
-                <button className="btn btn-primary">Add Product</button>
+                <button type="button" className="btn btn-primary" onClick={() => {/* Add logic to add product to the list */ }}>Add Product</button>
               </div>
             </div>
           </div>
 
           {/* Table */}
           <div className="table-responsive mt-5">
-            <Table
-              search="Search by Supplier Name"
-              data={data}
-              columns={columns}
-              showButton={false}
-              showActions={true}
-              showSearch={false}
-              showPDF={false}
-              showDate={false}
-              showRow={false}
-            />
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p>Error: {error}</p>
+            ) : (
+              <Table
+                search="Search by Supplier Name"
+                data={data}
+                columns={columns}
+                showButton={false}
+                showActions={true}
+                showSearch={false}
+                showPDF={false}
+                showDate={false}
+                showRow={false}
+              />
+            )}
           </div>
 
           {/* Footer Buttons */}

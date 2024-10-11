@@ -25,6 +25,33 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
     photo: ''
   });
 
+    // Reset form data when modal closes
+    const resetForm = () => {
+      setFormData({
+        title: '-Select Title-',
+        fullName: '',
+        userType: '-Select Title-',
+        userName: '',
+        email: '',
+        password: '',
+        nic: '',
+        address: '',
+        contact1: '',
+        contact2: '',
+        department: '',
+        photo: ''
+      });
+      setImage(null);
+      setFormErrors({});
+    };
+  
+    // Watch for modal closing
+    useEffect(() => {
+      if (!showModal) {
+        resetForm(); // Clear form when modal is closed
+      }
+    }, [showModal]);
+
   useEffect(() => {
     if (staff) {
       setFormData({
@@ -62,9 +89,26 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
     fetchStore();
   }, []);
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (formData.title === '-Select Title-') {
+      newErrors.title = 'Please select a valid title.';
+    }
+    if (formData.userType === '-Select Type-') {
+      newErrors.userType = 'Please select a valid user type.';
+    }
+    if (!formData.department || formData.department === 'select') {
+      newErrors.department = 'Please select a valid department.';
+    }
+    setFormErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try {
       const formDataToSend = new FormData();
 
@@ -95,6 +139,7 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
         setError(staff ? 'Successfully Updated!' : 'Successfully Created!');
         onSave();
         closeModal();
+        resetForm();
       } else {
         const errorData = await response.json();
         setError(errorData.error || 'Failed to create user');
@@ -130,6 +175,7 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
     }
   };
 
+
   if (!showModal) return null;
 
   return (
@@ -162,22 +208,12 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
 
           <div className="form-flex">
             <div className="form-1">
-              <div className="form-group">
-                <label>Title <span>*</span></label>
-                <select name="title" value={formData.title} onChange={handleChange} required>
-                  <option value="select">-select title-</option>
-                  <option value="Mr.">Mr.</option>
-                  <option value="Mrs.">Mrs.</option>
-                  <option value="Ms.">Ms.</option>
-                </select>
-              </div>
-              <div className="form-group">
+            <div className="form-group">
                 <label>Department / Job Position</label>
                 <select name="department" id=""
                   value={formData.department || ''}
                   onChange={handleChange}
                   className="form-control"
-                  
                 >
                   <option value="select">Select Department</option>
                   {stores.map((store) => (
@@ -186,7 +222,19 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
                     </option>
                   ))}
                 </select>
+                {formErrors.department && <div className="error-message">{formErrors.department}</div>}
               </div>
+              <div className="form-group">
+                <label>Title <span>*</span></label>
+                <select name="title" value={formData.title} onChange={handleChange} required>
+                  <option value="select">-select title-</option>
+                  <option value="Mr.">Mr.</option>
+                  <option value="Mrs.">Mrs.</option>
+                  <option value="Ms.">Ms.</option>
+                </select>
+                {formErrors.title && <div className="error-message">{formErrors.title}</div>}
+              </div>
+              
               <div className="form-group">
                 <label>Full Name</label>
                 <input
@@ -239,6 +287,7 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
                   <option value="Admin">Admin</option>
                   <option value="User">User</option>
                 </select>
+                {formErrors.userType && <div className="error-message">{formErrors.userType}</div>}
               </div>
               <div className="form-group">
                 <label>Contact 1</label>
