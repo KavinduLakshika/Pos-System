@@ -176,6 +176,7 @@ const updateStock = async (req, res) => {
                 stockPrice,
                 due,
                 vat,
+                total,
                 stockDescription,
                 cashAmount,
                 chequeAmount,
