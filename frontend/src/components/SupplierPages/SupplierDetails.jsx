@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Table from '../../components/Table/Table';
 import config from '../../config';
+import SupplierForm from '../../Models/SupplierForm/SupplierForm';
 
 function SupplierDetails() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSup, setSelectedSup] = useState(null);
 
   const columns = ['#', 'Supplier Name', 'Supplier Address', 'NIC', 'Email', 'Contact 1', 'Contact 2', 'Paid', 'Balance', 'Payment Date', 'Status'];
 
@@ -13,7 +16,7 @@ function SupplierDetails() {
 
   useEffect(() => {
     fetchSuppliers();
-  })
+  }, []);
 
   const fetchSuppliers = async () => {
     try {
@@ -49,6 +52,7 @@ function SupplierDetails() {
       setIsLoading(false);
     }
   };
+
   const handleStatusChange = async (supplierId, newStatus) => {
     try {
       const response = await fetch(`${config.BASE_URL}/supplier/${supplierId}`, {
@@ -68,8 +72,55 @@ function SupplierDetails() {
     }
   };
 
-  const title='Supplier Details';
-  const invoice='Supplier Details.pdf';
+  const handleEdit = (rowIndex) => {
+    const SupplierData = data[rowIndex];
+    setSelectedSup({
+      supplierId: SupplierData[0],
+      supplierName: SupplierData[1],
+      supplierAddress: SupplierData[2],
+      supplierNic: SupplierData[3],
+      supplierEmail: SupplierData[4],
+      supplierTP: SupplierData[5],
+      supplierSecondTP: SupplierData[6],
+      supplierPaid: SupplierData[7],
+      supplierBalance: SupplierData[8],
+      supplierPaymentDate: SupplierData[9],
+      supplierStatus: SupplierData[10].props.value,
+    });
+    setShowModal(true);
+  };
+
+  const handleDelete = async (rowIndex) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this supplier?');
+    if (!confirmDelete) return;
+
+    try {
+      const supplierId = data[rowIndex][0];
+      const response = await fetch(`${config.BASE_URL}/supplier/${supplierId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        alert('Failed to delete the supplier');
+      } else {
+        fetchSuppliers();
+      }
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const title = 'Supplier Details';
+  const invoice = 'Supplier Details.pdf';
+
+  const openModal = () => {
+    setSelectedSup(null);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <div>
@@ -85,10 +136,19 @@ function SupplierDetails() {
             data={data}
             columns={columns}
             btnName={btnName}
+            onAdd={openModal}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
             title={title}
             invoice={invoice}
           />
         )}
+        <SupplierForm
+          showModal={showModal}
+          closeModal={closeModal}
+          onSave={fetchSuppliers}
+          supplier={selectedSup} 
+        />
       </div>
     </div>
   );
