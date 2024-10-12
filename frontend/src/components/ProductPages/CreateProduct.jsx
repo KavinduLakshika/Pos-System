@@ -7,6 +7,8 @@ const CreateProduct = () => {
   const location = useLocation();
   const selectedProd = location.state?.selectedProd;
   const [products, setProducts] = useState([]);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState('');
   const [categories, setCategories] = useState([]);
@@ -107,17 +109,16 @@ const CreateProduct = () => {
 
       if (response.ok) {
         const data = await response.json();
-        alert(`${selectedProd ? 'Product updated' : 'Product created'} successfully`);
+        setSuccessMessage(`${selectedProd ? 'Product updated' : 'Product created'} successfully`);
         handleReset();
-        // Auto-refresh the product list
         fetchProducts();
       } else {
         const errorData = await response.json();
-        alert(errorData.error || `Failed to ${selectedProd ? 'update' : 'create'} product`);
+        setError(errorData.error || `Failed to ${selectedProd ? 'update' : 'create'} product`);
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred while processing the product.');
+      setError('An error occurred while processing the product.');
     }
   };
 
@@ -157,6 +158,17 @@ const CreateProduct = () => {
     <div>
       <div className="scrolling-container">
         <h4>{selectedProd ? 'Edit Product' : 'Add Product'}</h4>
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="alert alert-success" role="alert">
+            {successMessage}
+          </div>
+        )}
         <div className="row">
           <form action="" className='col-md-8 product-form' onSubmit={handleSubmit}>
             <div className="row">
