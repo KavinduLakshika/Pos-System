@@ -48,8 +48,7 @@ const createProduct = async (req, res) => {
             } = req.body;
 
             // Validate required fields
-            if (!productName || !productCode || !productUnit || !productBuyingPrice ||
-                !productSellingPrice || !productDescription) {
+            if (!productName || !productCode || !productUnit || !productBuyingPrice || !productSellingPrice) {
                 return res.status(400).json({ error: "All fields are required." });
             }
 

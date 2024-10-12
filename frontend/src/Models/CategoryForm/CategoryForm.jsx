@@ -27,12 +27,12 @@ const CategoryForm = ({ closeModal, showModal, selectedCategory, onSave }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         const dataToSend = {
             ...formData,
             categoryType: formData.categoryType ? formData.categoryType : null
         };
-    
+
         try {
             const response = await fetch(`${config.BASE_URL}/category${selectedCategory ? `/${selectedCategory.categoryId}` : ''}`, {
                 method: selectedCategory ? 'PUT' : 'POST',
@@ -41,7 +41,7 @@ const CategoryForm = ({ closeModal, showModal, selectedCategory, onSave }) => {
                 },
                 body: JSON.stringify(dataToSend)
             });
-    
+
             if (response.ok) {
                 setError(selectedCategory ? 'Successfully Updated!' : 'Successfully Created!');
                 onSave();
@@ -54,33 +54,6 @@ const CategoryForm = ({ closeModal, showModal, selectedCategory, onSave }) => {
             setError('An error occurred.');
         }
     };
-    
-
-    const handleDelete = async () => {
-        if (!selectedCategory) return;
-
-        const confirmed = window.confirm('Are you sure you want to delete this category?');
-        if (!confirmed) return;
-
-        try {
-            const response = await fetch(`${config.BASE_URL}/category/${selectedCategory.categoryId}`, {
-                method: 'DELETE'
-            });
-
-            if (response.ok) {
-                setError('Successfully Deleted!');
-                onSave();
-                closeModal();
-            } else {
-                const errorData = await response.json();
-                setError(errorData.error || 'Failed to delete category');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            setError('An error occurred while deleting the category.');
-        }
-    };
-
     if (!showModal) return null;
 
     return (
@@ -114,9 +87,6 @@ const CategoryForm = ({ closeModal, showModal, selectedCategory, onSave }) => {
                     <div className="form-actions">
                         <button type="button" className="btn btn-danger" onClick={closeModal}>Close</button>
                         <button type="submit" className="btn btn-primary">{selectedCategory ? 'Update' : 'Save Changes'}</button>
-                        {selectedCategory && (
-                            <button type="button" className="btn btn-danger" onClick={handleDelete}>Delete</button>
-                        )}
                     </div>
                 </form>
             </div>

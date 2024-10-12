@@ -14,7 +14,7 @@ const ProductCategory = () => {
   const btnName = "Add Category";
 
   useEffect(() => {
-    fetchCategory(); 
+    fetchCategory();
   }, []);
 
   const fetchCategory = async () => {
@@ -39,7 +39,7 @@ const ProductCategory = () => {
 
   const handleDelete = async (rowIndex) => {
     try {
-      const categoryId = data[rowIndex][0]; 
+      const categoryId = data[rowIndex][0];
       const response = await fetch(`${config.BASE_URL}/category/${categoryId}`, {
         method: 'DELETE',
       });
@@ -48,7 +48,7 @@ const ProductCategory = () => {
         throw new Error('Failed to delete category');
       }
 
-      
+
       setData((prevData) => prevData.filter((_, index) => index !== rowIndex));
     } catch (err) {
       setError(err.message);
@@ -60,13 +60,12 @@ const ProductCategory = () => {
     setSelectedCategory({
       categoryId: selectedCatData[0],
       categoryName: selectedCatData[1],
-      categoryType: selectedCatData[2],  
+      categoryType: selectedCatData[2],
     });
     setShowModal(true);
   };
-
   const openModal = () => {
-    setSelectedCategory(null);  
+    setSelectedCategory(null);
     setShowModal(true);
   };
 
@@ -75,12 +74,12 @@ const ProductCategory = () => {
   };
 
   const handleSave = () => {
-    fetchCategory();  
-    closeModal();     
+    fetchCategory();
+    closeModal();
   };
 
-  const title='Product Category List';
-  const invoice='product_category_list.pdf';
+  const title = 'Product Category List';
+  const invoice = 'product_category_list.pdf';
 
   return (
     <div>
@@ -107,8 +106,8 @@ const ProductCategory = () => {
         <CategoryForm
           showModal={showModal}
           closeModal={closeModal}
-          selectedCategory={selectedCategory}  
-          onSave={handleSave}                  
+          selectedCategory={selectedCategory}
+          onSave={handleSave}
         />
       </div>
     </div>
