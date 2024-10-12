@@ -17,7 +17,7 @@ const NewStock = () => {
   const [productSearch, setProductSearch] = useState('');
 
   const columns = [
-    '#', 'Supplier Name/Position', 'Product Name', 'Supplied Date & Time', 'Supplied Quantity', 'Price Per Item', 'Total Price Before VAT', 'VAT %', 'Total Amount + VAT'
+    '#', 'Supplier Name/Position', 'Product Name', 'Supplied Date & Time', 'Supplied Quantity', 'Price Per Item', 'Total Price Before VAT', 'VAT %', 'Total Amount + VAT', 'Cash Amount/ Cheque Amount'
   ];
 
   const [formData, setFormData] = useState({
@@ -82,6 +82,7 @@ const NewStock = () => {
           stock.stockPrice,
           stock.vat,
           stock.total,
+          stock.cashAmount || stock.chequeAmount,
         ];
       });
 

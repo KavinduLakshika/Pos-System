@@ -28,7 +28,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single('billImage');
 
-// Create Stock
 const createStock = async (req, res) => {
     upload(req, res, async function (err) {
         if (err instanceof multer.MulterError) {
@@ -45,6 +44,8 @@ const createStock = async (req, res) => {
                 due,
                 vat,
                 total,
+                cashAmount,
+                chequeAmount,
                 stockDescription,
                 productId,
                 supplierId,
@@ -85,6 +86,10 @@ const createStock = async (req, res) => {
                 billImage = `${req.protocol}://${req.get('host')}/uploads/stock/${req.file.filename}`;
             }
 
+            // Set default values for optional fields
+            const chequeAmountValue = chequeAmount === '' || chequeAmount === undefined ? null : parseFloat(chequeAmount);
+            const cashAmountValue = cashAmount === '' || cashAmount === undefined ? null : parseFloat(cashAmount);
+
             // Create new stock
             const newStock = await Stock.create({
                 stockName,
@@ -93,6 +98,8 @@ const createStock = async (req, res) => {
                 due,
                 vat,
                 total,
+                cashAmount: cashAmountValue,
+                chequeAmount: chequeAmountValue,
                 stockDescription,
                 stockStatus: "In stock",
                 billImage,
@@ -118,6 +125,7 @@ const createStock = async (req, res) => {
         }
     });
 };
+
 
 
 // Get all stocks
