@@ -286,6 +286,31 @@ const getProductByCodeOrName = async (req, res) => {
     }
 };
 
+const getProductSuggestions = async (req, res) => {
+    try {
+        const { query } = req.query;
+        if (!query || query.length < 2) {
+            return res.status(400).json({ message: 'Query must be at least 2 characters long' });
+        }
+
+        const products = await Product.findAll({
+            where: {
+                [Op.or]: [
+                    { productName: { [Op.like]: `%${query}%` } },
+                    { productCode: { [Op.like]: `%${query}%` } }
+                ]
+            },
+            attributes: ['productId', 'productName', 'productCode', 'productBuyingPrice', 'productSellingPrice', 'category_categoryId'],
+            limit: 10
+        });
+
+        res.status(200).json(products);
+    } catch (error) {
+        console.error('Error fetching product suggestions:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 module.exports = {
     createProduct,
@@ -294,5 +319,6 @@ module.exports = {
     getProductByName,
     updateProduct,
     deleteProduct,
-    getProductByCodeOrName
+    getProductByCodeOrName,
+    getProductSuggestions
 };
