@@ -44,6 +44,7 @@ const createStock = async (req, res) => {
                 stockPrice,
                 due,
                 vat,
+                total,
                 stockDescription,
                 productId,
                 supplierId,
@@ -84,22 +85,13 @@ const createStock = async (req, res) => {
                 billImage = `${req.protocol}://${req.get('host')}/uploads/stock/${req.file.filename}`;
             }
 
-            // Validate numeric fields
-            if (isNaN(stockPrice) || isNaN(vat)) {
-                return res.status(400).json({ error: "Stock price and VAT must be valid numbers." });
-            }
-
-            // Calculate total (stock price + VAT)
-            const total = parseFloat(stockPrice) + parseFloat(vat || 0);
-
-
             // Create new stock
             const newStock = await Stock.create({
                 stockName,
                 stockDate,
-                stockPrice: parseFloat(stockPrice),
-                due: parseFloat(due || 0),
-                vat: parseFloat(vat || 0),
+                stockPrice,
+                due,
+                vat,
                 total,
                 stockDescription,
                 stockStatus: "In stock",
@@ -248,20 +240,13 @@ const updateStock = async (req, res) => {
                 billImage = `${req.protocol}://${req.get('host')}/uploads/stock/${req.file.filename}`;
             }
 
-            // Validate numeric fields
-            if (isNaN(stockPrice) || isNaN(vat)) {
-                return res.status(400).json({ error: "Stock price and VAT must be valid numbers." });
-            }
-
-            // Calculate total (stock price + VAT)
-            const total = parseFloat(stockPrice) + parseFloat(vat || 0);
 
             await stock.update({
                 stockName,
                 stockDate,
-                stockPrice: parseFloat(stockPrice),
-                due: parseFloat(due || 0),
-                vat: parseFloat(vat || 0),
+                stockPrice,
+                due,
+                vat,
                 total,
                 stockDescription,
                 cashAmount,

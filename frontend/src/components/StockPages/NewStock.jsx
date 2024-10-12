@@ -7,6 +7,7 @@ import config from '../../config';
 const NewStock = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [data, setData] = useState([]);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState('');
@@ -23,12 +24,12 @@ const NewStock = () => {
     stockName: '',
     refNo: '',
     supplier: '',
-    storeId: '',
+    store: '',
     date: '',
     cashAmount: '',
     chequeAmount: '',
     due: '',
-    productId: '',
+    product: '',
     category: '',
     price: '',
     qty: '',
@@ -36,6 +37,24 @@ const NewStock = () => {
     vat: '',
     totalPriceVAT: '',
   });
+
+  const initialFormState = {
+    stockName: '',
+    refNo: '',
+    supplier: '',
+    store: '',
+    date: '',
+    cashAmount: '',
+    chequeAmount: '',
+    due: '',
+    product: '',
+    category: '',
+    price: '',
+    qty: '',
+    totalPrice: '',
+    vat: '',
+    totalPriceVAT: '',
+  };
 
   useEffect(() => {
     fetchStock();
@@ -123,7 +142,7 @@ const NewStock = () => {
         const product = await response.json();
         setFormData(prevData => ({
           ...prevData,
-          productId: product.productId,
+          product: product.productId,
           category: product.categoryName,
           price: product.productBuyingPrice,
           qty: product.productQty,
@@ -148,7 +167,6 @@ const NewStock = () => {
         newData.totalPriceVAT = (parseFloat(newData.totalPrice) + vatAmount).toFixed(2);
       }
 
-      // Calculate due based on totalPriceVAT minus either cashAmount or chequeAmount
       const paidAmount = parseFloat(newData.cashAmount) || parseFloat(newData.chequeAmount) || 0;
       newData.due = (paidAmount - parseFloat(newData.totalPriceVAT)).toFixed(2);
       return newData;
@@ -160,8 +178,21 @@ const NewStock = () => {
 
     const formDataToSend = new FormData();
 
-    for (const key in formData) {
-      formDataToSend.append(key, formData[key]);
+    formDataToSend.append('stockName', formData.stockName);
+    formDataToSend.append('stockDate', formData.date);
+    formDataToSend.append('stockPrice', formData.totalPrice);
+    formDataToSend.append('due', formData.due);
+    formDataToSend.append('vat', formData.vat);
+    formDataToSend.append('total', formData.totalPriceVAT);
+    formDataToSend.append('productId', formData.product);
+    formDataToSend.append('supplierId', formData.supplier);
+    formDataToSend.append('storeId', formData.store);
+    formDataToSend.append('categoryId', formData.category);
+    formDataToSend.append('cashAmount', formData.cashAmount);
+    formDataToSend.append('chequeAmount', formData.chequeAmount);
+
+    if (formData.stockDescription) {
+      formDataToSend.append('stockDescription', formData.stockDescription);
     }
 
     if (image) {
@@ -173,15 +204,28 @@ const NewStock = () => {
         method: 'POST',
         body: formDataToSend,
       });
+
       if (!response.ok) {
-        throw new Error('Failed to save stock');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to save stock');
       }
+
       const result = await response.json();
       console.log('Stock saved successfully:', result);
+      setSuccessMessage('Stock saved successfully!');
+      resetForm();
+      fetchStock();
     } catch (error) {
       console.error('Error:', error);
-      setError('An error occurred while saving the stock.');
+      setError(error.message || 'An error occurred while saving the stock.');
     }
+  };
+
+  const resetForm = () => {
+    setFormData(initialFormState);
+    setImage(null);
+    setPreview('');
+    setProductSearch('');
   };
 
   const handleImageChange = (e) => {
@@ -213,6 +257,17 @@ const NewStock = () => {
     <div className="scrolling-container">
       <div className="container-fluid my-5 mt-2">
         <h4 className="mb-4">Create New Stock</h4>
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="alert alert-success" role="alert">
+            {successMessage}
+          </div>
+        )}
 
         <div className="d-flex justify-content-end mt-4">
           <button className='btn btn-warning' onClick={handleNewStockClick}>Current Stock</button>
@@ -235,7 +290,7 @@ const NewStock = () => {
                 <div className="col-md-6 mb-3">
                   <label htmlFor="supplier" className="form-label">Supplier Name</label>
                   <select name="supplier" value={formData.supplier} className="form-select" onChange={handleChange}>
-                    <option value="">Select Supplier</option>
+                    <option value="select">Select Supplier</option>
                     {suppliers.map((supplier) => (
                       <option key={supplier.supplierId} value={supplier.supplierId}>
                         {supplier.supplierName}
@@ -245,8 +300,8 @@ const NewStock = () => {
                 </div>
 
                 <div className="col-md-6 mb-3">
-                  <label htmlFor="storeId" className="form-label">Store</label>
-                  <select name="storeId" value={formData.storeId} onChange={handleChange} className="form-select">
+                  <label htmlFor="store" className="form-label">Store</label>
+                  <select name="store" value={formData.store} onChange={handleChange} className="form-select">
                     <option value="">Select Store</option>
                     {stores.map((store) => (
                       <option key={store.storeId} value={store.storeId}>
@@ -341,8 +396,6 @@ const NewStock = () => {
           <div className="table-responsive mt-5">
             {isLoading ? (
               <p>Loading...</p>
-            ) : error ? (
-              <p>Error: {error}</p>
             ) : (
               <Table
                 search="Search by Supplier Name"
@@ -354,13 +407,14 @@ const NewStock = () => {
                 showPDF={false}
                 showDate={false}
                 showRow={false}
+                showDelete={false}
               />
             )}
           </div>
 
           {/* Footer Buttons */}
           <div className="d-flex justify-content-end mt-4">
-            <button type="reset" className="btn btn-danger me-2">Clear</button>
+            <button type="reset" className="btn btn-danger me-2" onClick={resetForm}>Clear</button>
             <button type="submit" className="btn btn-success">New Stock</button>
           </div>
         </form>

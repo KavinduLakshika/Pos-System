@@ -51,7 +51,7 @@ const Stock = sequelize.define(
         },
         stockDescription: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         stockStatus: {
             type: DataTypes.STRING,

@@ -94,6 +94,8 @@ const CreateProduct = () => {
     formDataToSend.append('mfd', formData.mfd);
     formDataToSend.append('exp', formData.exp);
 
+    console.log(formData);
+
     // Append the image file if provided
     if (image) {
       formDataToSend.append('productImage', image);
@@ -192,7 +194,7 @@ const CreateProduct = () => {
             </div>
 
             <div className="row">
-            <div className="product-details col-md-4 mb-2">
+              <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Product Code</label>
                 <input onChange={handleChange} type="text" name='productCode' id='' value={formData.productCode} className='form-control' />
               </div>
@@ -206,10 +208,10 @@ const CreateProduct = () => {
             </div>
 
             <div className="row">
-              
-           
-           
-            <div className="product-details col-md-4 mb-2">
+
+
+
+              <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Product Name</label>
                 <input onChange={handleChange} type="text" name='productName' id='' value={formData.productName} className='form-control' />
               </div>
@@ -220,7 +222,7 @@ const CreateProduct = () => {
                 <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
               </div>
             </div>
-            {/* <div className="row">
+            <div className="row">
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Manufacture Date </label>
                 <input onChange={handleChange} type="date" name='mfd' id='' onWheel={(e) => e.target.blur()} value={formData.mfd} className='form-control' />
@@ -229,13 +231,13 @@ const CreateProduct = () => {
                 <label htmlFor="" className='mb-1'>Expiration date</label>
                 <input onChange={handleChange} type="date" name='exp' id='' onWheel={(e) => e.target.blur()} value={formData.exp} className='form-control' />
               </div>
-            </div> */}
+            </div>
 
             <div className="row">
-              {/* <div className="product-details col-md-4 mb-2">
+              <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Quantity</label>
                 <input onChange={handleChange} type="number" name='qty' onWheel={(e) => e.target.blur()} id='' value={formData.qty} className='form-control' />
-              </div> */}
+              </div>
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Unit (G/KG/K24/K30)</label>
                 <input onChange={handleChange} type="text" name='unit' id='' onWheel={(e) => e.target.blur()} value={formData.unit} className='form-control' />
@@ -248,7 +250,7 @@ const CreateProduct = () => {
             </div>
 
             <div className="row">
-            <div className="product-details col-md-4 mb-2">
+              <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Warranty</label>
                 <select name='warranty' id='' value={formData.warranty} className='form-control' onChange={handleChange} >
                   <option value="No Warranty">No Warranty</option>
