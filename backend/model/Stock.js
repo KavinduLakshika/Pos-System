@@ -21,6 +21,18 @@ const Stock = sequelize.define(
             type: DataTypes.DATE,
             allowNull: false,
         },
+        stockQty: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        mfd: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
+        exp: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
         billImage: {
             type: DataTypes.STRING,
             allowNull: true,

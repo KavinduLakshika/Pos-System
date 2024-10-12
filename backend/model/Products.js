@@ -18,18 +18,6 @@ const Product = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    productQty: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    mfd: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-    exp: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
     productDiscount: {
       type: DataTypes.FLOAT,
       allowNull: true,

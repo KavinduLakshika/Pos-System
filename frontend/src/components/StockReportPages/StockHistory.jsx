@@ -28,7 +28,7 @@ function StockHistory() {
       const formattedData = outOfStockItems.map(stock => [
         stock.stockId,
         stock.stockName,
-        stock.stockQty || 0,
+        stock.stockQty,
         stock.stockDate,
         stock.stockPrice,
         stock.product?.productName || 'Unknown',

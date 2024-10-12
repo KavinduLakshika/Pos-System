@@ -16,13 +16,10 @@ const CreateProduct = () => {
     productCode: '',
     sellingPrice: '',
     buyingPrice: '',
-    qty: '',
     warranty: '',
     description: '',
     unit: '',
     image: '',
-    mfd: '',
-    exp: '',
   });
 
   // Fetch categories
@@ -68,7 +65,6 @@ const CreateProduct = () => {
         productCode: selectedProd.productCode || '',
         sellingPrice: selectedProd.productSellingPrice || '',
         buyingPrice: selectedProd.productBuyingPrice || '',
-        qty: selectedProd.productQty || '',
         warranty: selectedProd.productWarranty || '',
         description: selectedProd.productDescription || '',
         unit: selectedProd.productUnit || '',
@@ -89,10 +85,7 @@ const CreateProduct = () => {
     formDataToSend.append('productDescription', formData.description);
     formDataToSend.append('productWarranty', formData.warranty);
     formDataToSend.append('categoryId', formData.productCategory);
-    formDataToSend.append('productQty', formData.qty);
     formDataToSend.append('productUnit', formData.unit);
-    formDataToSend.append('mfd', formData.mfd);
-    formDataToSend.append('exp', formData.exp);
 
     console.log(formData);
 
@@ -152,13 +145,10 @@ const CreateProduct = () => {
       productCode: '',
       sellingPrice: '',
       buyingPrice: '',
-      qty: '',
       warranty: '',
       description: '',
       unit: '',
       image: '',
-      mfd: '',
-      exp: '',
     });
     setImage(null);
     setPreview('');
@@ -222,6 +212,7 @@ const CreateProduct = () => {
                 <input onChange={handleChange} type="number" name='sellingPrice' onWheel={(e) => e.target.blur()} id='' value={formData.sellingPrice} className='form-control' />
               </div>
             </div>
+            
             <div className="row">
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Manufacture Date </label>

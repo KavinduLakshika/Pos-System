@@ -7,7 +7,7 @@ function CurrentStock() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
-  const columns = ['#', 'Category', 'Product Name', 'Unit', 'Name', 'Quantity', 'Stock Date', 'Price', 'Description', 'Supplier', 'Store', 'Status'];
+  const columns = ['#', 'Category', 'Product Name', 'Unit', 'Name', 'Quantity', 'Stock Date', 'Price', 'MFD', 'EXP', 'Description', 'Supplier', 'Store', 'Status'];
   const btnName = '+ New Stock';
 
   useEffect(() => {
@@ -39,9 +39,11 @@ function CurrentStock() {
         stock.product?.productName || 'Unknown',
         stock.product?.productUnit || 'Unknown',
         stock.stockName,
-        stock.product?.productQty || 'Unknown',
+        stock.stockQty,
         stock.stockDate,
         stock.stockPrice,
+        stock.mfd,
+        stock.exp,
         stock.stockDescription,
         stock.supplier?.supplierName || 'Unknown',
         stock.store?.storeName || "Unknown",
@@ -49,7 +51,7 @@ function CurrentStock() {
           className='form-control'
           value={stock.stockStatus}
           onChange={(e) => handleStatusChange(stock.stockId, e.target.value)}
-          disabled={stock.product?.productQty === 0}
+          disabled={stock.stockQty === 0}
         >
           <option value="In stock">In stock</option>
           <option value="Out of Stock">Out of Stock</option>

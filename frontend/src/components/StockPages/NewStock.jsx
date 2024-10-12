@@ -22,7 +22,6 @@ const NewStock = () => {
 
   const [formData, setFormData] = useState({
     stockName: '',
-    refNo: '',
     supplier: '',
     store: '',
     date: '',
@@ -31,6 +30,8 @@ const NewStock = () => {
     due: '',
     product: '',
     category: '',
+    mfd: '',
+    exp: '',
     price: '',
     qty: '',
     totalPrice: '',
@@ -40,7 +41,6 @@ const NewStock = () => {
 
   const initialFormState = {
     stockName: '',
-    refNo: '',
     supplier: '',
     store: '',
     date: '',
@@ -49,6 +49,8 @@ const NewStock = () => {
     due: '',
     product: '',
     category: '',
+    mfd: '',
+    exp: '',
     price: '',
     qty: '',
     totalPrice: '',
@@ -77,7 +79,7 @@ const NewStock = () => {
           stock.supplier?.supplierName || "Unknown",
           stock.product?.productName || 'Unknown',
           stock.stockDate,
-          stock.product?.productQty,
+          stock.stockQty,
           stock.product?.productBuyingPrice,
           stock.stockPrice,
           stock.vat,
@@ -146,8 +148,6 @@ const NewStock = () => {
           product: product.productId,
           category: product.categoryName,
           price: product.productBuyingPrice,
-          qty: product.productQty,
-          totalPrice: (product.productBuyingPrice) * (product.productQty),
         }));
       } else {
         console.error('Product not found');
@@ -160,16 +160,26 @@ const NewStock = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData(prevData => {
+    setFormData((prevData) => {
       const newData = { ...prevData, [name]: value };
 
-      if (name === 'vat' || name === 'totalPrice') {
+      // Calculate total price when price or qty changes
+      if (name === 'price' || name === 'qty') {
+        const price = parseFloat(newData.price) || 0;
+        const qty = parseFloat(newData.qty) || 0;
+        newData.totalPrice = (price * qty).toFixed(2);  // Update total price
+      }
+
+      // Calculate VAT and total price with VAT
+      if (newData.vat && newData.totalPrice) {
         const vatAmount = (parseFloat(newData.vat) / 100) * parseFloat(newData.totalPrice);
         newData.totalPriceVAT = (parseFloat(newData.totalPrice) + vatAmount).toFixed(2);
       }
 
+      // Calculate due amount
       const paidAmount = parseFloat(newData.cashAmount) || parseFloat(newData.chequeAmount) || 0;
       newData.due = (paidAmount - parseFloat(newData.totalPriceVAT)).toFixed(2);
+
       return newData;
     });
   };
@@ -186,9 +196,12 @@ const NewStock = () => {
     formDataToSend.append('vat', formData.vat);
     formDataToSend.append('total', formData.totalPriceVAT);
     formDataToSend.append('productId', formData.product);
+    formDataToSend.append('stockQty', formData.qty);
     formDataToSend.append('supplierId', formData.supplier);
     formDataToSend.append('storeId', formData.store);
     formDataToSend.append('categoryId', formData.category);
+    formDataToSend.append('mfd', formData.mfd);
+    formDataToSend.append('exp', formData.exp);
     formDataToSend.append('cashAmount', formData.cashAmount);
     formDataToSend.append('chequeAmount', formData.chequeAmount);
 
@@ -362,6 +375,15 @@ const NewStock = () => {
                       </option>
                     ))}
                   </select>
+                </div>
+
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="" className='mb-1'>Manufacture Date </label>
+                  <input onChange={handleChange} type="date" name='mfd' id='' onWheel={(e) => e.target.blur()} value={formData.mfd} className='form-control' />
+                </div>
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="" className='mb-1'>Expiration date</label>
+                  <input onChange={handleChange} type="date" name='exp' id='' onWheel={(e) => e.target.blur()} value={formData.exp} className='form-control' />
                 </div>
 
                 <div className="col-md-4 mb-3">
