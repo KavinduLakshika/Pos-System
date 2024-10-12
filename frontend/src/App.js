@@ -1,5 +1,6 @@
 import './App.css';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SideBar from './components/SideBar/SideBar';
 import Dashboard from './Pages/Dashboard/Dashboard';
@@ -16,31 +17,40 @@ import Rental from './Pages/Rental/Rental';
 import Login from './Pages/Login';
 import Header from './components/SideBar/Header';
 
-function Layout() {
+const ProtectedRoute = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('token');
   const location = useLocation();
 
-  // Check if the current path is "/login" (case insensitive)
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+};
+
+function Layout() {
+  const location = useLocation();
   const isLoginPage = location.pathname.toLowerCase() === '/login';
 
   return (
-    <div >
+    <div>
       {!isLoginPage && <Header />}
       <div className="d-flex flex-grow-1">
         {!isLoginPage && <SideBar />}
         <div className="d-flex flex-column flex-grow-1" style={{ margin: '20px' }}>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/sales/*" element={<Sales />} />
-            <Route path="/rental/*" element={<Rental />} />
-            <Route path="/customer/*" element={<Customer />} />
-            <Route path="/product/*" element={<Product />} />
-            <Route path="/grn/*" element={<GRN />} />
-            <Route path="/stock/*" element={<Stock />} />
-            <Route path="/supplier/*" element={<Supplier />} />
-            <Route path="/sales-reports/*" element={<SalesReports />} />
-            <Route path="/stock-reports/*" element={<StockReports />} />
-            <Route path="/staff/*" element={<Staff />} />
+            <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/sales/*" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
+            <Route path="/rental/*" element={<ProtectedRoute><Rental /></ProtectedRoute>} />
+            <Route path="/customer/*" element={<ProtectedRoute><Customer /></ProtectedRoute>} />
+            <Route path="/product/*" element={<ProtectedRoute><Product /></ProtectedRoute>} />
+            <Route path="/grn/*" element={<ProtectedRoute><GRN /></ProtectedRoute>} />
+            <Route path="/stock/*" element={<ProtectedRoute><Stock /></ProtectedRoute>} />
+            <Route path="/supplier/*" element={<ProtectedRoute><Supplier /></ProtectedRoute>} />
+            <Route path="/sales-reports/*" element={<ProtectedRoute><SalesReports /></ProtectedRoute>} />
+            <Route path="/stock-reports/*" element={<ProtectedRoute><StockReports /></ProtectedRoute>} />
+            <Route path="/staff/*" element={<ProtectedRoute><Staff /></ProtectedRoute>} />
           </Routes>
         </div>
       </div>

@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, ShoppingCart, Package, Users, Boxes, Truck, FileText, Menu } from 'lucide-react';
 import './SideBar.css';
 
 const Sidebar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [activeSubmenu, setActiveSubmenu] = useState(null);
+    const navigate = useNavigate();
+
+  const handleLogout = () => {
+   
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    
+    
+    navigate('/login');
+  };
 
     useEffect(() => {
         const handleResize = () => {
@@ -190,14 +200,25 @@ const Sidebar = () => {
                                                 <li key={subIndex} className="nav-item nav-sub">
                                                     <Link to={submenu.path} className="nav-link">{submenu.title}</Link>
                                                 </li>
+                                                
                                             ))}
+                                            
                                         </ul>
+
                                     </div>
+                                    
                                 </li>
+                               
                             ))}
+                              
                         </ul>
+                        
+                    </div>
+                    <div className="d-flex justify-content-center mt-auto p-5">
+                        <button onClick={handleLogout} className="btn btn-danger">Logout</button>
                     </div>
                 </nav>
+               
             </div>
         </>
     );
