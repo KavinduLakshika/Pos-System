@@ -65,6 +65,7 @@ app.put("/product/:id", ProductController.updateProduct);
 app.delete("/product/:id", ProductController.deleteProduct);
 app.get("/product/productName/:name", ProductController.getProductByName);
 app.get('/product/codeOrName/:value', ProductController.getProductByCodeOrName);
+app.get('/product/suggestions', ProductController.getProductSuggestions);
 
 //stock routes
 app.post("/stock", StockController.createStock);
