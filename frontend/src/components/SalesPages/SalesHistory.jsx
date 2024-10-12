@@ -57,8 +57,8 @@ const SalesHistory = () => {
 
           {isLoading ? (
             <p>Loading...</p>
-          ) : error ? (
-            <p>Error: {error}</p>
+          // ) : error ? (
+          //   <p>Error: {error}</p>
           ) : (
             <Table
               data={data}
