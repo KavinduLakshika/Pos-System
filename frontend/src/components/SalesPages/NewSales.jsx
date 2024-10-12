@@ -191,7 +191,7 @@ const NewSales = ({ invoice }) => {
       }
     } catch (error) {
       console.error('Error:', error);
-      // alert('An error occurred while creating the invoice.');
+      
     }
   };
 

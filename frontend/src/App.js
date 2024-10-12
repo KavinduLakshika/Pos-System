@@ -14,31 +14,35 @@ import SalesReports from './Pages/SalesReport/SalesReports';
 import Supplier from './Pages/Supplier/Supplier';
 import Rental from './Pages/Rental/Rental';
 import Login from './Pages/Login';
+import Header from './components/SideBar/Header';
 
 function Layout() {
   const location = useLocation();
-  
+
   // Check if the current path is "/login" (case insensitive)
   const isLoginPage = location.pathname.toLowerCase() === '/login';
 
   return (
-    <div className="d-flex">
-      {!isLoginPage && <SideBar />}
-      <div style={{ flexGrow: 1, margin: '20px 20px' }}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/sales/*" element={<Sales />} />
-          <Route path="/rental/*" element={<Rental />} />
-          <Route path="/customer/*" element={<Customer />} />
-          <Route path="/product/*" element={<Product />} />
-          <Route path="/grn/*" element={<GRN />} />
-          <Route path="/stock/*" element={<Stock />} />
-          <Route path="/supplier/*" element={<Supplier />} />
-          <Route path="/sales-reports/*" element={<SalesReports />} />
-          <Route path="/stock-reports/*" element={<StockReports />} />
-          <Route path="/staff/*" element={<Staff />} />
-        </Routes>
+    <div >
+      {!isLoginPage && <Header />}
+      <div className="d-flex flex-grow-1">
+        {!isLoginPage && <SideBar />}
+        <div className="d-flex flex-column flex-grow-1" style={{ margin: '20px' }}>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/sales/*" element={<Sales />} />
+            <Route path="/rental/*" element={<Rental />} />
+            <Route path="/customer/*" element={<Customer />} />
+            <Route path="/product/*" element={<Product />} />
+            <Route path="/grn/*" element={<GRN />} />
+            <Route path="/stock/*" element={<Stock />} />
+            <Route path="/supplier/*" element={<Supplier />} />
+            <Route path="/sales-reports/*" element={<SalesReports />} />
+            <Route path="/stock-reports/*" element={<StockReports />} />
+            <Route path="/staff/*" element={<Staff />} />
+          </Routes>
+        </div>
       </div>
     </div>
   );

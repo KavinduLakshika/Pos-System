@@ -144,7 +144,7 @@ const Sidebar = () => {
         <>
 
             <button
-                className="toggle-btn d-md-none rounded bg-warning"
+                className="toggle-btn d-md-none rounded bg-warning mr-4"
                 onClick={toggleSidebar}
                 style={{
                     position: 'fixed',
@@ -165,9 +165,9 @@ const Sidebar = () => {
                         transition: 'transform 0.3s ease-in-out'
                     }}
                 >
-                    <div className="text-center mt-2 p-2">
+                    {/* <div className="text-center mt-2 p-2">
                         <h1>ලාංඡනය</h1>
-                    </div>
+                    </div> */}
                     <div className="position-sticky pt-3">
                         <ul className="nav flex-column">
                             <li className="nav-item">
