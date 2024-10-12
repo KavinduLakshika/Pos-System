@@ -9,13 +9,19 @@ const CategoryForm = ({ closeModal, showModal, selectedCategory, onSave }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (selectedCategory) {
+        if (showModal && selectedCategory) {
             setFormData({
                 categoryName: selectedCategory.categoryName || '',
                 categoryType: selectedCategory.categoryType || ''
             });
+        } else if (!showModal) {
+            setFormData({
+                categoryName: '',
+                categoryType: ''
+            });
+            setError(null);
         }
-    }, [selectedCategory]);
+    }, [showModal,selectedCategory]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -54,6 +60,7 @@ const CategoryForm = ({ closeModal, showModal, selectedCategory, onSave }) => {
             setError('An error occurred.');
         }
     };
+
     if (!showModal) return null;
 
     return (

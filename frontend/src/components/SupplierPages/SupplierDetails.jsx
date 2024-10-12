@@ -10,7 +10,7 @@ function SupplierDetails() {
   const [showModal, setShowModal] = useState(false);
   const [selectedSup, setSelectedSup] = useState(null);
 
-  const columns = ['#', 'Supplier Name', 'Supplier Address', 'NIC', 'Email', 'Contact 1', 'Contact 2', 'Paid', 'Balance', 'Payment Date', 'Status'];
+  const columns = ['#', 'Supplier Name', 'Supplier Address', 'NIC', 'Email', 'Contact 1', 'Contact 2',  'Status'];
 
   const btnName = ' + New Supplier ';
 
@@ -33,9 +33,6 @@ function SupplierDetails() {
         supplier.supplierEmail,
         supplier.supplierTP,
         supplier.supplierSecondTP,
-        supplier.supplierPaid,
-        supplier.supplierBalance,
-        supplier.supplierPaymentDate,
         <select
           className='form-control'
           value={supplier.supplierStatus}
