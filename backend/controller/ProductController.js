@@ -280,18 +280,19 @@ const getProductSuggestions = async (req, res) => {
             return res.status(400).json({ message: 'Query must be at least 2 characters long' });
         }
 
-        const products = await Product.findAll({
+        const product = await Product.findAll({
             where: {
                 [Op.or]: [
+                    { productId: { [Op.like]: `%${query}%` } },
                     { productName: { [Op.like]: `%${query}%` } },
                     { productCode: { [Op.like]: `%${query}%` } }
                 ]
             },
-            attributes: ['productId', 'productName', 'productCode', 'productBuyingPrice', 'productSellingPrice', 'category_categoryId'],
-            limit: 10
+            attributes: ['productId', 'productName', 'productCode'],
+            limit: 10 
         });
 
-        res.status(200).json(products);
+        res.status(200).json(product);
     } catch (error) {
         console.error('Error fetching product suggestions:', error);
         res.status(500).json({ error: error.message });
