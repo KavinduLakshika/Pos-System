@@ -265,24 +265,29 @@ const NewSales = ({ invoice }) => {
 
   const handlePaymentChange = (e) => {
     const { name, value } = e.target;
-    const numericValue = parseInt(value) || 0;
-  
+    const numericValue = parseFloat(value) || 0;
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: numericValue,
     }));
-  
-    const totalPaid = formData.card + formData.cheque+ formData.bank + formData.cash;
-    const payableAmount = parseInt(formData.amount) || 0;
+
+    const totalPaid = parseFloat(formData.card || 0)
+      + parseFloat(formData.cheque || 0)
+      + parseFloat(formData.bank || 0)
+      + parseFloat(name === 'cash' ? numericValue : formData.cash || 0);
+
+    const payableAmount = parseFloat(formData.amount) || 0;
     const dueAmount = payableAmount - totalPaid;
-  
+
     setFormData((prevData) => ({
       ...prevData,
-      paidAmount: totalPaid,
-      dueAmount: dueAmount,
+      paidAmount: totalPaid.toFixed(2),
+      dueAmount: dueAmount.toFixed(2),
     }));
   };
-  
+
+
   return (
     <div>
       <div className="scrolling-container">
