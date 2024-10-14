@@ -54,6 +54,7 @@ const NewSales = ({ invoice }) => {
         console.error('Error fetching customer data:', error);
       }
     }
+    
   
     if (name === 'productNo' || name === 'productName') {
       try {
@@ -85,6 +86,12 @@ const NewSales = ({ invoice }) => {
       }
     }
   };
+  
+  useEffect(() => {
+    const discountedPrice = (formData.productPrice || 0) * (1 - (formData.discount || 0) / 100);
+    const newTotalPrice = discountedPrice * (formData.qty || 1);
+    setFormData(prevData => ({ ...prevData, totalPrice: newTotalPrice }));
+  }, [formData.productPrice, formData.discount, formData.qty]);
   
 
   const handleCustomerCreated = (customerData) => {
