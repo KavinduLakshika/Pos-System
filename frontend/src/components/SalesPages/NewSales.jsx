@@ -25,6 +25,13 @@ const NewSales = ({ invoice }) => {
     totalPrice: '',
     productNote: '',
     emi: '',
+    amount: '', // Payable Amount
+    card: '',
+    cheque: '',
+    bank: '',
+    cash: '',
+    paidAmount: '',
+    dueAmount: '',
   });
 
   const handleChange = async (e) => {
@@ -148,12 +155,12 @@ const NewSales = ({ invoice }) => {
     let totalDiscount = 0;
 
     updatedTableData.forEach((row) => {
-      const price = parseFloat(row[5]) || 0; 
+      const price = parseFloat(row[5]) || 0;
       const qty = parseFloat(row[6]) || 0;
       const discount = parseFloat(row[7]) || 0;
 
-      totalAmount += price * qty; 
-      totalDiscount += discount; 
+      totalAmount += price * qty;
+      totalDiscount += discount;
     });
 
     const payableAmount = totalAmount - totalDiscount;
@@ -259,29 +266,34 @@ const NewSales = ({ invoice }) => {
 
   const handlePaymentChange = (e) => {
     const { name, value } = e.target;
-    
+  
+    // Parse the input as an integer (default to 0 if empty or invalid)
+    const numericValue = parseInt(value) || 0;
+  
+    // Update form data for payment inputs
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: numericValue, // Ensure integer values for each payment type
     }));
   
-    const cardPayment = parseFloat(formData.card || 0);
-    const chequePayment = parseFloat(formData.cheque || 0);
-    const bankPayment = parseFloat(formData.bank || 0);
-    const cashPayment = parseFloat(formData.cash || 0);
+    const totalPaid = formData.card + formData.cheque+ formData.bank + formData.cash;
   
-    const totalPaid = cardPayment + chequePayment + bankPayment + cashPayment;
+    // Ensure Payable Amount is a valid integer
+    const payableAmount = parseInt(formData.amount) || 0;
   
-
-    const dueAmount = parseFloat(formData.amount || 0) - totalPaid;
+    // Calculate due amount
+    const dueAmount = payableAmount - totalPaid;
   
+    // Update the state with the computed paid and due amounts
     setFormData((prevData) => ({
       ...prevData,
-      paidAmount: totalPaid.toFixed(2),
-      dueAmount: dueAmount.toFixed(2),
+      paidAmount: totalPaid,
+      dueAmount: dueAmount,
     }));
-  };  
-
+  };
+  
+  
+  
   return (
     <div>
       <div className="scrolling-container">
@@ -452,7 +464,7 @@ const NewSales = ({ invoice }) => {
                   </div>
 
                   {showCash && (
-                    <input type="number" className="form-control" id='cashAmount' name='cahAmount' placeholder='Cash Amount' onWheel={(e) => e.target.blur()} />
+                    <input type="number" className="form-control" id='cashAmount' name='cash' value={formData.cash} onChange={handlePaymentChange} placeholder='Cash Amount' onWheel={(e) => e.target.blur()} />
                   )}
                 </div>
                 <div className="payment-details">
@@ -461,7 +473,8 @@ const NewSales = ({ invoice }) => {
                     <label htmlFor="" id='label'>Card Payment</label>
                   </div>
                   {showCard && (
-                    <input type="number" className="form-control" id='' name='' placeholder='Card Payment' onWheel={(e) => e.target.blur()} />
+                    <input type="number" className="form-control" id='' name='card' onChange={handlePaymentChange} value={formData.card} placeholder='Card Payment' onWheel={(e) => e.target.blur()} />
+
                   )}
                 </div>
                 <div className="payment-details">
@@ -470,7 +483,7 @@ const NewSales = ({ invoice }) => {
                     <label htmlFor="" id='label'>Cheque Payment</label>
                   </div>
                   {showCheque && (
-                    <input type="number" className="form-control" id='' name='' placeholder='Cheque Payment' onWheel={(e) => e.target.blur()} />
+                    <input type="number" className="form-control" id='' name='cheque' value={formData.cheque} onChange={handlePaymentChange} placeholder='Cheque Payment' onWheel={(e) => e.target.blur()} />
                   )}
                 </div>
                 <div className="payment-details">
@@ -479,7 +492,7 @@ const NewSales = ({ invoice }) => {
                     <label htmlFor="" id='label'>Bank Payment</label>
                   </div>
                   {showBank && (
-                    <input type="number" className="form-control" id='' name='' placeholder='Bank Payment' onWheel={(e) => e.target.blur()} />
+                    <input type="number" className="form-control" id='' name='bank' value={formData.bank} onChange={handlePaymentChange} placeholder='Bank Payment' onWheel={(e) => e.target.blur()} />
                   )}
                 </div>
               </div>
@@ -487,11 +500,11 @@ const NewSales = ({ invoice }) => {
               <div className="amount-box">
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Paid Amount</label>
-                  <input className="form-control" type="number" onWheel={(e) => e.target.blur()} name="totalAmount" id="readOnly" readOnly />
+                  <input className="form-control" value={formData.paidAmount} type="number" onWheel={(e) => e.target.blur()} name="totalAmount" id="readOnly" readOnly />
                 </div>
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Due Amount</label>
-                  <input className="form-control" type="number" onWheel={(e) => e.target.blur()} name="discount" id="readOnly" readOnly />
+                  <input className="form-control" type="number" value={formData.dueAmount} onWheel={(e) => e.target.blur()} name="discount" id="readOnly" readOnly />
                 </div>
                 <div className="amount-group">
                   <label htmlFor="" id='label'>If Credit Sale</label>
