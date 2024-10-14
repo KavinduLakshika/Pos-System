@@ -7,7 +7,7 @@ import Table from '../Table/Table'
 import config from '../../config';
 
 const NewSales = ({ invoice }) => {
-  
+
   const [tableData, setTableData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [customerCreated, setCustomerCreated] = useState(false);
@@ -25,6 +25,13 @@ const NewSales = ({ invoice }) => {
     totalPrice: '',
     productNote: '',
     emi: '',
+    amount: '', // Payable Amount
+    card: '',
+    cheque: '',
+    bank: '',
+    cash: '',
+    paidAmount: '',
+    dueAmount: '',
   });
 
   const handleChange = async (e) => {
@@ -54,8 +61,8 @@ const NewSales = ({ invoice }) => {
         console.error('Error fetching customer data:', error);
       }
     }
-    
-  
+
+
     if (name === 'productNo' || name === 'productName') {
       try {
         const response = await fetch(`${config.BASE_URL}/product/codeOrName/${value}`);
@@ -63,13 +70,13 @@ const NewSales = ({ invoice }) => {
           const productData = await response.json();
           setFormData(prevData => ({
             ...prevData,
-            productNo: productData.productCode ,
+            productNo: productData.productCode,
             productName: productData.productName || prevData.productName,
             productPrice: productData.productSellingPrice,
             qty: 1,
             totalPrice: productData.productSellingPrice,
             productNote: productData.productWarranty + ' ' + productData.productDescription,
-            emi:productData.productEmi
+            emi: productData.productEmi
           }));
         } else {
           setFormData(prevData => ({
@@ -86,13 +93,13 @@ const NewSales = ({ invoice }) => {
       }
     }
   };
-  
+
   useEffect(() => {
     const discountedPrice = (formData.productPrice || 0) * (1 - (formData.discount || 0) / 100);
     const newTotalPrice = discountedPrice * (formData.qty || 1);
     setFormData(prevData => ({ ...prevData, totalPrice: newTotalPrice }));
   }, [formData.productPrice, formData.discount, formData.qty]);
-  
+
 
   const handleCustomerCreated = (customerData) => {
     setFormData(prevData => ({
@@ -107,12 +114,12 @@ const NewSales = ({ invoice }) => {
 
   const handleAddProduct = (e) => {
     e.preventDefault();
-    
+
     if (!formData.productNo || !formData.productName || !formData.productPrice || !formData.qty) {
       alert("Please fill in all the product details.");
       return;
     }
-     
+
     const newRow = [
       formData.cusCode,
       formData.cusName,
@@ -124,10 +131,10 @@ const NewSales = ({ invoice }) => {
       formData.discount,
       formData.totalPrice
     ];
-  
+
     setTableData(prevData => [...prevData, newRow]);
-  
-     
+
+
     setFormData(prevData => ({
       ...prevData,
       productNo: '',
@@ -142,6 +149,30 @@ const NewSales = ({ invoice }) => {
 
     console.log("Added new row:", newRow);
     console.log("Updated table data:", [...tableData, newRow]);
+    // Calculate total amount and apply discount
+    const updatedTableData = [...tableData, newRow];
+    let totalAmount = 0;
+    let totalDiscount = 0;
+
+    updatedTableData.forEach((row) => {
+      const price = parseFloat(row[5]) || 0;
+      const qty = parseFloat(row[6]) || 0;
+      const discount = parseFloat(row[7]) || 0;
+
+      totalAmount += price * qty;
+      totalDiscount += discount;
+    });
+
+    const payableAmount = totalAmount - totalDiscount;
+
+    // Update state for totalAmount and payableAmount
+    setFormData((prevData) => ({
+      ...prevData,
+      totalAmount: totalAmount.toFixed(2),
+      discountPrice: totalDiscount.toFixed(2),
+      amount: payableAmount.toFixed(2),
+    }));
+
   };
 
   const handleSubmit = async (e) => {
@@ -198,7 +229,7 @@ const NewSales = ({ invoice }) => {
       }
     } catch (error) {
       console.error('Error:', error);
-      
+
     }
   };
 
@@ -233,7 +264,35 @@ const NewSales = ({ invoice }) => {
     setBank(e.target.checked)
   }
 
-
+  const handlePaymentChange = (e) => {
+    const { name, value } = e.target;
+  
+    // Parse the input as an integer (default to 0 if empty or invalid)
+    const numericValue = parseInt(value) || 0;
+  
+    // Update form data for payment inputs
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: numericValue, // Ensure integer values for each payment type
+    }));
+  
+    const totalPaid = formData.card + formData.cheque+ formData.bank + formData.cash;
+  
+    // Ensure Payable Amount is a valid integer
+    const payableAmount = parseInt(formData.amount) || 0;
+  
+    // Calculate due amount
+    const dueAmount = payableAmount - totalPaid;
+  
+    // Update the state with the computed paid and due amounts
+    setFormData((prevData) => ({
+      ...prevData,
+      paidAmount: totalPaid,
+      dueAmount: dueAmount,
+    }));
+  };
+  
+  
   
   return (
     <div>
@@ -378,12 +437,13 @@ const NewSales = ({ invoice }) => {
               <div className="amount-box">
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Total Amount</label>
-                  <input type="number" className="form-control" onWheel={(e) => e.target.blur()} name="totalAmount" id="readOnly" readOnly />
+                  <input type="number" className="form-control" value={formData.totalAmount} id='readOnly' readOnly />
                 </div>
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Discount</label>
-                  <input type="number" className="form-control" onWheel={(e) => e.target.blur()} name="discountPrice" id="readOnly" readOnly />
+                  <input type="number" className="form-control" value={formData.discountPrice} id='readOnly' readOnly />
                 </div>
+
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Invoice Note</label>
                   <textarea name="invoiceNote" className="form-control" id="invoiceNote" rows={3} />
@@ -395,7 +455,7 @@ const NewSales = ({ invoice }) => {
               <div className="payment-details-box">
                 <div className="payment-details">
                   <label htmlFor="" id='label'>Payable Amount</label>
-                  <input type="number" className="form-control" id='readOnly' name='amount' readOnly />
+                  <input type="number" className="form-control" value={formData.amount} id='readOnly' readOnly />
                 </div>
                 <div className="payment-details">
                   <div className="payment-details-amount">
@@ -404,7 +464,7 @@ const NewSales = ({ invoice }) => {
                   </div>
 
                   {showCash && (
-                    <input type="number" className="form-control" id='cashAmount' name='cahAmount' placeholder='Cash Amount' onWheel={(e) => e.target.blur()} />
+                    <input type="number" className="form-control" id='cashAmount' name='cash' value={formData.cash} onChange={handlePaymentChange} placeholder='Cash Amount' onWheel={(e) => e.target.blur()} />
                   )}
                 </div>
                 <div className="payment-details">
@@ -413,7 +473,8 @@ const NewSales = ({ invoice }) => {
                     <label htmlFor="" id='label'>Card Payment</label>
                   </div>
                   {showCard && (
-                    <input type="number" className="form-control" id='' name='' placeholder='Card Payment' onWheel={(e) => e.target.blur()} />
+                    <input type="number" className="form-control" id='' name='card' onChange={handlePaymentChange} value={formData.card} placeholder='Card Payment' onWheel={(e) => e.target.blur()} />
+
                   )}
                 </div>
                 <div className="payment-details">
@@ -422,7 +483,7 @@ const NewSales = ({ invoice }) => {
                     <label htmlFor="" id='label'>Cheque Payment</label>
                   </div>
                   {showCheque && (
-                    <input type="number" className="form-control" id='' name='' placeholder='Cheque Payment' onWheel={(e) => e.target.blur()} />
+                    <input type="number" className="form-control" id='' name='cheque' value={formData.cheque} onChange={handlePaymentChange} placeholder='Cheque Payment' onWheel={(e) => e.target.blur()} />
                   )}
                 </div>
                 <div className="payment-details">
@@ -431,7 +492,7 @@ const NewSales = ({ invoice }) => {
                     <label htmlFor="" id='label'>Bank Payment</label>
                   </div>
                   {showBank && (
-                    <input type="number" className="form-control" id='' name='' placeholder='Bank Payment' onWheel={(e) => e.target.blur()} />
+                    <input type="number" className="form-control" id='' name='bank' value={formData.bank} onChange={handlePaymentChange} placeholder='Bank Payment' onWheel={(e) => e.target.blur()} />
                   )}
                 </div>
               </div>
@@ -439,11 +500,11 @@ const NewSales = ({ invoice }) => {
               <div className="amount-box">
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Paid Amount</label>
-                  <input className="form-control" type="number" onWheel={(e) => e.target.blur()} name="totalAmount" id="readOnly" readOnly />
+                  <input className="form-control" value={formData.paidAmount} type="number" onWheel={(e) => e.target.blur()} name="totalAmount" id="readOnly" readOnly />
                 </div>
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Due Amount</label>
-                  <input className="form-control" type="number" onWheel={(e) => e.target.blur()} name="discount" id="readOnly" readOnly />
+                  <input className="form-control" type="number" value={formData.dueAmount} onWheel={(e) => e.target.blur()} name="discount" id="readOnly" readOnly />
                 </div>
                 <div className="amount-group">
                   <label htmlFor="" id='label'>If Credit Sale</label>
