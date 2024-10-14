@@ -17,6 +17,14 @@ const Return = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        returnQty: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        returnNote: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         returnItemDate: {
             type: DataTypes.DATE,
             allowNull: false,
