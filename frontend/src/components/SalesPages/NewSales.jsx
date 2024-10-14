@@ -165,7 +165,6 @@ const NewSales = ({ invoice }) => {
 
     const payableAmount = totalAmount - totalDiscount;
 
-    // Update state for totalAmount and payableAmount
     setFormData((prevData) => ({
       ...prevData,
       totalAmount: totalAmount.toFixed(2),
@@ -266,33 +265,23 @@ const NewSales = ({ invoice }) => {
 
   const handlePaymentChange = (e) => {
     const { name, value } = e.target;
-  
-    // Parse the input as an integer (default to 0 if empty or invalid)
     const numericValue = parseInt(value) || 0;
   
-    // Update form data for payment inputs
     setFormData((prevData) => ({
       ...prevData,
-      [name]: numericValue, // Ensure integer values for each payment type
+      [name]: numericValue,
     }));
   
     const totalPaid = formData.card + formData.cheque+ formData.bank + formData.cash;
-  
-    // Ensure Payable Amount is a valid integer
     const payableAmount = parseInt(formData.amount) || 0;
-  
-    // Calculate due amount
     const dueAmount = payableAmount - totalPaid;
   
-    // Update the state with the computed paid and due amounts
     setFormData((prevData) => ({
       ...prevData,
       paidAmount: totalPaid,
       dueAmount: dueAmount,
     }));
   };
-  
-  
   
   return (
     <div>
