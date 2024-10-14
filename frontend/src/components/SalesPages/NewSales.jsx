@@ -149,21 +149,22 @@ const NewSales = ({ invoice }) => {
 
     console.log("Added new row:", newRow);
     console.log("Updated table data:", [...tableData, newRow]);
-    // Calculate total amount and apply discount
+
     const updatedTableData = [...tableData, newRow];
     let totalAmount = 0;
     let totalDiscount = 0;
+    let payableAmount = 0;
 
     updatedTableData.forEach((row) => {
       const price = parseFloat(row[5]) || 0;
       const qty = parseFloat(row[6]) || 0;
       const discount = parseFloat(row[7]) || 0;
+      const totalPrice = parseFloat(row[8]) || 0;
 
       totalAmount += price * qty;
       totalDiscount += discount;
+      payableAmount += totalPrice;
     });
-
-    const payableAmount = totalAmount - totalDiscount;
 
     setFormData((prevData) => ({
       ...prevData,
@@ -272,9 +273,9 @@ const NewSales = ({ invoice }) => {
       [name]: numericValue,
     }));
 
-    const totalPaid = parseFloat(name === 'card' ? numericValue :formData.card || 0)
-      + parseFloat(name === 'cheque' ? numericValue :formData.cheque || 0)
-      + parseFloat(name === 'bank' ? numericValue :formData.bank || 0)
+    const totalPaid = parseFloat(name === 'card' ? numericValue : formData.card || 0)
+      + parseFloat(name === 'cheque' ? numericValue : formData.cheque || 0)
+      + parseFloat(name === 'bank' ? numericValue : formData.bank || 0)
       + parseFloat(name === 'cash' ? numericValue : formData.cash || 0);
 
     const payableAmount = parseFloat(formData.amount) || 0;
