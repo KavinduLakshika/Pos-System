@@ -2,6 +2,7 @@ const { Op } = require("sequelize");
 const Invoice = require("../../model/Invoice");
 const Product = require("../../model/Products");
 const User = require("../../model/User");
+const sequelize = require("sequelize");
 
 async function getReports(req, res) {
   try {
@@ -30,10 +31,11 @@ async function getReports(req, res) {
       // dailyRevenueLast30Days: await dailyRevenueLast30Days(),
       // dailySalesLast30Days: await dailySalesLast30Days(),
 
+      mostSellingItemsWeek: await mostSellingItemsWeek(),
+      mostSellingItemsMonth: await mostSellingItemsMonth(),
+
       monthlyRevenue: await monthlyRevenue(),
       monthlySales: await monthlySales(),
-
-      getInvoiceSummaryByDate: await getInvoiceSummaryByDate()
     };
 
     res.json({ message_type: "success", message: report });
@@ -389,43 +391,65 @@ async function monthlySales() {
   return result.reverse();
 }
 
-const getInvoiceSummaryByDate = async (date) => {
-  try {
-      const startOfDay = new Date(date);
-      const endOfDay = new Date(date);
-      endOfDay.setHours(23, 59, 59, 999);  // Set end of day
+// Most Selling Items for the Week
+async function mostSellingItemsWeek() {
+  const today = new Date();
+  const last7Days = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-      const summary = await Invoice.findAll({
-          where: {
-              invoiceDate: {
-                  [Op.between]: [startOfDay, endOfDay],  // Filter by date range
-              },
-          },
-          include: [
-              {
-                  model: Product,
-                  as: "product",
-                  attributes: ["productId", "productName"],
-              },
-              {
-                  model: User,
-                  as: "user",
-                  attributes: ["userId", "userName"],
-              },
-          ],
-          attributes: ["invoiceId", "invoiceQty", "paidAmount", "totalAmount"],
-      });
-      return summary;
-  } catch (error) {
-      console.error("Error fetching invoice summary:", error);
-  }
-};
+  const result = await Invoice.findAll({
+    attributes: [
+      [sequelize.col('productName'), 'productName'],
+      [sequelize.fn('SUM', sequelize.col('invoiceQty')), 'totalQuantity']
+    ],
+    include: [{
+      model: Product,
+      as: 'product',
+      attributes: []
+    }],
+    where: {
+      invoiceDate: {
+        [Op.gte]: last7Days,
+        [Op.lt]: today,
+      },
+    },
+    group: ['productId'],
+    order: [[sequelize.fn('SUM', sequelize.col('invoiceQty')), 'DESC']],
+    limit: 5,
+    raw: true
+  });
 
-// Example usage
-getInvoiceSummaryByDate("2024-10-08").then((summary) => {
-});
+  return result;
+}
 
+// Most Selling Items for the Month
+async function mostSellingItemsMonth() {
+  const today = new Date();
+  const last30Days = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
 
+  const result = await Invoice.findAll({
+    attributes: [
+      [sequelize.col('productName'), 'productName'],
+      [sequelize.fn('SUM', sequelize.col('invoiceQty')), 'totalQuantity']
+    ],
+    include: [{
+      model: Product,
+      as: 'product',
+      attributes: []
+    }],
+    where: {
+      invoiceDate: {
+        [Op.gte]: last30Days,
+        [Op.lt]: today,
+      },
+    },
+    group: ['productId'],
+    order: [[sequelize.fn('SUM', sequelize.col('invoiceQty')), 'DESC']],
+    limit: 5,
+    raw: true
+  });
+
+  return result;
+}
 module.exports = {
   getReports,
 };

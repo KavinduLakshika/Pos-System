@@ -18,12 +18,12 @@ const Dashboard = () => {
     monthTotalSales: [],
     monthlyRevenue: [],
     monthlySales: [],
+    mostSellingItemsMonth: []
   });
 
   const [stockSize, setStockSize] = useState([]);
   const [labels, setLabels] = useState([]);
 
-  // Fetch report data
   useEffect(() => {
     const fetchReports = async () => {
       try {
@@ -48,7 +48,6 @@ const Dashboard = () => {
     fetchReports();
   }, [base_url]);
 
-  // Fetch stock data
   useEffect(() => {
     const fetchStockData = async () => {
       try {
@@ -77,9 +76,8 @@ const Dashboard = () => {
     fetchStockData();
   }, [base_url]);
 
-  
-  const stockDistribution = [65, 59, 80, 81];
-  const productLabels = ['Expenses', 'Supplier Payments', 'Salaray Payment', 'Income'];
+  const topSellingLabels = (reportData.mostSellingItemsMonth || []).map(item => item.productName);
+  const topSellingValues = (reportData.mostSellingItemsMonth || []).map(item => parseInt(item.totalQuantity, 10));
 
   return (
     <div className="scrolling-container">
@@ -119,8 +117,9 @@ const Dashboard = () => {
           </div>
           <div className="col-lg-6 col-sm-12">
             <CardFour
-              dataValues={stockDistribution}
-              labels={productLabels}
+              dataValues={topSellingValues}
+              labels={topSellingLabels}
+              title="Top Selling Items This Month"
             />
           </div>
         </div>

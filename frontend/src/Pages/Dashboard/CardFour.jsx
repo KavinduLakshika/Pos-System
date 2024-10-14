@@ -1,50 +1,57 @@
 import React, { useEffect, useRef } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Use Bootstrap for layout
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const CardFour = ({ dataValues, labels }) => {
+const CardFour = ({ dataValues = [], labels = [] }) => {
+
     const chartRef = useRef(null);
+    const getRandomColor = () => {
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        return `rgba(${r}, ${g}, ${b}, 0.5)`;
+    };
+
+    const getRandomBorderColor = () => {
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        return `rgba(${r}, ${g}, ${b}, 1)`;
+    };
 
     useEffect(() => {
+        if (dataValues.length === 0 || labels.length === 0) {
+            return;
+        }
+
+        const backgroundColors = dataValues.map(() => getRandomColor());
+        const borderColors = dataValues.map(() => getRandomBorderColor());
+
         const data = {
-            labels: labels, // Array of labels
+            labels: labels,
             datasets: [
                 {
                     label: 'Stock Distribution',
-                    data: dataValues, // Array of values for the doughnut chart
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(255, 206, 86, 0.5)',
-                        'rgba(75, 192, 192, 0.5)',
-                        'rgba(153, 102, 255, 0.5)',
-                        'rgba(255, 159, 64, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
+                    data: dataValues,
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
                     borderWidth: 1,
                 },
             ],
         };
 
         const config = {
-            type: 'doughnut', // You can change this to 'pie' if you want a pie chart
+            type: 'doughnut',
             data: data,
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // Make the chart responsive
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'top', // Position of the legend
+                        position: 'top',
                     },
                     title: {
                         display: true,
-                        text: 'Stock Distribution',
+                        text: 'Most Selling Products',
                     },
                 },
             },
@@ -52,7 +59,6 @@ const CardFour = ({ dataValues, labels }) => {
 
         const myDoughnutChart = new window.Chart(chartRef.current, config);
 
-        // Cleanup chart when component unmounts
         return () => {
             myDoughnutChart.destroy();
         };
@@ -60,7 +66,7 @@ const CardFour = ({ dataValues, labels }) => {
 
     return (
         <div className="card bg-light mb-3 rounded-lg shadow-md relative me-3" style={{ height: '400px' }}>
-            <div className="card-header">Stock Distribution Doughnut Chart</div>
+            <div className="card-header">Top Selling Products In this Month</div>
             <div className="card-body">
                 <div style={{ position: 'relative', height: '300px', width: '100%' }}>
                     <canvas ref={chartRef}></canvas>
