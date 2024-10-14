@@ -272,9 +272,9 @@ const NewSales = ({ invoice }) => {
       [name]: numericValue,
     }));
 
-    const totalPaid = parseFloat(formData.card || 0)
-      + parseFloat(formData.cheque || 0)
-      + parseFloat(formData.bank || 0)
+    const totalPaid = parseFloat(name === 'card' ? numericValue :formData.card || 0)
+      + parseFloat(name === 'cheque' ? numericValue :formData.cheque || 0)
+      + parseFloat(name === 'bank' ? numericValue :formData.bank || 0)
       + parseFloat(name === 'cash' ? numericValue : formData.cash || 0);
 
     const payableAmount = parseFloat(formData.amount) || 0;
