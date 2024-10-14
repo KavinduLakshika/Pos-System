@@ -9,6 +9,8 @@ const createReturn = async (req, res) => {
         const {
             returnItemType,
             returnItemDate,
+            returnQty,
+            returnNote,
             productId,
             storeId,
             userId,
@@ -48,6 +50,8 @@ const createReturn = async (req, res) => {
         const newReturn = await Return.create({
             returnItemType,
             returnItemDate,
+            returnQty,
+            returnNote,
             products_productId: productId,
             store_storeId: storeId,
             user_userId: userId,
