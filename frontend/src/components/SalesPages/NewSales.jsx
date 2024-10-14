@@ -142,7 +142,6 @@ const NewSales = ({ invoice }) => {
 
     console.log("Added new row:", newRow);
     console.log("Updated table data:", [...tableData, newRow]);
-    
     // Calculate total amount and apply discount
     const updatedTableData = [...tableData, newRow];
     let totalAmount = 0;
@@ -158,7 +157,8 @@ const NewSales = ({ invoice }) => {
     });
 
     const payableAmount = totalAmount - totalDiscount;
-  ]
+
+    // Update state for totalAmount and payableAmount
     setFormData((prevData) => ({
       ...prevData,
       totalAmount: totalAmount.toFixed(2),
@@ -166,11 +166,6 @@ const NewSales = ({ invoice }) => {
       amount: payableAmount.toFixed(2),
     }));
 
-    console.log("Added new row:", newRow);
-    console.log("Updated table data:", [...tableData, newRow]);
-    console.log("Total Amount:", totalAmount);
-    console.log("Discount:", totalDiscount);
-    console.log("Payable Amount:", payableAmount);
   };
 
   const handleSubmit = async (e) => {
