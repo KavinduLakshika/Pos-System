@@ -7,7 +7,7 @@ import Table from '../Table/Table'
 import config from '../../config';
 
 const NewSales = ({ invoice }) => {
-  
+
   const [tableData, setTableData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [customerCreated, setCustomerCreated] = useState(false);
@@ -54,8 +54,8 @@ const NewSales = ({ invoice }) => {
         console.error('Error fetching customer data:', error);
       }
     }
-    
-  
+
+
     if (name === 'productNo' || name === 'productName') {
       try {
         const response = await fetch(`${config.BASE_URL}/product/codeOrName/${value}`);
@@ -63,13 +63,13 @@ const NewSales = ({ invoice }) => {
           const productData = await response.json();
           setFormData(prevData => ({
             ...prevData,
-            productNo: productData.productCode ,
+            productNo: productData.productCode,
             productName: productData.productName || prevData.productName,
             productPrice: productData.productSellingPrice,
             qty: 1,
             totalPrice: productData.productSellingPrice,
             productNote: productData.productWarranty + ' ' + productData.productDescription,
-            emi:productData.productEmi
+            emi: productData.productEmi
           }));
         } else {
           setFormData(prevData => ({
@@ -86,13 +86,13 @@ const NewSales = ({ invoice }) => {
       }
     }
   };
-  
+
   useEffect(() => {
     const discountedPrice = (formData.productPrice || 0) * (1 - (formData.discount || 0) / 100);
     const newTotalPrice = discountedPrice * (formData.qty || 1);
     setFormData(prevData => ({ ...prevData, totalPrice: newTotalPrice }));
   }, [formData.productPrice, formData.discount, formData.qty]);
-  
+
 
   const handleCustomerCreated = (customerData) => {
     setFormData(prevData => ({
@@ -107,12 +107,12 @@ const NewSales = ({ invoice }) => {
 
   const handleAddProduct = (e) => {
     e.preventDefault();
-    
+
     if (!formData.productNo || !formData.productName || !formData.productPrice || !formData.qty) {
       alert("Please fill in all the product details.");
       return;
     }
-     
+
     const newRow = [
       formData.cusCode,
       formData.cusName,
@@ -124,10 +124,10 @@ const NewSales = ({ invoice }) => {
       formData.discount,
       formData.totalPrice
     ];
-  
+
     setTableData(prevData => [...prevData, newRow]);
-  
-     
+
+
     setFormData(prevData => ({
       ...prevData,
       productNo: '',
@@ -142,6 +142,35 @@ const NewSales = ({ invoice }) => {
 
     console.log("Added new row:", newRow);
     console.log("Updated table data:", [...tableData, newRow]);
+    // Calculate total amount and apply discount
+    const updatedTableData = [...tableData, newRow];
+    let totalAmount = 0;
+    let totalDiscount = 0;
+
+    updatedTableData.forEach((row) => {
+      const price = parseFloat(row[5]) || 0; // Product price (row[5] is the product price)
+      const qty = parseFloat(row[6]) || 0;   // Quantity (row[6] is the quantity)
+      const discount = parseFloat(row[7]) || 0; // Discount (row[7] is the discount)
+
+      totalAmount += price * qty; // Accumulate total price
+      totalDiscount += discount;  // Accumulate discount
+    });
+
+    const payableAmount = totalAmount - totalDiscount;
+
+    // Update state for totalAmount and payableAmount
+    setFormData((prevData) => ({
+      ...prevData,
+      totalAmount: totalAmount.toFixed(2),
+      discountPrice: totalDiscount.toFixed(2),
+      amount: payableAmount.toFixed(2),
+    }));
+
+    console.log("Added new row:", newRow);
+    console.log("Updated table data:", [...tableData, newRow]);
+    console.log("Total Amount:", totalAmount);
+    console.log("Discount:", totalDiscount);
+    console.log("Payable Amount:", payableAmount);
   };
 
   const handleSubmit = async (e) => {
@@ -198,7 +227,7 @@ const NewSales = ({ invoice }) => {
       }
     } catch (error) {
       console.error('Error:', error);
-      
+
     }
   };
 
@@ -234,7 +263,7 @@ const NewSales = ({ invoice }) => {
   }
 
 
-  
+
   return (
     <div>
       <div className="scrolling-container">
@@ -378,12 +407,13 @@ const NewSales = ({ invoice }) => {
               <div className="amount-box">
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Total Amount</label>
-                  <input type="number" className="form-control" onWheel={(e) => e.target.blur()} name="totalAmount" id="readOnly" readOnly />
+                  <input type="number" className="form-control" value={formData.totalAmount} id='readOnly' readOnly />
                 </div>
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Discount</label>
-                  <input type="number" className="form-control" onWheel={(e) => e.target.blur()} name="discountPrice" id="readOnly" readOnly />
+                  <input type="number" className="form-control" value={formData.discountPrice} id='readOnly' readOnly />
                 </div>
+
                 <div className="amount-group">
                   <label htmlFor="" id='label'>Invoice Note</label>
                   <textarea name="invoiceNote" className="form-control" id="invoiceNote" rows={3} />
@@ -395,7 +425,7 @@ const NewSales = ({ invoice }) => {
               <div className="payment-details-box">
                 <div className="payment-details">
                   <label htmlFor="" id='label'>Payable Amount</label>
-                  <input type="number" className="form-control" id='readOnly' name='amount' readOnly />
+                  <input type="number" className="form-control" value={formData.amount} id='readOnly' readOnly />
                 </div>
                 <div className="payment-details">
                   <div className="payment-details-amount">
