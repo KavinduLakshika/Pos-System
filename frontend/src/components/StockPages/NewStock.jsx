@@ -37,6 +37,7 @@ const NewStock = () => {
     totalPrice: '',
     vat: '',
     totalPriceVAT: '',
+    description: '',
   });
 
   const initialFormState = {
@@ -56,6 +57,7 @@ const NewStock = () => {
     totalPrice: '',
     vat: '',
     totalPriceVAT: '',
+    description: '',
   };
 
   useEffect(() => {
@@ -205,8 +207,8 @@ const NewStock = () => {
     formDataToSend.append('cashAmount', formData.cashAmount);
     formDataToSend.append('chequeAmount', formData.chequeAmount);
 
-    if (formData.stockDescription) {
-      formDataToSend.append('stockDescription', formData.stockDescription);
+    if (formData.description) {
+      formDataToSend.append('stockDescription', formData.description);
     }
 
     if (image) {
@@ -291,15 +293,8 @@ const NewStock = () => {
           <div className="row">
             {/* Left Column */}
             <div className="col-md-6">
-
               <label htmlFor="stockName" className="form-label">Stock Name / Stock Number</label>
               <input type="text" name="stockName" value={formData.stockName} className="form-control" onChange={handleChange} />
-
-              {/* <div className="col-md-6 mb-3">
-                  <label htmlFor="refNo" className="form-label">Reference Number (ID)</label>
-                  <input type="text" name="refNo" value={formData.refNo} className="form-control" onChange={handleChange} />
-                </div> */}
-
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <label htmlFor="supplier" className="form-label">Supplier Name</label>
@@ -407,6 +402,10 @@ const NewStock = () => {
                   <label htmlFor="totalPriceVAT" className="form-label">Total Price + VAT</label>
                   <input type="text" name="totalPriceVAT" value={formData.totalPriceVAT} className="form-control" readOnly />
                 </div>
+              </div>
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Description</label>
+                <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
               </div>
 
               <div className="d-flex justify-content-end mt-4">
