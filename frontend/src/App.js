@@ -34,10 +34,10 @@ function Layout() {
 
   return (
     <div>
-      {!isLoginPage && <Header />}
+      <div className='Header-show'>{!isLoginPage && <Header />}</div>
       <div className="d-flex flex-grow-1">
         {!isLoginPage && <SideBar />}
-        <div className="d-flex flex-column flex-grow-1" style={{ margin: '20px' }}>
+        <div className="d-flex flex-column flex-grow-1" style={{ margin: '0px' }}>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

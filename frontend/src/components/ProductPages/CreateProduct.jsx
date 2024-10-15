@@ -197,24 +197,21 @@ const CreateProduct = () => {
 
             <div className="row">
               <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Product Code</label>
-                <input onChange={handleChange} type="text" name='productCode' id='' value={formData.productCode} className='form-control' />
-              </div>
-
-
-              <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Buying price (Per Unit)</label>
-                <input onChange={handleChange} type="number" name='buyingPrice' id='' onWheel={(e) => e.target.blur()} value={formData.buyingPrice} className='form-control' />
-              </div>
-
-            </div>
-
-            <div className="row">
-              <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Product Name</label>
                 <input onChange={handleChange} type="text" name='productName' id='' value={formData.productName} className='form-control' />
               </div>
 
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Product Code</label>
+                <input onChange={handleChange} type="text" name='productCode' id='' value={formData.productCode} className='form-control' />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="product-details col-md-4 mb-2">
+                <label htmlFor="" className='mb-1'>Buying price (Per Unit)</label>
+                <input onChange={handleChange} type="number" name='buyingPrice' id='' onWheel={(e) => e.target.blur()} value={formData.buyingPrice} className='form-control' />
+              </div>
 
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Selling Price (Per Unit)</label>
@@ -223,10 +220,6 @@ const CreateProduct = () => {
             </div>
 
             <div className="row">
-              {/* <div className="product-details col-md-4 mb-2">
-                <label htmlFor="" className='mb-1'>Quantity</label>
-                <input onChange={handleChange} type="number" name='qty' onWheel={(e) => e.target.blur()} id='' value={formData.qty} className='form-control' />
-              </div> */}
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Unit (G/KG/K24/K30)</label>
                 <input onChange={handleChange} type="text" name='unit' id='' onWheel={(e) => e.target.blur()} value={formData.unit} className='form-control' />
@@ -235,7 +228,6 @@ const CreateProduct = () => {
                 <label htmlFor="" className='mb-1'>Description</label>
                 <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
               </div>
-
             </div>
 
             <div className="row">
@@ -281,7 +273,6 @@ const CreateProduct = () => {
                   <option value="36 Months">36 Months</option>
                 </select>
               </div>
-
             </div>
 
             <div className="sales-add btn d-grid d-md-flex me-md-2 justify-content-end px-5">
@@ -292,7 +283,6 @@ const CreateProduct = () => {
 
           <div className="showProduct col-md-4">
             <h4>Products With Category</h4>
-
             {products.length > 0 ? (
               products.map(product => (<div className="mb-1">
                 <div key={product.productId} className="showProduct-group">

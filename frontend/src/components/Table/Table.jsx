@@ -31,12 +31,12 @@ const Table = ({
     const [itemsPerPage, setItemsPerPage] = useState(25);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    
+
 
     useEffect(() => {
         setTableData(Array.isArray(data) ? data : []);
     }, [data]);
-    
+
 
     useEffect(() => {
         setTableColumns(columns);
@@ -45,8 +45,8 @@ const Table = ({
     const filteredData = tableData.filter((tableDatum) => {
         const query = searchQuery.toLowerCase();
         const isWithinDateRange = (!startDate && !endDate) || (new Date(tableDatum[1]) >= new Date(startDate) && new Date(tableDatum[1]) <= new Date(endDate));
-        
-        
+
+
         return isWithinDateRange && Array.isArray(tableDatum) && tableDatum.some((item) => {
             return item != null && item.toString().toLowerCase().includes(query);
         });
@@ -59,28 +59,28 @@ const Table = ({
             currentPage * itemsPerPage
         );
 
-        const generatePDF = () => {
-            const doc = new jsPDF();
-            doc.text(title, 20, 20);
-        
-            const headers = columns.map(column => ({ content: column, styles: { halign: 'center' } }));
-            const tableData = filteredData.map(row => row.map(cell => ({ content: cell, styles: { halign: 'center' } })));
-        
-            doc.autoTable({
-                head: [headers],
-                body: tableData,
-                startY: 30,
-                theme: 'striped',
-                margin: { top: 10, right: 10, bottom: 10, left: 10 },
-                styles: { fontSize: 5, halign: 'center', valign: 'middle' },
-                headStyles: { fillColor: [255, 216, 126], textColor: 0, fontSize: 5 },
-                bodyStyles: { textColor: 50 },
-                alternateRowStyles: { fillColor: [250, 250, 250] }
-            });
-        
-            doc.save(invoice);
-        };
-        
+    const generatePDF = () => {
+        const doc = new jsPDF();
+        doc.text(title, 20, 20);
+
+        const headers = columns.map(column => ({ content: column, styles: { halign: 'center' } }));
+        const tableData = filteredData.map(row => row.map(cell => ({ content: cell, styles: { halign: 'center' } })));
+
+        doc.autoTable({
+            head: [headers],
+            body: tableData,
+            startY: 30,
+            theme: 'striped',
+            margin: { top: 10, right: 10, bottom: 10, left: 10 },
+            styles: { fontSize: 5, halign: 'center', valign: 'middle' },
+            headStyles: { fillColor: [255, 216, 126], textColor: 0, fontSize: 5 },
+            bodyStyles: { textColor: 50 },
+            alternateRowStyles: { fillColor: [250, 250, 250] }
+        });
+
+        doc.save(invoice);
+    };
+
     const resetFilters = () => {
         setStartDate(null);
         setEndDate(null);
@@ -165,7 +165,7 @@ const Table = ({
                         )}
                     </div>
                 </div>
-                
+
                 {showButton && (
                     <div className=" d-flex justify-content-end">
                         <button className="btn btn-info text-white" onClick={onAdd}>
@@ -188,10 +188,10 @@ const Table = ({
                                 </tr>
                             </thead>
                             <tbody>
-                            {currentItems.reverse().map((datum, rowIndex) => (
+                                {currentItems.reverse().map((datum, rowIndex) => (
                                     <tr key={rowIndex}>
                                         {datum.map((item, colIndex) => (
-                                            <td key={colIndex}>{item}</td>
+                                            <td key={colIndex} style={{ textAlign: 'center' }} >{item}</td>
                                         ))}
                                         {showActions && (
                                             <td>

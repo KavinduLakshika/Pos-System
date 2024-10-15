@@ -5,6 +5,7 @@ import CardTwo from './CardTwo';
 import CardThree from './CardThree';
 import CardFour from './CardFour';
 import config from '../../config';
+import Header from '../../components/SideBar/Header'
 
 const Dashboard = () => {
   const base_url = config.BASE_URL;
@@ -80,47 +81,50 @@ const Dashboard = () => {
   const topSellingValues = (reportData.mostSellingItemsMonth || []).map(item => parseInt(item.totalQuantity, 10));
 
   return (
-    <div className="scrolling-container">
-      <div className="container-fluid my-4">
-        <h1 className="h2 mb-4">Dashboard</h1>
+    <div>
+      <div className='show-Header'><Header /></div>
+      <div className="scrolling-container">
+        <div className="container-fluid my-4">
+          <h1 className="h2 mb-4">Dashboard</h1>
 
-        <div className="row">
-          <div className="col-lg-3 col-md-12 mb-4">
-            <div className="h-100">
-              <CardOne
-                TodayTotal={reportData.revenueToday}
-                YesterdayTotal={reportData.revenueYesterday}
-                ThisMonthTotal={reportData.revenueMonth}
-                LastMonthTotal={reportData.revenueLastMonth}
-                todayTotalSales={reportData.salesToday}
-                monthTotalSales={reportData.salesMonth}
-              />
+          <div className="row">
+            <div className="col-lg-3 col-md-12 mb-4">
+              <div className="h-100">
+                <CardOne
+                  TodayTotal={reportData.revenueToday}
+                  YesterdayTotal={reportData.revenueYesterday}
+                  ThisMonthTotal={reportData.revenueMonth}
+                  LastMonthTotal={reportData.revenueLastMonth}
+                  todayTotalSales={reportData.salesToday}
+                  monthTotalSales={reportData.salesMonth}
+                />
+              </div>
+            </div>
+
+            <div className="col-lg-9 col-md-12 mb-4">
+              <div className="h-100">
+                <CardTwo
+                  monthlyRevenue={reportData.monthlyRevenue}
+                  monthlySales={reportData.monthlySales}
+                />
+              </div>
             </div>
           </div>
 
-          <div className="col-lg-9 col-md-12 mb-4">
-            <div className="h-100">
-              <CardTwo
-                monthlyRevenue={reportData.monthlyRevenue}
-                monthlySales={reportData.monthlySales}
+          <div className='row'>
+            <div className="col-lg-6 col-sm-12">
+              <CardThree
+                stockSize={stockSize}
+                labels={labels}
               />
             </div>
-          </div>
-        </div>
-
-        <div className='row'>
-          <div className="col-lg-6 col-sm-12">
-            <CardThree
-              stockSize={stockSize}
-              labels={labels}
-            />
-          </div>
-          <div className="col-lg-6 col-sm-12">
-            <CardFour
-              dataValues={topSellingValues}
-              labels={topSellingLabels}
-              title="Top Selling Items This Month"
-            />
+            <div className="col-lg-6 col-sm-12">
+              <CardFour
+                dataValues={topSellingValues}
+                labels={topSellingLabels}
+                title="Top Selling Items This Month"
+              />
+            </div>
           </div>
         </div>
       </div>

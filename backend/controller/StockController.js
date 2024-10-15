@@ -61,7 +61,14 @@ const createStock = async (req, res) => {
                 return res.status(400).json({ error: "All required fields must be filled." });
             }
 
-            // Check existence of related entities
+            // Example: Validate mfd and exp only for specific categories (if needed)
+            if (categoryId === 'specific-category-id') {
+                if (!mfd || !exp) {
+                    return res.status(400).json({ error: "MFD and EXP are required for this category." });
+                }
+            }
+
+            // Rest of the validation and creation logic remains the same
             const supplier = await Supplier.findByPk(supplierId);
             if (!supplier) {
                 return res.status(400).json({ error: 'Invalid supplier ID' });
@@ -75,12 +82,6 @@ const createStock = async (req, res) => {
             const store = await Store.findByPk(storeId);
             if (!store) {
                 return res.status(400).json({ error: 'Invalid store ID' });
-            }
-
-            // Check if stock with the same name exists
-            const existingStock = await Stock.findOne({ where: { stockName } });
-            if (existingStock) {
-                return res.status(400).json({ error: "A stock with this name already exists." });
             }
 
             // Handle image upload
@@ -102,8 +103,8 @@ const createStock = async (req, res) => {
                 vat,
                 total,
                 stockQty,
-                mfd,
-                exp,
+                mfd: mfd || null,
+                exp: exp || null,
                 cashAmount: cashAmountValue,
                 chequeAmount: chequeAmountValue,
                 stockDescription,
@@ -115,7 +116,6 @@ const createStock = async (req, res) => {
                 category_categoryId: categoryId,
             });
 
-            // Fetch and return detailed stock info
             const stockDetails = await Stock.findByPk(newStock.stockId, {
                 include: [
                     { model: Supplier, as: 'supplier' },
@@ -131,6 +131,7 @@ const createStock = async (req, res) => {
         }
     });
 };
+
 
 
 
@@ -251,7 +252,7 @@ const updateStock = async (req, res) => {
                     : null;
 
                 if (oldImagePath && fs.existsSync(oldImagePath)) {
-                    fs.unlinkSync(oldImagePath); // Remove old image from server
+                    fs.unlinkSync(oldImagePath);
                 }
 
                 // Update the stock image with the new one
