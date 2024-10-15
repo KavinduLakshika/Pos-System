@@ -149,23 +149,23 @@ const NewSales = ({ invoice }) => {
 
     console.log("Added new row:", newRow);
     console.log("Updated table data:", [...tableData, newRow]);
-    // Calculate total amount and apply discount
+
     const updatedTableData = [...tableData, newRow];
     let totalAmount = 0;
     let totalDiscount = 0;
+    let payableAmount = 0;
 
     updatedTableData.forEach((row) => {
       const price = parseFloat(row[5]) || 0;
       const qty = parseFloat(row[6]) || 0;
       const discount = parseFloat(row[7]) || 0;
+      const totalPrice = parseFloat(row[8]) || 0;
 
       totalAmount += price * qty;
       totalDiscount += discount;
+      payableAmount += totalPrice;
     });
 
-    const payableAmount = totalAmount - totalDiscount;
-
-    // Update state for totalAmount and payableAmount
     setFormData((prevData) => ({
       ...prevData,
       totalAmount: totalAmount.toFixed(2),
@@ -266,34 +266,29 @@ const NewSales = ({ invoice }) => {
 
   const handlePaymentChange = (e) => {
     const { name, value } = e.target;
-  
-    // Parse the input as an integer (default to 0 if empty or invalid)
-    const numericValue = parseInt(value) || 0;
-  
-    // Update form data for payment inputs
+    const numericValue = parseFloat(value) || 0;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: numericValue, // Ensure integer values for each payment type
+      [name]: numericValue,
     }));
-  
-    const totalPaid = formData.card + formData.cheque+ formData.bank + formData.cash;
-  
-    // Ensure Payable Amount is a valid integer
-    const payableAmount = parseInt(formData.amount) || 0;
-  
-    // Calculate due amount
+
+    const totalPaid = parseFloat(name === 'card' ? numericValue : formData.card || 0)
+      + parseFloat(name === 'cheque' ? numericValue : formData.cheque || 0)
+      + parseFloat(name === 'bank' ? numericValue : formData.bank || 0)
+      + parseFloat(name === 'cash' ? numericValue : formData.cash || 0);
+
+    const payableAmount = parseFloat(formData.amount) || 0;
     const dueAmount = payableAmount - totalPaid;
-  
-    // Update the state with the computed paid and due amounts
+
     setFormData((prevData) => ({
       ...prevData,
-      paidAmount: totalPaid,
-      dueAmount: dueAmount,
+      paidAmount: totalPaid.toFixed(2),
+      dueAmount: dueAmount.toFixed(2),
     }));
   };
-  
-  
-  
+
+
   return (
     <div>
       <div className="scrolling-container">

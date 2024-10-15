@@ -148,7 +148,7 @@ const NewStock = () => {
         setFormData(prevData => ({
           ...prevData,
           product: product.productId,
-          category: product.categoryName,
+          category: product.category_categoryId,
           price: product.productBuyingPrice,
         }));
       } else {

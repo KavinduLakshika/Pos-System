@@ -34,6 +34,7 @@
   height: calc(100vh - 60px);
   overflow-y:auto;
   scrollbar-width: none;
+  padding: 10px;
 }
 
 .scroll-table{
