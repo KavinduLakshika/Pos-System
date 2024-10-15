@@ -121,7 +121,7 @@ const CreateProductReturn = () => {
                     product: product.productId,
                     productNo: product.productCode,
                     productName: product.productName,
-                    productNote: product.productDescription,
+                    productNote: product.productDescription + '  ' + product.productWarranty,
                 }));
             } else {
                 console.error('Product not found');
@@ -245,8 +245,9 @@ const CreateProductReturn = () => {
                                 <label htmlFor="returnType">Return Type</label>
                                 <select name="returnType" className="form-control" value={formData.returnType} onChange={handleChange}>
                                     <option value="">Select Type</option>
-                                    <option value="Replace">Replace</option>
-                                    <option value="Broken">Broken</option>
+                                    <option value="Damage">Damaged</option>
+                                    <option value="WarrantyClaim">Warranty Claim</option>
+                                    <option value="Exchange">Exchange</option>
                                 </select>
                             </div>
                             <div className="Stock-details">
@@ -299,7 +300,7 @@ const CreateProductReturn = () => {
                                     <input type="number" className="form-control" name="qty" value={formData.qty} onChange={handleChange} onWheel={(e) => e.target.blur()} />
                                 </div>
                                 <div className="Stock-details col-md-4 mb-2">
-                                    <label htmlFor="productNote">Note</label>
+                                    <label htmlFor="productNote">Note / Warranty</label>
                                     <textarea className="form-control" name="productNote" value={formData.productNote} onChange={handleChange} rows={2} />
                                 </div>
                                 <div className="col-md-4 mt-5">
