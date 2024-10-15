@@ -12,6 +12,10 @@ const Invoice = sequelize.define(
             primaryKey: true,
             autoIncrement: true,
         },
+        invoiceNo: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         invoiceDate: {
             type: DataTypes.DATE,
             allowNull: false,

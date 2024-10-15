@@ -1,32 +1,116 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import Form from '../../Models/Form/Form';
 import { PlusSquareIcon } from 'lucide-react';
-import './Stock.css'
-import Table from '../Table/Table'
+import './Stock.css';
+import Table from '../Table/Table';
 import config from '../../config';
 
 const CreateProductReturn = () => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [data,] = useState([]);
-    const Columns = ["id", 'product', 'qty', 'price'];
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
     const [productSearch, setProductSearch] = useState('');
     const [customerSearch, setCustomerSearch] = useState('');
-    const [formData, setFormData] = useState({
-        cusName: '',
+    const [stores, setStores] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [data, setData] = useState([]);
+    const Columns = ["id", 'product', 'Type', 'qty', 'price'];
+
+    const initialFormData = {
+        cusNic: '',
         invoiceNo: '',
         returnType: '',
         user: '',
         store: '',
         returnDate: '',
         note: '',
+        product: '',
         productNo: '',
         productName: '',
         qty: '',
         productNote: '',
-    });
+    };
 
+    const [formData, setFormData] = useState(initialFormData);
+    useEffect(() => {
+        fetchStores();
+        fetchUsers();
+        fetchReturn();
+    }, []);
 
+    const fetchReturn = async () => {
+        try {
+            const response = await fetch(`${config.BASE_URL}/returns`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch return list');
+            }
+            const returnList = await response.json();
+
+            const formattedData = returnList.map(returns => {
+                return [
+                    returns.returnItemId,
+                    returns.products?.productName,
+                    returns.returnItemType,
+                    returns.returnQty,
+                    returns.products?.productSellingPrice,
+                ];
+            });
+
+            setData(formattedData);
+            setIsLoading(false);
+        } catch (err) {
+            setError(err.message);
+            setIsLoading(false);
+        }
+    };
+
+    // Handle form data changes
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(`${config.BASE_URL}/return`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    returnItemType: formData.returnType,
+                    returnItemDate: formData.returnDate,
+                    returnQty: formData.qty,
+                    returnNote: formData.note,
+                    productId: formData.product,
+                    storeId: formData.store,
+                    userId: formData.user,
+                    invoiceId: formData.invoiceNo,
+                    cusId: formData.customer,
+                }),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                setSuccessMessage('Return created successfully:', result);
+                setFormData(initialFormData);
+            } else {
+                const errorData = await response.json();
+                setError(`Failed to create return: ${errorData.message || response.statusText}`);
+            }
+        } catch (error) {
+            setError(`Error during return creation: ${error.message}`);
+        }
+    };
+
+    // Fetch product by name
     const fetchProductByName = async (name) => {
         try {
             const response = await fetch(`${config.BASE_URL}/product/productName/${name}`);
@@ -47,15 +131,16 @@ const CreateProductReturn = () => {
         }
     };
 
-    const fetchCustomerByName = async (name) => {
+    // Fetch customer by NIC
+    const fetchCustomerByNic = async (nic) => {
         try {
-            const response = await fetch(`${config.BASE_URL}/customer/cusName/${name}`);
+            const response = await fetch(`${config.BASE_URL}/customer/cusNIC/${nic}`);
             if (response.ok) {
                 const customer = await response.json();
                 setFormData(prevData => ({
                     ...prevData,
                     customer: customer.cusId,
-                    customerName: customer.cusName,
+                    cusNic: customer.cusNIC,
                 }));
             } else {
                 console.error('Customer not found');
@@ -65,20 +150,53 @@ const CreateProductReturn = () => {
         }
     };
 
+    const fetchStores = async () => {
+        try {
+            const response = await fetch(`${config.BASE_URL}/stores`);
+            if (response.ok) {
+                const data = await response.json();
+                setStores(data);
+            } else {
+                console.error('Failed to fetch stores');
+            }
+        } catch (error) {
+            console.error('Error fetching stores:', error);
+        }
+    };
+
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch(`${config.BASE_URL}/users`);
+            if (response.ok) {
+                const data = await response.json();
+                setUsers(data);
+            } else {
+                console.error('Failed to fetch users');
+            }
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    };
+
+    // Handle product search
     const handleProductSearch = (e) => {
-        setProductSearch(e.target.value);
-        if (e.target.value.length > 2) {
-            fetchProductByName(e.target.value);
+        const { value } = e.target;
+        setProductSearch(value);
+        if (value.length > 2) {
+            fetchProductByName(value);
         }
     };
 
+    // Handle customer search
     const handleCustomerSearch = (e) => {
-        setCustomerSearch(e.target.value);
-        if (e.target.value.length > 2) {
-            fetchCustomerByName(e.target.value);
+        const { value } = e.target;
+        setCustomerSearch(value);
+        if (value.length > 2) {
+            fetchCustomerByNic(value);
         }
     };
 
+    // Open and close modal
     const openModal = () => {
         setModalIsOpen(true);
     };
@@ -87,21 +205,30 @@ const CreateProductReturn = () => {
         setModalIsOpen(false);
     };
 
-
-
     return (
         <div>
             <div className="scrolling-container">
                 <h4>Create Product Return</h4>
-                <form action="">
+                {error && (
+                    <div className="alert alert-danger" role="alert">
+                        {error}
+                    </div>
+                )}
+
+                {successMessage && (
+                    <div className="alert alert-success" role="alert">
+                        {successMessage}
+                    </div>
+                )}
+                <form onSubmit={handleSubmit}>
                     <div className="row">
                         <div className="customer col-md-4">
-                            <div className='row'>
+                            <div className="row">
                                 <div className="Stock-details col-md-10 mb-2">
-                                    <label htmlFor="">Customer Name</label>
-                                    <input type="text" className="form-control" name="cusName" id="cusName" value={customerSearch} onChange={handleCustomerSearch} placeholder="Enter Name" />
+                                    <label htmlFor="cusNic">Customer NIC</label>
+                                    <input type="text" className="form-control" name="cusNic" value={customerSearch} onChange={handleCustomerSearch} placeholder="Enter NIC" />
                                 </div>
-                                <button className='addCusBtn col-md-2 bg- mt-3' type="button" onClick={openModal}><PlusSquareIcon size={30} /></button>
+                                <button className="addCusBtn col-md-2 mt-3" type="button" onClick={openModal}><PlusSquareIcon size={30} /></button>
                             </div>
                             <Modal
                                 isOpen={modalIsOpen}
@@ -111,88 +238,102 @@ const CreateProductReturn = () => {
                                 <Form closeModal={closeModal} />
                             </Modal>
                             <div className="Stock-details">
-                                <label htmlFor="">Invoice Number</label>
-                                <input type="number" className="form-control" onWheel={(e) => e.target.blur()} name="invoiceNo" value={formData.invoiceNo} id="" placeholder="" />
+                                <label htmlFor="invoiceNo">Invoice Number/ ID</label>
+                                <input type="number" className="form-control" name="invoiceNo" value={formData.invoiceNo} onChange={handleChange} onWheel={(e) => e.target.blur()} />
                             </div>
-                            <div className="Stock-details  mb-2">
-                                <label htmlFor="">Return Type</label>
-                                <select name="returnType" id="" value={formData.returnType} className='form-control'>
-                                    <option value="">select Type</option>
+                            <div className="Stock-details mb-2">
+                                <label htmlFor="returnType">Return Type</label>
+                                <select name="returnType" className="form-control" value={formData.returnType} onChange={handleChange}>
+                                    <option value="">Select Type</option>
                                     <option value="Replace">Replace</option>
                                     <option value="Broken">Broken</option>
                                 </select>
                             </div>
                             <div className="Stock-details">
-                                <label htmlFor="">Person</label>
-                                <input type="number" className="form-control" onWheel={(e) => e.target.blur()} name="user" value={formData.user} id="" placeholder="" />
-                            </div>
-                            <div className="Stock-details  mb-2">
-                                <label htmlFor="">Store</label>
-                                <select name="store" id="" value={formData.store} className='form-control'>
-                                    <option value="">select store</option>
-                                    <option value="Main">Main</option>
-                                    <option value="Sub">Sub</option>
+                                <label htmlFor="user">Person</label>
+                                <select name="user" className="form-control" value={formData.user} onChange={handleChange}>
+                                    <option value="">Select Store</option>
+                                    {users.map((user) => (
+                                        <option key={user.userId} value={user.userId}>
+                                            {user.userName}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
-                            <div className="Stock-details  mb-2">
-                                <label htmlFor="">Return Date</label>
-                                <input type="Date" className="form-control" value={formData.returnDate} name="returnDate" id="" />
+                            <div className="Stock-details mb-2">
+                                <label htmlFor="store">Store</label>
+                                <select name="store" className="form-control" value={formData.store} onChange={handleChange}>
+                                    <option value="">Select Store</option>
+                                    {stores.map((store) => (
+                                        <option key={store.storeId} value={store.storeId}>
+                                            {store.storeName}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
-                            <div className="Stock-details  mb-2">
-                                <label htmlFor="">Note</label>
-                                <textarea className="form-control" name="note" id="" value={formData.note} placeholder="Add your note here" rows={3} />
+                            <div className="Stock-details mb-2">
+                                <label htmlFor="returnDate">Return Date</label>
+                                <input type="date" className="form-control" name="returnDate" value={formData.returnDate} onChange={handleChange} />
+                            </div>
+                            <div className="Stock-details mb-2">
+                                <label htmlFor="note">Note</label>
+                                <textarea className="form-control" name="note" value={formData.note} onChange={handleChange} placeholder="Add your note here" rows={3} />
                             </div>
                         </div>
 
                         <div className="product col-md-8">
                             <div className="row">
-                                <div className="Stock-details col-md-4  mb-2">
-                                    <label htmlFor="">Product Name</label>
+                                <div className="Stock-details col-md-4 mb-2">
+                                    <label htmlFor="productName">Product Name</label>
                                     <input type="text" className="form-control" name="productName" value={productSearch} onChange={handleProductSearch} />
                                 </div>
                                 <div className="Stock-details col-md-4">
-                                    <label htmlFor="">Product Number</label>
-                                    <input type="text" className="form-control" value={formData.productNo} name="productNo" id="" />
+                                    <label htmlFor="productNo">Product Number</label>
+                                    <input type="text" className="form-control" name="productNo" value={formData.productNo} onChange={handleChange} />
                                 </div>
                             </div>
 
                             <div className="row">
-                                <div className="Stock-details col-md-4  mb-2">
-                                    <label htmlFor="">Quantity</label>
-                                    <input type="number" className="form-control" onWheel={(e) => e.target.blur()} name="qty" value={formData.qty} id="" />
+                                <div className="Stock-details col-md-4 mb-2">
+                                    <label htmlFor="qty">Quantity</label>
+                                    <input type="number" className="form-control" name="qty" value={formData.qty} onChange={handleChange} onWheel={(e) => e.target.blur()} />
                                 </div>
-                                <div className="Stock-details col-md-4  mb-2">
-                                    <label htmlFor="">Note</label>
-                                    <textarea className="form-control" name="productNote" value={formData.productNote} id="" rows={2} />
+                                <div className="Stock-details col-md-4 mb-2">
+                                    <label htmlFor="productNote">Note</label>
+                                    <textarea className="form-control" name="productNote" value={formData.productNote} onChange={handleChange} rows={2} />
                                 </div>
                                 <div className="col-md-4 mt-5">
-                                    <button className="btn btn-primary btn-md">Add product</button>
+                                    <button className="btn btn-primary btn-md">Add Product</button>
                                 </div>
                             </div>
 
                             <div className="product-table">
-                                <Table
-                                    data={data}
-                                    columns={Columns}
-                                    showSearch={false}
-                                    showButton={false}
-                                    showActions={false}
-                                    showRow={false}
-                                    showDate={false}
-                                    showPDF={false}
-                                />
+                                {isLoading ? (
+                                    <p>Loading...</p>
+                                ) : (
+                                    <Table
+                                        data={data}
+                                        columns={Columns}
+                                        showSearch={false}
+                                        showButton={false}
+                                        showActions={false}
+                                        showRow={false}
+                                        showDate={false}
+                                        showPDF={false}
+                                    />
+                                )}
                             </div>
 
                         </div>
                     </div>
                     <div className="d-grid d-md-flex me-md-2 justify-content-end px-5">
-                        <button className="btn btn-danger btn-md mb-2">Clear</button>
-                        <button className="btn btn-primary btn-md mb-2">Proceed</button>
+                        <button className="btn btn-danger btn-md mb-2" type="button" onClick={() => setFormData(initialFormData)}>Clear</button>
+                        <button className="btn btn-primary btn-md mb-2" type="submit">Proceed</button>
                     </div>
                 </form>
             </div>
-        </div >
-    )
-}
+        </div>
+    );
+};
 
-export default CreateProductReturn
+export default CreateProductReturn;
