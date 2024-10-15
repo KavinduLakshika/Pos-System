@@ -11,8 +11,9 @@ const NewSales = ({ invoice }) => {
   const [tableData, setTableData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [customerCreated, setCustomerCreated] = useState(false);
+  const [users, setUsers] = useState([]);
 
-  const Columns = ["Customer Code", 'Customer Name', 'Customer Nic', 'Product Code', 'Product Name', 'Product Price', 'Quantity', 'Discount', 'Total Price','Note and Warranty'];
+  const Columns = ["Customer Code", 'Customer Name', 'Customer Nic', 'Product Code', 'Product Name', 'Product Price', 'Quantity', 'Discount', 'Total Price', 'Warranty'];
   const [formData, setFormData] = useState({
     cusName: '',
     cusNic: '',
@@ -95,6 +96,21 @@ const NewSales = ({ invoice }) => {
   };
 
   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`${config.BASE_URL}/users`);
+        if (response.ok) {
+          const userData = await response.json();
+          setUsers(userData);  // Populate users in state
+        } else {
+          console.error('Failed to fetch users');
+        }
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+    fetchUsers();
+
     const discountedPrice = (formData.productPrice || 0) * (1 - (formData.discount || 0) / 100);
     const newTotalPrice = discountedPrice * (formData.qty || 1);
     setFormData(prevData => ({ ...prevData, totalPrice: newTotalPrice }));
@@ -376,7 +392,7 @@ const NewSales = ({ invoice }) => {
                     <input onChange={handleChange} value={formData.totalPrice} type="number" onWheel={(e) => e.target.blur()} name="totalPrice" className="form-control" id="totalPrice" placeholder="Total Price" />
                   </div>
                   <div className="product-details col-md-6 mb-2">
-                    <textarea onChange={handleChange} value={formData.productNote} name="productNote" className="form-control" id="productNote" placeholder="Note and Warranty" rows="3"></textarea>
+                    <textarea onChange={handleChange} value={formData.productNote} name="productNote" className="form-control" id="productNote" placeholder="Warranty" rows="3"></textarea>
                   </div>
                   {/* <div className="product-details-checkbox col-md-1 mb-2">
                     <input type="checkbox" id="emi" name="emi" value="EMI" onChange={handleEmi} />
@@ -414,10 +430,13 @@ const NewSales = ({ invoice }) => {
               <div className="sales-person-box">
                 <div className="sales-person">
                   <label id='label'>Sales Person</label>
-                  <select className="form-control">
-                    <option value="" >Select</option>
-                    <option value="1" >Admin</option>
-                    <option value="2" >User</option>
+                  <select className="form-control" name="salesPerson" onChange={handleChange}>
+                    <option value="">Select</option>
+                    {users.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {user.userName}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="sales-person">

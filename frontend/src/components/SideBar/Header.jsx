@@ -13,12 +13,12 @@ const Header = () => {
   return (
     <header className="d-flex align-items-center justify-content-between p-3 bg-secondary text-light">
       <div className="d-flex align-items-center">
-        <img 
+        {/* <img 
           src="https://openui.fly.dev/openui/24x24.svg?text=✨" 
           alt="Logo" 
           className="me-2" 
         />
-        <h1 className="h4 mb-0">LOGO</h1>
+        <h1 className="h4 mb-0">LOGO</h1> */}
       </div>
       <span className="trial-message text-white d-none d-md-block">
         Trial Version: Only 19 days remaining
