@@ -180,7 +180,7 @@ const Table = ({
                             <thead>
                                 <tr>
                                     {tableColumns.map((item, index) => (
-                                        <th key={index} style={{ backgroundColor: 'black', color: 'white' }}>{item}</th>
+                                        <th key={index} style={{ backgroundColor: 'black', color: 'white', textAlign: 'center' }}>{item}</th>
                                     ))}
                                     {showActions && (
                                         <th style={{ backgroundColor: 'black', color: 'white' }}>Actions</th>

@@ -10,13 +10,13 @@ function SupplierDetails() {
   const [showModal, setShowModal] = useState(false);
   const [selectedSup, setSelectedSup] = useState(null);
 
-  const columns = ['#', 'Supplier Name', 'Supplier Address', 'NIC', 'Email', 'Contact 1', 'Contact 2',  'Status'];
+  const columns = ['#', 'Supplier Name', 'Supplier Address', 'NIC', 'Email', 'Contact 1', 'Contact 2', 'Status'];
 
   const btnName = ' + New Supplier ';
 
   useEffect(() => {
     fetchSuppliers();
-  }, []);
+  });
 
   const fetchSuppliers = async () => {
     try {
@@ -82,7 +82,6 @@ function SupplierDetails() {
       supplierPaid: SupplierData[7],
       supplierBalance: SupplierData[8],
       supplierPaymentDate: SupplierData[9],
-      supplierStatus: SupplierData[10].props.value,
     });
     setShowModal(true);
   };
@@ -98,7 +97,7 @@ function SupplierDetails() {
       });
 
       if (!response.ok) {
-        alert('Failed to delete the supplier');
+        setError('Failed to delete the supplier');
       } else {
         fetchSuppliers();
       }
@@ -144,7 +143,7 @@ function SupplierDetails() {
           showModal={showModal}
           closeModal={closeModal}
           onSave={fetchSuppliers}
-          supplier={selectedSup} 
+          supplier={selectedSup}
         />
       </div>
     </div>

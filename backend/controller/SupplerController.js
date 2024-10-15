@@ -9,10 +9,6 @@ const createSupplier = async (req, res) => {
             supplierEmail,
             supplierTP,
             supplierSecondTP,
-            supplierPaid,
-            supplierBalance,
-            supplierPaymentDate,
-
         } = req.body;
 
         if (
@@ -38,9 +34,6 @@ const createSupplier = async (req, res) => {
             supplierEmail,
             supplierTP,
             supplierSecondTP,
-            supplierPaid,
-            supplierBalance,
-            supplierPaymentDate,
             supplierStatus: "Active",
         });
 
@@ -98,9 +91,6 @@ const updateSupplier = async (req, res) => {
             supplierEmail,
             supplierTP,
             supplierSecondTP,
-            supplierPaid,
-            supplierBalance,
-            supplierPaymentDate,
             supplierStatus
         } = req.body;
 
@@ -116,9 +106,6 @@ const updateSupplier = async (req, res) => {
             supplierEmail,
             supplierTP,
             supplierSecondTP,
-            supplierPaid,
-            supplierBalance,
-            supplierPaymentDate,
             supplierStatus
         });
 

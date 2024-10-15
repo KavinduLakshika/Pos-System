@@ -33,22 +33,10 @@ const Supplier = sequelize.define(
             type: DataTypes.STRING,
             allowNull: true,
         },
-        supplierPaid: {
-            type: DataTypes.FLOAT,
-            allowNull: true,
-        },
-        supplierBalance: {
-            type: DataTypes.FLOAT,
-            allowNull: true,
-        },
         supplierStatus: {
             type: DataTypes.STRING,
             allowNull: true,
             defaultValue: "Active",
-        },
-        supplierPaymentDate: {
-            type: DataTypes.DATE,
-            allowNull: true,
         },
     },
     {
