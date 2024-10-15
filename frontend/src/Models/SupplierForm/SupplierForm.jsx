@@ -4,6 +4,7 @@ import config from '../../config';
 
 const SupplierForm = ({ closeModal, showModal, onSave, supplier }) => {
     const [formErrors, setFormErrors] = useState({});
+    const [successMessage, setSuccessMessage] = useState(null);
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
@@ -20,7 +21,7 @@ const SupplierForm = ({ closeModal, showModal, onSave, supplier }) => {
                 name: supplier.supplierName,
                 address: supplier.supplierAddress,
                 email: supplier.supplierEmail,
-                nic: supplier.	supplierNic,
+                nic: supplier.supplierNic,
                 contact1: supplier.supplierTP,
                 contact2: supplier.supplierSecondTP,
             });
@@ -91,7 +92,7 @@ const SupplierForm = ({ closeModal, showModal, onSave, supplier }) => {
                 const errorData = await response.json();
                 setError(errorData.error || 'An error occurred.');
             } else {
-                alert(supplier ? 'Supplier updated successfully!' : 'Supplier created successfully!');
+                setSuccessMessage(supplier ? 'Supplier updated successfully!' : 'Supplier created successfully!');
                 closeModal();
                 onSave();
             }
@@ -119,6 +120,17 @@ const SupplierForm = ({ closeModal, showModal, onSave, supplier }) => {
             <div className="modal-overlay">
                 <div className="modal-content">
                     <h4>{supplier ? 'Update Supplier' : 'Add Supplier'}</h4>
+                    {error && (
+                        <div className="alert alert-danger" role="alert">
+                            {error}
+                        </div>
+                    )}
+
+                    {successMessage && (
+                        <div className="alert alert-success" role="alert">
+                            {successMessage}
+                        </div>
+                    )}
                     {error && <p className="error">{error}</p>}
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
