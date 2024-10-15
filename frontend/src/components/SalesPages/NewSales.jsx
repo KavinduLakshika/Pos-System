@@ -12,7 +12,7 @@ const NewSales = ({ invoice }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [customerCreated, setCustomerCreated] = useState(false);
 
-  const Columns = ["Customer Code", 'Customer Name', 'Customer Nic', 'Product Code', 'Product Name', 'Product Price', 'Quantity', 'Discount', 'Total Price'];
+  const Columns = ["Customer Code", 'Customer Name', 'Customer Nic', 'Product Code', 'Product Name', 'Product Price', 'Quantity', 'Discount', 'Total Price','Note and Warranty'];
   const [formData, setFormData] = useState({
     cusName: '',
     cusNic: '',
@@ -129,7 +129,8 @@ const NewSales = ({ invoice }) => {
       formData.productPrice,
       formData.qty,
       formData.discount,
-      formData.totalPrice
+      formData.totalPrice,
+      formData.productNote,
     ];
 
     setTableData(prevData => [...prevData, newRow]);
@@ -369,7 +370,7 @@ const NewSales = ({ invoice }) => {
                     <input onChange={handleChange} value={formData.qty} type="number" onWheel={(e) => e.target.blur()} name="qty" className="form-control" id="qty" placeholder="Enter Quantity" />
                   </div>
                   <div className="product-details col-md-3 mb-2">
-                    <input onChange={handleChange} value={formData.discount} type="number" onWheel={(e) => e.target.blur()} name="discount" className="form-control" id="discount" placeholder="Product Discount" />
+                    <input onChange={handleChange} value={formData.discount} type="number" onWheel={(e) => e.target.blur()} name="discount" className="form-control" id="discount" placeholder="Product Discount %" />
                   </div>
                   <div className="product-details col-md-3 mb-2">
                     <input onChange={handleChange} value={formData.totalPrice} type="number" onWheel={(e) => e.target.blur()} name="totalPrice" className="form-control" id="totalPrice" placeholder="Total Price" />
@@ -377,15 +378,15 @@ const NewSales = ({ invoice }) => {
                   <div className="product-details col-md-6 mb-2">
                     <textarea onChange={handleChange} value={formData.productNote} name="productNote" className="form-control" id="productNote" placeholder="Note and Warranty" rows="3"></textarea>
                   </div>
-                  <div className="product-details-checkbox col-md-1 mb-2">
+                  {/* <div className="product-details-checkbox col-md-1 mb-2">
                     <input type="checkbox" id="emi" name="emi" value="EMI" onChange={handleEmi} />
                     <label htmlFor="emi">Imei</label>
-                  </div>
-                  {Emi && (
+                  </div> */}
+                  {/* {Emi && (
                     <div className="product-details col-md-5">
                       <input onChange={handleChange} value={formData.emi} type="text" name="emi" className="form-control" id="emi" placeholder="Imei/Serial Number" />
                     </div>
-                  )}
+                  )} */}
 
                 </div>
               </div>
@@ -423,10 +424,10 @@ const NewSales = ({ invoice }) => {
                   <label htmlFor="" id='label'>Invoice Date</label>
                   <input type="datetime-local" className="form-control" name="invoiceDate" id="date" />
                 </div>
-                <div className="sales-person">
+                {/* <div className="sales-person">
                   <label htmlFor="" id='label'>Invoice Due Date</label>
                   <input type="datetime-local" className="form-control" name="invoiceDueDate" id="date" />
-                </div>
+                </div> */}
               </div>
 
               <div className="amount-box">
@@ -501,9 +502,9 @@ const NewSales = ({ invoice }) => {
                   <label htmlFor="" id='label'>Due Amount</label>
                   <input className="form-control" type="number" value={formData.dueAmount} onWheel={(e) => e.target.blur()} name="discount" id="readOnly" readOnly />
                 </div>
-                <div className="amount-group">
+                {/* <div className="amount-group">
                   <label htmlFor="" id='label'>If Credit Sale</label>
-                </div>
+                </div> */}
               </div>
             </div>
 
