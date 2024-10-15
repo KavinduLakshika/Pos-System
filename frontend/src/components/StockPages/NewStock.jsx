@@ -389,6 +389,17 @@ const NewStock = () => {
                     ))}
                   </select>
                 </div>
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="category" className="form-label">Product Category</label>
+                  <select name="category" value={formData.category} onChange={handleChange} className="form-select">
+                    <option value="">Select Category</option>
+                    {categories.map((category) => (
+                      <option key={category.categoryId} value={category.categoryId}>
+                        {category.categoryName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
                 <div className="col-md-6 mb-3">
                   <label htmlFor="" className='mb-1'>Manufacture Date </label>
