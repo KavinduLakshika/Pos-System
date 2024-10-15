@@ -3,6 +3,7 @@ const sequelize = require("../dbConfig");
 const Invoice = require("./Invoice");
 const Supplier = require("./Supplier");
 const RentalInvoice = require("./RentalInvoice");
+const User = require("./User");
 
 const Transaction = sequelize.define(
     "Transaction",
@@ -21,8 +22,24 @@ const Transaction = sequelize.define(
             type: DataTypes.FLOAT,
             allowNull: false,
         },
+        discount: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
         dateTime: {
             type: DataTypes.DATE,
+            allowNull: false,
+        },
+        note: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        paid: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        due: {
+            type: DataTypes.FLOAT,
             allowNull: false,
         },
         invoice_invoiceId: {
@@ -49,6 +66,14 @@ const Transaction = sequelize.define(
             },
             allowNull: false,
         },
+        user_userId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: User,
+                key: "userId",
+            },
+            allowNull: false,
+        },
     },
     {
         tableName: "transaction",
@@ -66,5 +91,9 @@ Transaction.belongsTo(Supplier, {
 Transaction.belongsTo(RentalInvoice, {
     foreignKey: "rentalInvoice_rentalInvoiceId",
     as: "rentalInvoice",
+});
+Invoice.belongsTo(User, {
+    foreignKey: "user_userId",
+    as: "user",
 });
 module.exports = Transaction;

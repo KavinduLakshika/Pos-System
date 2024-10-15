@@ -169,7 +169,7 @@ const NewStock = () => {
       if (name === 'price' || name === 'qty') {
         const price = parseFloat(newData.price) || 0;
         const qty = parseFloat(newData.qty) || 0;
-        newData.totalPrice = (price * qty).toFixed(2);  // Update total price
+        newData.totalPrice = (price * qty).toFixed(2); 
       }
 
       // Calculate VAT and total price with VAT
