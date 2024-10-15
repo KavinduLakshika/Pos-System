@@ -38,12 +38,12 @@ const Header = () => {
   return (
     <header className="d-flex align-items-center justify-content-between p-3 bg-secondary text-light">
       <div className="d-flex align-items-center">
-        <img
-          src="https://openui.fly.dev/openui/24x24.svg?text=✨"
-          alt="Logo"
-          className="me-2"
+        <img 
+          src="https://openui.fly.dev/openui/24x24.svg?text=✨" 
+          alt="Logo" 
+          className="me-2" 
         />
-        <h1 className="h4 mb-0">LOGO</h1>
+        <h1 className="h4 mb-0">LOGO</h1> */}
       </div>
       <div className="d-flex align-items-center">
         <span className="trial-message text-white me-3 d-none d-md-block">

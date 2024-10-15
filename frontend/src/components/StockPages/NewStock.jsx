@@ -15,6 +15,8 @@ const NewStock = () => {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [productSearch, setProductSearch] = useState('');
+  const [products, setProducts] = useState([]);
+
 
   const columns = [
     '#', 'Supplier Name/Position', 'Product Name', 'Supplied Date & Time', 'Supplied Quantity', 'Price Per Item', 'Total Price Before VAT', 'VAT %', 'Total Amount + VAT', 'Cash Amount', ' Cheque Amount'
@@ -65,6 +67,7 @@ const NewStock = () => {
     fetchStores();
     fetchCategories();
     fetchSuppliers();
+    fetchProducts();
   }, []);
 
   const fetchStock = async () => {
@@ -138,6 +141,20 @@ const NewStock = () => {
       }
     } catch (error) {
       console.error('Error fetching suppliers:', error);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(`${config.BASE_URL}/products`);
+      if (response.ok) {
+        const data = await response.json();
+        setProducts(data);
+      } else {
+        console.error('Failed to fetch products');
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
     }
   };
 
@@ -362,8 +379,15 @@ const NewStock = () => {
             <div className="col-md-6">
               <div className="row">
                 <div className="col-md-6 mb-3">
-                  <label htmlFor="productSearch" className="form-label">Product Name</label>
-                  <input type="text" name="productSearch" className="form-control" value={productSearch} onChange={handleProductSearch} />
+                  <label htmlFor="product" className="form-label">Product Name</label>
+                  <select name="product" value={formData.product} className="form-select" onChange={handleChange}>
+                    <option value="">Select Product</option>
+                    {products.map((product) => (
+                      <option key={product.productId} value={product.productId}>
+                        {product.productName}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="col-md-6 mb-3">
                   <label htmlFor="category" className="form-label">Product Category</label>

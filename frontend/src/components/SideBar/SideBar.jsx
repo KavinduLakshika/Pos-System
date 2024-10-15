@@ -175,9 +175,9 @@ const Sidebar = () => {
                         transition: 'transform 0.3s ease-in-out'
                     }}
                 >
-                    {/* <div className="text-center mt-2 p-2">
-                        <h1>ලාංඡනය</h1>
-                    </div> */}
+                    <div className="text-center mt-2 p-2">
+                        <h1>LOGO</h1>
+                    </div>
                     <div className="position-sticky pt-3">
                         <ul className="nav flex-column">
                             <li className="nav-item">
