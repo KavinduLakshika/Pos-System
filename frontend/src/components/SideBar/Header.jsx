@@ -43,7 +43,7 @@ const Header = () => {
           alt="Logo" 
           className="me-2" 
         />
-        <h1 className="h4 mb-0">LOGO</h1> */}
+        <h1 className="h4 mb-0">LOGO</h1> 
       </div>
       <div className="d-flex align-items-center">
         <span className="trial-message text-white me-3 d-none d-md-block">
