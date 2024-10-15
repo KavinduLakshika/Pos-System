@@ -14,13 +14,13 @@ const Header = () => {
     <div>
       <header className="d-flex align-items-center justify-content-between p-3 bg-secondary text-light" style={{ width: '100%', position: 'relative' }}>
         <div className="d-flex align-items-center">
-          <img 
+          {/* <img 
             src="https://openui.fly.dev/openui/24x24.svg?text=✨" 
             alt="Logo" 
             className="me-2" 
             style={{ height: '32px', width: '32px'}} 
-          />
-          <h1 className="h4 mb-0">LOGO</h1>
+          /> */}
+          <h1 className="h4 mb-0">POS System</h1>
         </div>
         <div className="d-flex align-items-center">
           <span className="text-white me-4 d-none d-md-block">Trial Version: Only 19 days remaining</span>

@@ -28,7 +28,8 @@ function Login() {
     <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
       <div className="card p-4 rounded shadow-lg w-100" style={{ maxWidth: '400px' }}>
         <div className="text-center mb-4">
-          <img src="/logo.png" alt="logo" className="mb-3" style={{ height: '40px' }} />
+          {/* <img src="/logo.png" alt="logo" className="mb-3" style={{ height: '40px' }} /> */}
+          <h1>Pos System</h1>
         </div>
         <h2 className="text-center mb-4">Welcome!</h2>
         {error && <div className="alert alert-danger">{error}</div>}
