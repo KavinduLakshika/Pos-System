@@ -7,6 +7,7 @@ const User = require("../model/User");
 const createInvoice = async (req, res) => {
     try {
         const {
+            invoiceNo,
             invoiceDate,
             invoiceQty,
             paidAmount,
@@ -14,18 +15,15 @@ const createInvoice = async (req, res) => {
             dueAmount,
             discount,
             totalAmount,
-            invoiceNote,
             productId,
             cusId,
-            userId,
         } = req.body;
 
         // Validate required fields
         if (!invoiceDate ||
             !invoiceQty ||
             !paidAmount ||
-            !totalAmount ||
-            !invoiceNote) {
+            !totalAmount) {
             return res.status(400).json({ error: "All fields are required." });
         }
 
@@ -41,14 +39,9 @@ const createInvoice = async (req, res) => {
             return res.status(400).json({ message: 'Invalid customer ID' });
         }
 
-        // Check if user exists
-        const user = await User.findByPk(userId);
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid user ID' });
-        }
-
         // Create a new invoice
         const newInvoice = await Invoice.create({
+            invoiceNo,
             invoiceDate,
             invoiceQty,
             paidAmount,
@@ -56,10 +49,8 @@ const createInvoice = async (req, res) => {
             dueAmount,
             totalAmount,
             discount,
-            invoiceNote,
             products_productId: productId,
             customer_cusId: cusId,
-            user_userId: userId,
         });
 
         // Fetch newly created invoice  information
@@ -67,7 +58,6 @@ const createInvoice = async (req, res) => {
             include: [
                 { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
-                { model: User, as: 'user' },
             ],
         });
 
@@ -86,7 +76,6 @@ const getAllInvoice = async (req, res) => {
             include: [
                 { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
-                { model: User, as: 'user' },
             ],
         });
 
@@ -108,7 +97,6 @@ const getInvoiceById = async (req, res) => {
             include: [
                 { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
-                { model: User, as: 'user' },
             ],
         });
 
@@ -122,11 +110,29 @@ const getInvoiceById = async (req, res) => {
     }
 };
 
+const getInvoiceByNo = async (req, res) => {
+    try {
+        const { no } = req.params;
+
+        const invoice = await Invoice.findOne({
+            where: { invoiceNo: no }
+        });
+
+        if (!invoice) {
+            return res.status(404).json({ message: "Invoice not found" });
+        }
+
+        res.status(200).json(invoice);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 // Update invoice
 const updateInvoice = async (req, res) => {
     try {
         const { id } = req.params;
         const {
+            invoiceNo,
             invoiceDate,
             invoiceQty,
             paidAmount,
@@ -134,10 +140,8 @@ const updateInvoice = async (req, res) => {
             dueAmount,
             totalAmount,
             discount,
-            invoiceNote,
             productId,
             cusId,
-            userId,
         } = req.body;
 
         // Check if customer exists
@@ -152,27 +156,20 @@ const updateInvoice = async (req, res) => {
                 return res.status(400).json({ message: "Invalid product ID" });
             }
         }
-        // Check if user exists
-        const user = await User.findByPk(userId);
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid user ID' });
-        }
 
         const invoice = await Invoice.findByPk(id);
         if (invoice) {
             await invoice.update({
+                invoiceNo,
                 invoiceDate,
-                invoiceDueDate,
                 invoiceQty,
                 paidAmount,
                 payableAmount,
                 dueAmount,
                 totalAmount,
                 discount,
-                invoiceNote,
                 products_productId: productId,
                 customer_cusId: cusId,
-                user_userId: userId,
             });
             res.status(200).json(invoice);
         } else {
@@ -202,6 +199,7 @@ module.exports = {
     createInvoice,
     getAllInvoice,
     getInvoiceById,
+    getInvoiceByNo,
     updateInvoice,
     deleteInvoice,
 };

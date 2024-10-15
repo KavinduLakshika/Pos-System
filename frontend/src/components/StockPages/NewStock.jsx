@@ -17,7 +17,7 @@ const NewStock = () => {
   const [productSearch, setProductSearch] = useState('');
 
   const columns = [
-    '#', 'Supplier Name/Position', 'Product Name', 'Supplied Date & Time', 'Supplied Quantity', 'Price Per Item', 'Total Price Before VAT', 'VAT %', 'Total Amount + VAT', 'Cash Amount/ Cheque Amount'
+    '#', 'Supplier Name/Position', 'Product Name', 'Supplied Date & Time', 'Supplied Quantity', 'Price Per Item', 'Total Price Before VAT', 'VAT %', 'Total Amount + VAT', 'Cash Amount', ' Cheque Amount'
   ];
 
   const [formData, setFormData] = useState({
@@ -86,7 +86,8 @@ const NewStock = () => {
           stock.stockPrice,
           stock.vat,
           stock.total,
-          stock.cashAmount || stock.chequeAmount,
+          stock.cashAmount || '-',
+          stock.chequeAmount || '-',
         ];
       });
 
@@ -169,7 +170,7 @@ const NewStock = () => {
       if (name === 'price' || name === 'qty') {
         const price = parseFloat(newData.price) || 0;
         const qty = parseFloat(newData.qty) || 0;
-        newData.totalPrice = (price * qty).toFixed(2);  // Update total price
+        newData.totalPrice = (price * qty).toFixed(2);
       }
 
       // Calculate VAT and total price with VAT
@@ -179,8 +180,11 @@ const NewStock = () => {
       }
 
       // Calculate due amount
-      const paidAmount = parseFloat(newData.cashAmount) || parseFloat(newData.chequeAmount) || 0;
-      newData.due = (paidAmount - parseFloat(newData.totalPriceVAT)).toFixed(2);
+      const cashAmount = parseFloat(newData.cashAmount) || 0;
+      const chequeAmount = parseFloat(newData.chequeAmount) || 0;
+      const totalPaidAmount = cashAmount + chequeAmount;
+
+      newData.due = (totalPaidAmount - parseFloat(newData.totalPriceVAT)).toFixed(2);
 
       return newData;
     });
@@ -268,6 +272,7 @@ const NewStock = () => {
   const handleNewStockClick = () => {
     navigate('/stock-reports/current-stock');
   };
+
 
   return (
     <div className="scrolling-container">
@@ -424,12 +429,11 @@ const NewStock = () => {
                 data={data}
                 columns={columns}
                 showButton={false}
-                showActions={true}
+                showActions={false}
                 showSearch={false}
                 showPDF={false}
                 showDate={false}
                 showRow={false}
-                showDelete={false}
               />
             )}
           </div>
