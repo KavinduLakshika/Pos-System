@@ -80,7 +80,7 @@ app.get("/invoices", InvoiceController.getAllInvoice);
 app.get("/invoice/:id", InvoiceController.getInvoiceById);
 app.put("/invoice/:id", InvoiceController.updateInvoice);
 app.delete("/invoice/:id", InvoiceController.deleteInvoice);
-app.get('/invoice/invoiceNo/:no', InvoiceController.getInvoiceByNo);
+app.get('/invoice/invoiceNo/:num', InvoiceController.getInvoiceByNo);
 
 //rental invoice routes
 app.post("/rentalInvoice", RentalInvoiceController.createRentalInvoice);

@@ -92,7 +92,7 @@ Transaction.belongsTo(RentalInvoice, {
     foreignKey: "rentalInvoice_rentalInvoiceId",
     as: "rentalInvoice",
 });
-Invoice.belongsTo(User, {
+Transaction.belongsTo(User, {
     foreignKey: "user_userId",
     as: "user",
 });

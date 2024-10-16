@@ -1,7 +1,7 @@
 const Invoice = require("../model/Invoice");
 const Customer = require("../model/Customers");
 const Product = require("../model/Products");
-const User = require("../model/User");
+const Stock = require("../model/Stock");
 
 // Create invoice
 const createInvoice = async (req, res) => {
@@ -17,6 +17,7 @@ const createInvoice = async (req, res) => {
             totalAmount,
             productId,
             cusId,
+            stockId, 
         } = req.body;
 
         // Validate required fields
@@ -33,11 +34,26 @@ const createInvoice = async (req, res) => {
             return res.status(400).json({ message: 'Invalid product ID' });
         }
 
-        // Check if customer exists (fixed issue here)
+        // Check if customer exists
         const customer = await Customer.findByPk(cusId);
         if (!customer) {
             return res.status(400).json({ message: 'Invalid customer ID' });
         }
+
+        // Check if stock exists
+        const stock = await Stock.findByPk(stockId);
+        if (!stock) {
+            return res.status(400).json({ message: 'Invalid stock ID' });
+        }
+
+        // Ensure that there is enough quantity in stock
+        if (stock.stockQty < invoiceQty) {
+            return res.status(400).json({ message: 'Not enough stock available' });
+        }
+
+        // Update stock quantity by subtracting the invoice quantity
+        const updatedStockQty = stock.stockQty - invoiceQty;
+        await stock.update({ stockQty: updatedStockQty });
 
         // Create a new invoice
         const newInvoice = await Invoice.create({
@@ -51,13 +67,15 @@ const createInvoice = async (req, res) => {
             discount,
             products_productId: productId,
             customer_cusId: cusId,
+            stock_stockId: stockId,
         });
 
-        // Fetch newly created invoice  information
+        // Fetch newly created invoice information
         const invoiceDetails = await Invoice.findByPk(newInvoice.invoiceId, {
             include: [
                 { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
+                { model: Stock, as: 'stock' },
             ],
         });
 
@@ -76,6 +94,7 @@ const getAllInvoice = async (req, res) => {
             include: [
                 { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
+                { model: Stock, as: 'stock' },
             ],
         });
 
@@ -97,6 +116,7 @@ const getInvoiceById = async (req, res) => {
             include: [
                 { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
+                { model: Stock, as: 'stock' },
             ],
         });
 
@@ -112,10 +132,10 @@ const getInvoiceById = async (req, res) => {
 
 const getInvoiceByNo = async (req, res) => {
     try {
-        const { no } = req.params;
+        const { num } = req.params;
 
         const invoice = await Invoice.findOne({
-            where: { invoiceNo: no }
+            where: { invoiceNo: num }
         });
 
         if (!invoice) {
@@ -127,6 +147,7 @@ const getInvoiceByNo = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 // Update invoice
 const updateInvoice = async (req, res) => {
     try {
