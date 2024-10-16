@@ -15,9 +15,10 @@ const NewStock = () => {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [productSearch, setProductSearch] = useState('');
+  const [tableData, setTableData] = useState(data || []);
 
   const columns = [
-    '#', 'Supplier Name/Position', 'Product Name', 'Supplied Date & Time', 'Supplied Quantity', 'Price Per Item', 'Total Price Before VAT', 'VAT %', 'Total Amount + VAT', 'Cash Amount', ' Cheque Amount'
+    'Stock Name', 'Supplier Name','Store', 'Supplied Date & Time','Product Name','Product Category', 'M Date', 'Exp Date','Price Per Item', 'Supplied Quantity',  'Total Price Before VAT', 'VAT %', 'Total Amount + VAT', 'Cash Amount', ' Cheque Amount', 'Due','Description'
   ];
 
   const [formData, setFormData] = useState({
@@ -166,6 +167,12 @@ const NewStock = () => {
     setFormData((prevData) => {
       const newData = { ...prevData, [name]: value };
 
+      if (name === 'date' && value) {
+        const dateObject = new Date(value);
+        newData.date = dateObject.toISOString().slice(0, 16); // format to 'YYYY-MM-DDTHH:MM'
+      }
+  
+
       // Calculate total price when price or qty changes
       if (name === 'price' || name === 'qty') {
         const price = parseFloat(newData.price) || 0;
@@ -194,9 +201,11 @@ const NewStock = () => {
     e.preventDefault();
 
     const formDataToSend = new FormData();
+    const formattedDate = formData.date.replace('T', ' ');
 
     formDataToSend.append('stockName', formData.stockName);
-    formDataToSend.append('stockDate', formData.date);
+    formDataToSend.append('stockDate', formattedDate);
+    
     formDataToSend.append('stockPrice', formData.totalPrice);
     formDataToSend.append('due', formData.due);
     formDataToSend.append('vat', formData.vat);
@@ -312,26 +321,6 @@ const NewStock = () => {
         console.log("Updated table data:", updatedData);
         return updatedData;
     });
-
-    setFormData(prevData => ({
-      ...prevData,
-      stockName: '',
-    
-    cashAmount: '',
-    chequeAmount: '',
-    due: '',
-    product: '',
-    category: '',
-    mfd: '',
-    exp: '',
-    price: '',
-    qty: '',
-    totalPrice: '',
-    vat: '',
-    totalPriceVAT: '',
-    description: '',
-    }));
-
 };
 
 
@@ -340,7 +329,7 @@ const NewStock = () => {
     <div className="scrolling-container">
       <div className="container-fluid my-5 mt-2">
         <h4 className="mb-4">Create New Stock</h4>
-        {error && (
+        {/* {error && (
           <div className="alert alert-danger" role="alert">
             {error}
           </div>
@@ -350,7 +339,7 @@ const NewStock = () => {
           <div className="alert alert-success" role="alert">
             {successMessage}
           </div>
-        )}
+        )} */}
 
         <div className="d-flex justify-content-end mt-4">
           <button className='btn btn-warning' onClick={handleNewStockClick}>Current Stock</button>
@@ -476,19 +465,30 @@ const NewStock = () => {
               </div>
 
               <div className="d-flex justify-content-end mt-4">
-                <button type="button" className="btn btn-primary" onClick={() => {/* Add logic to add product to the list */ }}>Add Product</button>
+                <button type="button" className="btn btn-primary" onClick={handleAddStock}>Add Stock +</button>
               </div>
             </div>
           </div>
-
+          
           {/* Table */}
           <div className="table-responsive mt-5">
+          {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="alert alert-success" role="alert">
+            {successMessage}
+          </div>
+        )}
             {isLoading ? (
               <p>Loading...</p>
             ) : (
               <Table
-                search="Search by Supplier Name"
-                data={data}
+                search="Search"
+                data={tableData}
                 columns={columns}
                 showButton={false}
                 showActions={false}
@@ -503,7 +503,7 @@ const NewStock = () => {
           {/* Footer Buttons */}
           <div className="d-flex justify-content-end mt-4">
             <button type="reset" className="btn btn-danger me-2" onClick={resetForm}>Clear</button>
-            <button type="submit" className="btn btn-success">Save New Stock</button>
+            <button type="submit" className="btn btn-success">New Stock</button>
           </div>
         </form>
       </div>
