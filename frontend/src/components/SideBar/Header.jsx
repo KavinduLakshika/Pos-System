@@ -48,7 +48,7 @@ const Header = () => {
   return (
     <header className="d-flex align-items-center justify-content-between p-3 bg-secondary text-light">
       <div className="d-flex align-items-center">
-        {isMaster && <Switch />} {/* Render Switch only for 'master' */}
+        {isMaster && <Switch />} 
       </div>
       <div className="d-flex align-items-center">
         <span className="trial-message text-white me-3 d-none d-md-block">
