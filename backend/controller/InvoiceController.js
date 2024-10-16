@@ -10,6 +10,7 @@ const createInvoice = async (req, res) => {
             invoiceNo,
             invoiceDate,
             invoiceQty,
+            totalAmount,
             productId,
             cusId,
             stockId,
@@ -52,6 +53,7 @@ const createInvoice = async (req, res) => {
             invoiceNo,
             invoiceDate,
             invoiceQty,
+            totalAmount,
             products_productId: productId,
             customer_cusId: cusId,
             stock_stockId: stockId,
@@ -142,6 +144,7 @@ const updateInvoice = async (req, res) => {
         const {
             invoiceNo,
             invoiceDate,
+            totalAmount,
             invoiceQty,
             productId,
             cusId,
@@ -165,6 +168,7 @@ const updateInvoice = async (req, res) => {
             await invoice.update({
                 invoiceNo,
                 invoiceDate,
+                totalAmount,
                 invoiceQty,
                 products_productId: productId,
                 customer_cusId: cusId,

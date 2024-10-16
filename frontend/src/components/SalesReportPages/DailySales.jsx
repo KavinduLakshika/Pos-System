@@ -7,7 +7,7 @@ function DailySales() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const columns = ['Date & Time', 'Product Name', 'Size', 'Customer Name', 'Customer Nic', 'Sold Price', 'Value', 'Job Done By', 'Profit/Loss'];
+  const columns = ['Date & Time', 'Product Name', 'Size', 'Customer Name', 'Customer Nic', 'Sold Price', 'Profit/Loss'];
   const btnName = '+ New Sale';
 
   useEffect(() => {
@@ -52,8 +52,6 @@ function DailySales() {
           invoice.customer?.cusName || "Unknown",
           invoice.customer?.cusNIC || "Unknown",
           invoice.product?.productSellingPrice || "Unknown",
-          invoice.totalAmount,
-          invoice.user?.userName || "Unknown",
           totalProfit
         ];
       });
