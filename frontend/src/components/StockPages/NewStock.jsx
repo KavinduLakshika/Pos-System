@@ -442,7 +442,10 @@ const NewStock = () => {
               </div>
             </div>
           </div>
-
+          <div className="d-flex justify-content-end mt-2">
+            <button type="reset" className="btn btn-danger me-2" onClick={resetForm}>Clear</button>
+            <button type="submit" className="btn btn-success">New Stock</button>
+          </div>
           {/* Table */}
           <div className="table-responsive mt-5">
             {isLoading ? (
@@ -460,12 +463,6 @@ const NewStock = () => {
                 showRow={false}
               />
             )}
-          </div>
-
-          {/* Footer Buttons */}
-          <div className="d-flex justify-content-end mt-4">
-            <button type="reset" className="btn btn-danger me-2" onClick={resetForm}>Clear</button>
-            <button type="submit" className="btn btn-success">New Stock</button>
           </div>
         </form>
       </div>
