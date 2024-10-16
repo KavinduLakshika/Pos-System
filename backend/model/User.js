@@ -67,6 +67,11 @@ const User = sequelize.define(
             },
             allowNull: false,
         },
+        is_hidden: {
+            type: DataTypes.TINYINT,
+            allowNull: false,
+            defaultValue: 0, 
+        },
     },
     {
         tableName: "user",

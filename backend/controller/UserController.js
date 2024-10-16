@@ -150,17 +150,39 @@ const createUser = async (req, res) => {
 // Get all user
 const getAllUsers = async (req, res) => {
     try {
-        const user = await User.findAll({
-            include: [
-                {
-                    model: Store,
-                    as: 'store',
-                },
-            ],
+        const users = await User.findAll({
+            where: {
+                is_hidden: 0, // Only fetch users that are not hidden
+            },
+            include: [{
+                model: Store,
+                as: 'store',
+            }],
         });
-        res.status(200).json(user);
+        res.json(users);
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+};
+
+// Example function to hide a user
+const hideUser = async (req, res) => {
+    const { userId } = req.params; // Assuming you pass userId in the URL
+
+    try {
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Hide the user by setting is_hidden to 1
+        user.is_hidden = 1;
+        await user.save();
+
+        res.json({ message: "User hidden successfully" });
+    } catch (error) {
+        console.error("Error hiding user:", error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
@@ -343,4 +365,5 @@ module.exports = {
     updateUser,
     deleteUser,
     userLogin,
+    hideUser
 }

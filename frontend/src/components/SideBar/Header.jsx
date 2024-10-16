@@ -7,6 +7,7 @@ import Switch from './Switch';
 const Header = () => {
   const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isMaster, setIsMaster] = useState(false);
 
   const trialStartDate = new Date(currentTime.getFullYear(), currentTime.getMonth(), 1);
   const trialDuration = 30;
@@ -24,6 +25,14 @@ const Header = () => {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    // Check if the logged-in user is "master"
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.userName === 'master') {
+      setIsMaster(true);
+    }
+  }, []);
+
   const handleNewSaleClick = () => {
     navigate('/sales/new');
   };
@@ -39,13 +48,7 @@ const Header = () => {
   return (
     <header className="d-flex align-items-center justify-content-between p-3 bg-secondary text-light">
       <div className="d-flex align-items-center">
-        {/* <img 
-          src="https://openui.fly.dev/openui/24x24.svg?text=✨" 
-          alt="Logo" 
-          className="me-2" 
-        />
-        <h1 className="h4 mb-0">LOGO</h1>  */}
-        <Switch/>
+        {isMaster && <Switch />} {/* Render Switch only for 'master' */}
       </div>
       <div className="d-flex align-items-center">
         <span className="trial-message text-white me-3 d-none d-md-block">

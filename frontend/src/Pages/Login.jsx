@@ -12,17 +12,19 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${config.BASE_URL}/userLogin`, { userName, userPassword });
-      const { token, user } = response.data;
+        const response = await axios.post(`${config.BASE_URL}/userLogin`, { userName, userPassword });
+        const { token, user } = response.data;
 
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+        
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));  
 
-      navigate('/');
+        navigate('/');  
     } catch (error) {
-      setError('Invalid username or password');
+        setError('Invalid username or password');
     }
-  };
+};
+
 
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
