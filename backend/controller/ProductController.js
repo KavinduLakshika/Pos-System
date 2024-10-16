@@ -167,7 +167,6 @@ const updateProduct = async (req, res) => {
                 productBuyingPrice,
                 productSellingPrice,
                 productWarranty,
-                productProfit,
                 productEmi,
                 productStatus,
                 categoryId
@@ -198,6 +197,8 @@ const updateProduct = async (req, res) => {
 
                 productImage = `${req.protocol}://${req.get('host')}/uploads/products/${req.file.filename}`;
             }
+
+            const productProfit = parseFloat(productSellingPrice) - parseFloat(productBuyingPrice);
 
             await product.update({
                 productName,
@@ -289,7 +290,7 @@ const getProductSuggestions = async (req, res) => {
                 ]
             },
             attributes: ['productId', 'productName', 'productCode'],
-            limit: 10 
+            limit: 10
         });
 
         res.status(200).json(product);

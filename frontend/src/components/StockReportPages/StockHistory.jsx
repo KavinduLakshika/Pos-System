@@ -7,8 +7,7 @@ function StockHistory() {
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
 
-  const columns = ['#', 'Stock Name','Supplier Name', 'Store', 'Stock Supplied Date','Product Name','Product Category', 'M Date', 'Exp Date','Price per Item', 'Supplied Quantity','Total stock price before vat', 'Vat','Stock Price + VAT', 'Paid',  'Due', 'Description'];
-  const btnName = 'Generate Report'
+  const columns = ['#', 'Stock Name', 'Stock Supplied Date', 'Product Name', 'M Date', 'Exp Date', 'Price per Item', 'Supplied Quantity', 'Total stock price before vat', 'Vat', 'Stock Price + VAT', 'Paid', 'Due', 'Description'];
 
   useEffect(() => {
     fetchStock();
@@ -24,9 +23,19 @@ function StockHistory() {
 
       const formattedData = stock.map(stock => [
         stock.stockHistoryId,
-        stock.stockHistoryQty,
-        stock.stock?.stockName || "Unknown",
+        stock.stock?.stockName,
+        stock.stock?.stockDate,
         stock.product?.productName || "Unknown",
+        stock.stock?.mfd,
+        stock.stock?.exp,
+        stock.product?.productBuyingPrice,
+        stock.stockHistoryQty,
+        stock.stock?.stockPrice || "-",
+        stock.stock?.vat || "-",
+        stock.stock?.total || "-",
+        stock.stock?.cashAmount || stock.stock?.chequeAmount || '-',
+        stock.stock?.due || '-',
+        stock.stock.stockDescription || '-',
       ]);
       setData(formattedData);
       setIsLoading(false);

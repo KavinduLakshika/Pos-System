@@ -11,7 +11,7 @@ const CreateStaff = () => {
   const [error, setError] = useState(null);
   const [selectedStaff, setSelectedStaff] = useState(null);
 
-  const columns = ["#", "Title",  "Full Name","Department / Job Position", "User Type", "User Name", "Email", "Contact 1", "Contact 2", "Address", "Nic", "Status"];
+  const columns = ["#", "Title", "Full Name", "Department / Job Position", "User Type", "User Name", "Email", "Contact 1", "Contact 2", "Address", "Nic", "Status"];
   const btnName = 'Add New Staff Member';
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const CreateStaff = () => {
     try {
       const response = await fetch(`${config.BASE_URL}/users`);
       if (!response.ok) {
-        throw new Error('Failed to fetch user list');
+        setError('Failed to fetch user list');
       }
       const user = await response.json();
       const formattedData = user.map(user => [
@@ -119,8 +119,8 @@ const CreateStaff = () => {
     setShowModal(true);
   };
 
-  const title='Staff List';
-  const invoice='Staff List.pdf';
+  const title = 'Staff List';
+  const invoice = 'Staff List.pdf';
 
   return (
     <div>

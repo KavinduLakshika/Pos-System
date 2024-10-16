@@ -7,7 +7,7 @@ function CurrentStock() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
-  const columns = ['#',  'Stock Name','Product Name', 'Category', 'Quantity', 'Status' ];
+  const columns = ['#', 'Stock Name', 'Product Name', 'Category', 'Quantity', 'Status'];
   const btnName = '+ New Stock';
 
   useEffect(() => {
@@ -23,18 +23,10 @@ function CurrentStock() {
       const stock = await response.json();
       const formattedData = stock.map(stock => [
         stock.stockId,
-        stock.category?.categoryName || "Unknown",
-        stock.product?.productName || 'Unknown',
-        stock.product?.productUnit || 'Unknown',
         stock.stockName,
+        stock.product?.productName || 'Unknown',
+        stock.category?.categoryName || "Unknown",
         stock.stockQty,
-        stock.stockDate,
-        stock.stockPrice,
-        stock.mfd,
-        stock.exp,
-        stock.stockDescription,
-        stock.supplier?.supplierName || 'Unknown',
-        stock.store?.storeName || "Unknown",
         <select
           className='form-control'
           value={stock.stockStatus}

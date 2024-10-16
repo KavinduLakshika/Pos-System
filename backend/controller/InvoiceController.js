@@ -10,21 +10,14 @@ const createInvoice = async (req, res) => {
             invoiceNo,
             invoiceDate,
             invoiceQty,
-            paidAmount,
-            payableAmount,
-            dueAmount,
-            discount,
             totalAmount,
             productId,
             cusId,
-            stockId, 
+            stockId,
         } = req.body;
 
         // Validate required fields
-        if (!invoiceDate ||
-            !invoiceQty ||
-            !paidAmount ||
-            !totalAmount) {
+        if (!invoiceDate || !invoiceQty) {
             return res.status(400).json({ error: "All fields are required." });
         }
 
@@ -60,11 +53,7 @@ const createInvoice = async (req, res) => {
             invoiceNo,
             invoiceDate,
             invoiceQty,
-            paidAmount,
-            payableAmount,
-            dueAmount,
             totalAmount,
-            discount,
             products_productId: productId,
             customer_cusId: cusId,
             stock_stockId: stockId,
@@ -155,12 +144,8 @@ const updateInvoice = async (req, res) => {
         const {
             invoiceNo,
             invoiceDate,
-            invoiceQty,
-            paidAmount,
-            payableAmount,
-            dueAmount,
             totalAmount,
-            discount,
+            invoiceQty,
             productId,
             cusId,
         } = req.body;
@@ -183,12 +168,8 @@ const updateInvoice = async (req, res) => {
             await invoice.update({
                 invoiceNo,
                 invoiceDate,
-                invoiceQty,
-                paidAmount,
-                payableAmount,
-                dueAmount,
                 totalAmount,
-                discount,
+                invoiceQty,
                 products_productId: productId,
                 customer_cusId: cusId,
             });

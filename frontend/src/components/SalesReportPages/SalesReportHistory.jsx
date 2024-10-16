@@ -6,7 +6,7 @@ const SalesHistory = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const columns = ['Date & Time', 'Product Name', 'Size', 'Customer Name', 'Customer Nic', 'Value', 'Sold Price', 'Job Done By', 'Profit/Loss'];
+  const columns = ['Date & Time', 'Product Name', 'Size', 'Customer Name', 'Customer Nic', 'Sold Price', 'Profit/Loss'];
 
   useEffect(() => {
     fetchSummery();
@@ -35,9 +35,7 @@ const SalesHistory = () => {
           invoice.invoiceQty,
           invoice.customer?.cusName || "Unknown",
           invoice.customer?.cusNIC || "Unknown",
-          invoice.totalAmount,
           invoice.product?.productSellingPrice || "Unknown",
-          invoice.user?.userName || "Unknown",
           totalProfit
         ];
       });
