@@ -7,7 +7,7 @@ function CurrentStock() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
-  const columns = ['#', 'Category', 'Product Name', 'Name', 'Quantity', 'Status' , 'Action'];
+  const columns = ['#', 'Category', 'Product Name', 'Name', 'Quantity', 'Status' ];
   const btnName = '+ New Stock';
 
   useEffect(() => {
