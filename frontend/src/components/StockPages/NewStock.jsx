@@ -321,6 +321,26 @@ const NewStock = () => {
         console.log("Updated table data:", updatedData);
         return updatedData;
     });
+
+    setFormData(prevData => ({
+      ...prevData,
+      stockName: '',
+    
+    cashAmount: '',
+    chequeAmount: '',
+    due: '',
+    product: '',
+    category: '',
+    mfd: '',
+    exp: '',
+    price: '',
+    qty: '',
+    totalPrice: '',
+    vat: '',
+    totalPriceVAT: '',
+    description: '',
+    }));
+
 };
 
 
@@ -503,7 +523,7 @@ const NewStock = () => {
           {/* Footer Buttons */}
           <div className="d-flex justify-content-end mt-4">
             <button type="reset" className="btn btn-danger me-2" onClick={resetForm}>Clear</button>
-            <button type="submit" className="btn btn-success">New Stock</button>
+            <button type="submit" className="btn btn-success">Save New Stock</button>
           </div>
         </form>
       </div>
