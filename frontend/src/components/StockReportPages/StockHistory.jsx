@@ -8,7 +8,6 @@ function StockHistory() {
   const [data, setData] = useState([]);
 
   const columns = ['#', 'Name', 'Quantity', 'Stock Date', 'Stock Price', 'Product', 'Supplier', 'Store', 'Status'];
-  const btnName = 'Generate Report'
 
   useEffect(() => {
     fetchStock();
@@ -123,8 +122,8 @@ function StockHistory() {
             search={'Search by Product Name'}
             data={data}
             columns={columns}
-            btnName={btnName}
             onDelete={handleDelete}
+            showButton={false}
             title={title}
             invoice={invoice}
           />
