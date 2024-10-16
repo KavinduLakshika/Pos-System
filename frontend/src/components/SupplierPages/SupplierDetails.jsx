@@ -61,7 +61,7 @@ function SupplierDetails() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update supplier status');
+        setError('Failed to update supplier status');
       }
       fetchSuppliers();
     } catch (error) {
