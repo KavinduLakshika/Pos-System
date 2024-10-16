@@ -273,6 +273,68 @@ const NewStock = () => {
     navigate('/stock-reports/current-stock');
   };
 
+  const handleAddStock = (e) => {
+    e.preventDefault();
+
+    
+    if (!formData.stockName || !formData.supplier || !formData.date ||
+        !formData.cashAmount || !formData.due || !formData.category || !formData.totalPrice) {
+        alert("Please fill necessary details.");
+        return;
+    }
+
+    const formattedDate = formData.date.replace('T', ' ');
+    // Create a new row from formData
+    const newRow = [
+        formData.stockName,
+        formData.supplier,
+        formData.store,
+        formattedDate,
+        formData.product,
+        formData.category,
+        formData.mfd,
+        formData.exp,
+        formData.price,
+        formData.qty,
+        formData.totalPrice,
+        formData.vat,
+        formData.totalPriceVAT,
+        formData.cashAmount,
+        formData.chequeAmount,
+        formData.due,
+        formData.description
+    ];
+
+    // Update table data 
+    setTableData(prevData => {
+        const updatedData = [...prevData, newRow];
+        console.log("Added new row:", newRow);
+        console.log("Updated table data:", updatedData);
+        return updatedData;
+    });
+
+    setFormData(prevData => ({
+      ...prevData,
+      stockName: '',
+    
+    cashAmount: '',
+    chequeAmount: '',
+    due: '',
+    product: '',
+    category: '',
+    mfd: '',
+    exp: '',
+    price: '',
+    qty: '',
+    totalPrice: '',
+    vat: '',
+    totalPriceVAT: '',
+    description: '',
+    }));
+
+};
+
+
 
   return (
     <div className="scrolling-container">
@@ -441,7 +503,7 @@ const NewStock = () => {
           {/* Footer Buttons */}
           <div className="d-flex justify-content-end mt-4">
             <button type="reset" className="btn btn-danger me-2" onClick={resetForm}>Clear</button>
-            <button type="submit" className="btn btn-success">New Stock</button>
+            <button type="submit" className="btn btn-success">Save New Stock</button>
           </div>
         </form>
       </div>

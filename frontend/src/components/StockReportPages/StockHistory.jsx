@@ -7,7 +7,8 @@ function StockHistory() {
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
 
-  const columns = ['#', 'Quantity', 'Stock Name', 'Product', 'Stock Date'];
+  const columns = ['#', 'Stock Name','Supplier Name', 'Store', 'Stock Supplied Date','Product Name','Product Category', 'M Date', 'Exp Date','Price per Item', 'Supplied Quantity','Total stock price before vat', 'Vat','Stock Price + VAT', 'Paid',  'Due', 'Description'];
+  const btnName = 'Generate Report'
 
   useEffect(() => {
     fetchStock();
