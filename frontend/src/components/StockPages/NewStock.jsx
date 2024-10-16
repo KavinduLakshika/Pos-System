@@ -314,13 +314,34 @@ const NewStock = () => {
         formData.description
     ];
 
-    // Update table data 
+     
     setTableData(prevData => {
-        const updatedData = [...prevData, newRow];
-        console.log("Added new row:", newRow);
-        console.log("Updated table data:", updatedData);
-        return updatedData;
-    });
+      const updatedData = [...prevData, newRow];
+      console.log("Added new row:", newRow);
+      console.log("Updated table data:", updatedData);
+      return updatedData;
+  });
+    // Reset form fields after adding to table
+    setFormData(prevData => ({
+      ...prevData,
+      stockName: '',
+      cashAmount: '',
+      chequeAmount: '',
+      due: '',
+      product: '',
+      category: '',
+      mfd: '',
+      exp: '',
+      price: '',
+      qty: '',
+      totalPrice: '',
+      vat: '',
+      totalPriceVAT: '',
+      description: '',
+    }));
+
+    // Update table data 
+    
 };
 
 
