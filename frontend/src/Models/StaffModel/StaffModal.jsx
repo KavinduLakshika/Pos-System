@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './StaffModal.css';
-import { FontAwesomeIcon } from '@font-awesome/react-font-awesome';
-import { faEdit } from '@font-awesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import config from '../../config';
 
 const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
@@ -25,30 +25,32 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
     photo: ''
   });
 
-  const resetForm = () => {
-    setFormData({
-      title: '-Select Title-',
-      fullName: '',
-      userType: '-Select Title-',
-      userName: '',
-      email: '',
-      password: '',
-      nic: '',
-      address: '',
-      contact1: '',
-      contact2: '',
-      department: '',
-      photo: ''
-    });
-    setImage(null);
-    setFormErrors({});
-  };
-
-  useEffect(() => {
-    if (!showModal) {
-      resetForm();
-    }
-  }, [showModal]);
+    // Reset form data when modal closes
+    const resetForm = () => {
+      setFormData({
+        title: '-Select Title-',
+        fullName: '',
+        userType: '-Select Title-',
+        userName: '',
+        email: '',
+        password: '',
+        nic: '',
+        address: '',
+        contact1: '',
+        contact2: '',
+        department: '',
+        photo: ''
+      });
+      setImage(null);
+      setFormErrors({});
+    };
+  
+    // Watch for modal closing
+    useEffect(() => {
+      if (!showModal) {
+        resetForm(); // Clear form when modal is closed
+      }
+    }, [showModal]);
 
   useEffect(() => {
     if (staff) {
@@ -206,7 +208,7 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
 
           <div className="form-flex">
             <div className="form-1">
-              <div className="form-group">
+            <div className="form-group">
                 <label>Department / Job Position</label>
                 <select name="department" id=""
                   value={formData.department || ''}
@@ -232,7 +234,7 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
                 </select>
                 {formErrors.title && <div className="error-message">{formErrors.title}</div>}
               </div>
-
+              
               <div className="form-group">
                 <label>Full Name</label>
                 <input

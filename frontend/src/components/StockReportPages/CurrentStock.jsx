@@ -18,12 +18,9 @@ function CurrentStock() {
     try {
       const response = await fetch(`${config.BASE_URL}/stocks`);
       if (!response.ok) {
-        setError('Failed to fetch stock list');
+        throw new Error('Failed to fetch stock list');
       }
       const stock = await response.json();
-
-
-
       const formattedData = stock.map(stock => [
         stock.stockId,
         stock.category?.categoryName || "Unknown",
