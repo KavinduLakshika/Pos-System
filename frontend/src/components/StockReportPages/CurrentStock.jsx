@@ -21,19 +21,7 @@ function CurrentStock() {
         throw new Error('Failed to fetch stock list');
       }
       const stock = await response.json();
-
-      const updatedStock = await Promise.all(stock.map(async (item) => {
-        if (item.product?.productQty === 0 && item.stockStatus !== 'Out of Stock') {
-          await handleStatusChange(item.stockId, 'Out of Stock');
-          return { ...item, stockStatus: 'Out of Stock' };
-        }
-        return item;
-      }));
-
-      // Filter out "Out of Stock" items
-      const inStockItems = updatedStock.filter(item => item.stockStatus !== 'Out of Stock');
-
-      const formattedData = inStockItems.map(stock => [
+      const formattedData = stock.map(stock => [
         stock.stockId,
         stock.category?.categoryName || "Unknown",
         stock.product?.productName || 'Unknown',
@@ -65,38 +53,20 @@ function CurrentStock() {
       setIsLoading(false);
     }
   };
-
   const handleStatusChange = async (stockId, newStatus) => {
     try {
-      // Fetch the current stock item to get all its details
-      const stockResponse = await fetch(`${config.BASE_URL}/stock/${stockId}`);
-      if (!stockResponse.ok) {
-        throw new Error(`Failed to fetch stock details: ${stockResponse.status} ${stockResponse.statusText}`);
-      }
-      const stockItem = await stockResponse.json();
-
-      // Prepare the update payload
-      const updatePayload = {
-        ...stockItem,
-        stockStatus: newStatus,
-        stockQty: newStatus === 'Out of Stock' ? 0 : stockItem.stockQty
-      };
-
-      // Send the update request
       const response = await fetch(`${config.BASE_URL}/stock/${stockId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updatePayload),
+        body: JSON.stringify({ stockStatus: newStatus }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`Failed to update stock status: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
+        setError(`Failed to update stock status: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
       }
-
-      // Refetch the stock data to update the UI
       await fetchStock();
     } catch (error) {
       setError(`Error updating stock status: ${error.message}`);

@@ -7,7 +7,7 @@ function StockHistory() {
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
 
-  const columns = ['#', 'Name', 'Quantity', 'Stock Date', 'Stock Price', 'Product', 'Supplier', 'Store', 'Status'];
+  const columns = ['#', 'Quantity', 'Stock ', 'Product'];
   const btnName = 'Generate Report'
 
   useEffect(() => {
@@ -16,94 +16,23 @@ function StockHistory() {
 
   const fetchStock = async () => {
     try {
-      const response = await fetch(`${config.BASE_URL}/stocks`);
+      const response = await fetch(`${config.BASE_URL}/stockHistory`);
       if (!response.ok) {
-        throw new Error('Failed to fetch stock list');
+        setError('Failed to fetch stock History');
       }
       const stock = await response.json();
 
-      // Filter to show only out-of-stock items
-      const outOfStockItems = stock.filter(stock => stock.stockStatus === "Out of Stock");
-
-      const formattedData = outOfStockItems.map(stock => [
-        stock.stockId,
-        stock.stockName,
-        stock.stockQty,
-        stock.stockDate,
-        stock.stockPrice,
-        stock.product?.productName || 'Unknown',
-        stock.supplier?.supplierName || 'Unknown',
-        stock.store?.storeName || "Unknown",
-        <select
-          className='form-control'
-          value={stock.stockStatus}
-          onChange={(e) => handleStatusChange(stock.stockId, e.target.value)}
-        >
-          <option value="In stock">In stock</option>
-          <option value="Out of Stock">Out of Stock</option>
-        </select>
+      const formattedData = stock.map(stock => [
+        stock.stockHistoryId,
+        stock.stockHistoryQty,
+        stock.stock?.stockName || "Unknown",
+        stock.product?.productName || "Unknown",
       ]);
       setData(formattedData);
       setIsLoading(false);
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
-    }
-  };
-
-  const handleStatusChange = async (stockId, newStatus) => {
-    try {
-
-      const fetchResponse = await fetch(`${config.BASE_URL}/stock/${stockId}`);
-      if (!fetchResponse.ok) {
-        throw new Error(`Failed to fetch stock data: ${fetchResponse.status} ${fetchResponse.statusText}`);
-      }
-      const currentStock = await fetchResponse.json();
-
-      const updatePayload = {
-        ...currentStock,
-        stockStatus: newStatus
-      };
-
-      if (newStatus === "In stock" && updatePayload.stockQty === 0) {
-        updatePayload.stockQty = 1;
-      }
-
-      const updateResponse = await fetch(`${config.BASE_URL}/stock/${stockId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatePayload),
-      });
-
-      if (!updateResponse.ok) {
-        const errorData = await updateResponse.json();
-        throw new Error(`Failed to update stock status: ${updateResponse.status} ${updateResponse.statusText}. ${errorData.message || ''}`);
-      }
-
-      await fetchStock();
-    } catch (error) {
-      setError(`Error updating stock status: ${error.message}`);
-    }
-  };
-
-  const handleDelete = async (rowIndex) => {
-    try {
-      const stockId = data[rowIndex][0];
-      const response = await fetch(`${config.BASE_URL}/stock/${stockId}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Failed to delete stock: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
-      }
-
-      setData(prevData => prevData.filter((_, index) => index !== rowIndex));
-      await fetchStock();
-    } catch (err) {
-      setError(`Error deleting stock: ${err.message}`);
     }
   };
 
@@ -124,7 +53,6 @@ function StockHistory() {
             data={data}
             columns={columns}
             btnName={btnName}
-            onDelete={handleDelete}
             title={title}
             invoice={invoice}
           />
