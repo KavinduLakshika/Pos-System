@@ -1,5 +1,6 @@
 const User = require("../model/User");
 const Store = require("../model/Store");
+const Switch = require("../model/Switch");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
@@ -308,30 +309,39 @@ const deleteUser = async (req, res) => {
     }
 };
 
-//User login
+
 const userLogin = async (req, res) => {
     try {
         const { userName, userPassword } = req.body;
 
         if (!userName || !userPassword) {
-            return res
-                .status(400)
-                .json({ error: "Username and password are required." });
+            return res.status(400).json({ error: "Username and password are required." });
         }
 
-        const user = await User.findOne({ where: { userName } });
+        // Fetch switch status
+        const switchStatus = await Switch.findOne({ where: { id: 1 } });
+        if (!switchStatus) {
+            return res.status(500).json({ error: "System status not found." });
+        }
 
+        // Fetch user details
+        const user = await User.findOne({ where: { userName } });
         if (!user) {
             return res.status(404).json({ error: "User not found." });
         }
 
-        const passwordMatch = await bcrypt.compare(userPassword, user.userPassword);
+        // If switch is off (status = 0) and user is not 'master', deny access
+        if (switchStatus.status === 0 && user.userName !== 'master') {
+            return res.status(403).json({ error: "Access denied. Please contact the administrator." });
+        }
 
+        // Verify password
+        const passwordMatch = await bcrypt.compare(userPassword, user.userPassword);
         if (!passwordMatch) {
             return res.status(401).json({ error: "Incorrect password." });
         }
 
-        // Generate JWT token
+        // Generate token
         const token = jwt.sign(
             {
                 id: user.id,
@@ -342,7 +352,7 @@ const userLogin = async (req, res) => {
             { expiresIn: "12h" }
         );
 
-        // Respond with the token
+        // Return token and user info
         res.status(200).json({
             message: "Login successful",
             token,
@@ -356,7 +366,40 @@ const userLogin = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: `An error occurred: ${error.message}` });
     }
-}
+};
+
+
+// Get users by is_hidden status
+const getUsersByHiddenStatus = async (req, res) => {
+    try {
+        const { is_hidden } = req.params; // Get is_hidden status from request parameters
+
+        if (is_hidden !== '0' && is_hidden !== '1') {
+            return res.status(400).json({ error: "Invalid is_hidden value. Use 0 (visible) or 1 (hidden)." });
+        }
+
+        // Fetch users based on is_hidden value
+        const users = await User.findAll({
+            where: {
+                is_hidden: is_hidden
+            },
+            include: [{
+                model: Store,
+                as: 'store',
+            }],
+        });
+
+        // Check if any users are found
+        if (!users.length) {
+            return res.status(404).json({ message: `No users found with is_hidden = ${is_hidden}.` });
+        }
+
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ error: `An error occurred: ${error.message}` });
+    }
+};
+
 
 module.exports = {
     createUser,
@@ -365,5 +408,6 @@ module.exports = {
     updateUser,
     deleteUser,
     userLogin,
-    hideUser
+    hideUser,
+    getUsersByHiddenStatus
 }
