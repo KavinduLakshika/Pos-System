@@ -82,62 +82,60 @@ const Form = ({ closeModal, onSave, cus }) => {
     e.preventDefault();
     const errors = validate();
     if (Object.keys(errors).length > 0) {
-        setFormErrors(errors);
-        return;
+      setFormErrors(errors);
+      return;
     }
 
     const customerData = {
-        cusTitle: formData.title,
-        cusName: formData.name,
-        cusAddress: formData.address,
-        cusPhone: formData.phone,
-        cusEmail: formData.email,
-        cusNIC: formData.nic,
-        cusCompany: formData.company,
-        cusJob: formData.jobPosition,
-        cusWorkPlaceTP: formData.workplacePhone,
-        cusWorkPlaceAddress: formData.workplaceAddress,
-        cusCode: generateCustomerCode(formData.name),
-        cusCity: 'Unknown',
+      cusTitle: formData.title,
+      cusName: formData.name,
+      cusAddress: formData.address,
+      cusPhone: formData.phone,
+      cusEmail: formData.email,
+      cusNIC: formData.nic,
+      cusCompany: formData.company,
+      cusJob: formData.jobPosition,
+      cusWorkPlaceTP: formData.workplacePhone,
+      cusWorkPlaceAddress: formData.workplaceAddress,
+      cusCode: generateCustomerCode(formData.name),
+      cusCity: 'Unknown',
     };
 
-    console.log('Customer data:', customerData); 
+    console.log('Customer data:', customerData);
 
     try {
-        const url = cus
-            ? `${config.BASE_URL}/customer/${cus.cusId}`
-            : `${config.BASE_URL}/customer`;
-        const method = cus ? 'PUT' : 'POST';
+      const url = cus
+        ? `${config.BASE_URL}/customer/${cus.cusId}`
+        : `${config.BASE_URL}/customer`;
+      const method = cus ? 'PUT' : 'POST';
 
-        const response = await fetch(url, {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(customerData),
-        });
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(customerData),
+      });
 
-        console.log('Response status:', response.status); 
+      console.log('Response status:', response.status);
 
-        const responseData = await response.json(); 
-        console.log('Response data:', responseData);
+      const responseData = await response.json();
+      console.log('Response data:', responseData);
 
-        if (response.ok) {
-            console.log(cus ? 'Customer updated:' : 'Customer created:', responseData);
-            setError(cus ? 'Successfully Updated!' : 'Successfully Created!');
-            onSave(customerData);
-            closeModal();
-        } else {
-            console.error('Failed to save customer:', responseData); 
-            setError(responseData.error || 'An error occurred while saving the customer.'); 
-        }
+      if (response.ok) {
+        console.log(cus ? 'Customer updated:' : 'Customer created:', responseData);
+        setError(cus ? 'Successfully Updated!' : 'Successfully Created!');
+        onSave(customerData);
+        closeModal();
+      } else {
+        console.error('Failed to save customer:', responseData);
+        setError(responseData.error || 'An error occurred while saving the customer.');
+      }
     } catch (error) {
-        console.error('Error:', error);
-        setError('An error occurred while saving the customer.');
+      console.error('Error:', error);
+      setError('An error occurred while saving the customer.');
     }
-};
-
-
+  };
 
   const generateCustomerCode = (name) => {
     return name.substring(0, 3).toUpperCase() + Date.now().toString().slice(-4);
