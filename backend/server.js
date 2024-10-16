@@ -19,6 +19,7 @@ const ExpensesCatController = require("./controller/ExpensesCatController");
 const RentalInvoiceController = require("./controller/RentalInvoiceController");
 const ReportController = require("./controller/Reports/ReportController");
 const ProductNStockController = require("./controller/Reports/ProductStockController");
+const StockHistoryController = require('./controller/StockHistoryController');
 
 const app = express();
 const PORT = process.env.PORT;
@@ -73,6 +74,9 @@ app.get("/stocks", StockController.getAllStocks);
 app.get("/stock/:id", StockController.getStockById);
 app.put("/stock/:id", StockController.updateStock);
 app.delete("/stock/:id", StockController.deleteStock);
+
+//Stock History routes
+app.get('/stockHistory', StockHistoryController.getAllStockHistory);
 
 //invoice routes
 app.post("/invoice", InvoiceController.createInvoice);

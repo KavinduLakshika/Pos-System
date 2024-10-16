@@ -3,6 +3,7 @@ const Supplier = require("../model/Supplier");
 const Product = require("../model/Products");
 const Store = require("../model/Store");
 const Category = require("../model/Category");
+const StockHistory = require("../model/StockHistory");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -123,6 +124,13 @@ const createStock = async (req, res) => {
                     { model: Store, as: 'store' },
                     { model: Category, as: 'category' },
                 ],
+            });
+
+            // Now create a stock history entry
+            await StockHistory.create({
+                stockHistoryQty: stockQty,
+                stock_stockId: newStock.stockId,
+                products_productId: productId
             });
 
             res.status(201).json(stockDetails);
@@ -281,6 +289,15 @@ const updateStock = async (req, res) => {
                 category_categoryId: categoryId,
             });
 
+
+            if (stockQty && stockQty !== stock.stockQty) {
+                await StockHistory.create({
+                    stockHistoryQty: stockQty,
+                    stock_stockId: stock.stockId,
+                    products_productId: productId
+                });
+            }
+
             res.status(200).json(stock);
         } catch (error) {
             res.status(400).json({ error: error.message });
@@ -301,7 +318,7 @@ const deleteStock = async (req, res) => {
         if (stock.billImage) {
             const imagePath = path.join(__dirname, '..', 'uploads', 'stock', path.basename(stock.billImage));
             if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath); // Remove image from server
+                fs.unlinkSync(imagePath); 
             }
         }
 

@@ -50,22 +50,6 @@ const Transaction = sequelize.define(
             },
             allowNull: false,
         },
-        supplier_supplierId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Supplier,
-                key: "supplierId",
-            },
-            allowNull: false,
-        },
-        rentalInvoice_rentalInvoiceId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: RentalInvoice,
-                key: "rentalInvoiceId",
-            },
-            allowNull: false,
-        },
         user_userId: {
             type: DataTypes.INTEGER,
             references: {
@@ -83,14 +67,6 @@ const Transaction = sequelize.define(
 Transaction.belongsTo(Invoice, {
     foreignKey: "invoice_invoiceId",
     as: "product",
-});
-Transaction.belongsTo(Supplier, {
-    foreignKey: "supplier_supplierId",
-    as: "supplier",
-});
-Transaction.belongsTo(RentalInvoice, {
-    foreignKey: "rentalInvoice_rentalInvoiceId",
-    as: "rentalInvoice",
 });
 Transaction.belongsTo(User, {
     foreignKey: "user_userId",

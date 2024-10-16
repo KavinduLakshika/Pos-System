@@ -7,7 +7,6 @@ const SalesHistory = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const columns = ['Date & Time', 'Product Name', 'Size', 'Customer Name', 'Customer Nic', 'Value', 'Sold Price', 'Job Done By', 'Profit/Loss'];
-  const btnName = 'Generate Report';
 
   useEffect(() => {
     fetchSummery();
@@ -66,7 +65,7 @@ const SalesHistory = () => {
             search={'Search by Customer Name , Product Name'}
             data={data}
             columns={columns}
-            btnName={btnName}
+            showButton={false}
             title={title}
             showActions={false}
             invoice={invoice}
