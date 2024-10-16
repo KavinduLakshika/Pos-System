@@ -22,7 +22,7 @@ function SupplierDetails() {
     try {
       const response = await fetch(`${config.BASE_URL}/suppliers`);
       if (!response.ok) {
-        throw new Error('Failed to fetch supplier list');
+        setError('Failed to fetch supplier list');
       }
       const supplier = await response.json();
       const formattedData = supplier.map(supplier => [
@@ -61,7 +61,7 @@ function SupplierDetails() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update supplier status');
+        setError('Failed to update supplier status');
       }
       fetchSuppliers();
     } catch (error) {

@@ -4,6 +4,7 @@ import config from '../../config';
 
 const StoreForm = ({ closeModal, showModal, onSave, store }) => {
     const [formErrors, setFormErrors] = useState({});
+    const [successMessage, setSuccessMessage] = useState(null);
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
@@ -66,7 +67,7 @@ const StoreForm = ({ closeModal, showModal, onSave, store }) => {
                 const errorData = await response.json();
                 setError(errorData.error || 'An error occurred.');
             } else {
-                alert(store ? 'Store updated successfully!' : 'Store created successfully!');
+                setSuccessMessage(store ? 'Store updated successfully!' : 'Store created successfully!');
                 closeModal();
                 onSave();
             }
@@ -94,7 +95,17 @@ const StoreForm = ({ closeModal, showModal, onSave, store }) => {
             <div className="modal-overlay">
                 <div className="modal-content">
                     <h4>{store ? 'Update Department' : 'Add Department'}</h4>
-                    {error && <p className="error">{error}</p>}
+                    {error && (
+                        <div className="alert alert-danger" role="alert">
+                            {error}
+                        </div>
+                    )}
+
+                    {successMessage && (
+                        <div className="alert alert-success" role="alert">
+                            {successMessage}
+                        </div>
+                    )}
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="name">Store Name</label>
