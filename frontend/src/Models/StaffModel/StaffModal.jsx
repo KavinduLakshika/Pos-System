@@ -25,7 +25,7 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
     photo: ''
   });
 
-    // Reset form data when modal closes
+  
     const resetForm = () => {
       setFormData({
         title: '-Select Title-',
@@ -45,10 +45,10 @@ const StaffModal = ({ showModal, closeModal, onSave, staff }) => {
       setFormErrors({});
     };
   
-    // Watch for modal closing
+    
     useEffect(() => {
       if (!showModal) {
-        resetForm(); // Clear form when modal is closed
+        resetForm();
       }
     }, [showModal]);
 
