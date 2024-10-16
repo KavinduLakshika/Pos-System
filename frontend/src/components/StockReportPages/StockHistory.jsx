@@ -7,7 +7,7 @@ function StockHistory() {
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
 
-  const columns = ['#', 'Quantity', 'Stock ', 'Product'];
+  const columns = ['#', 'Name', 'Quantity', 'Stock Date', 'Stock Price', 'Product', 'Supplier', 'Store', 'Status'];
   const btnName = 'Generate Report'
 
   useEffect(() => {
@@ -53,6 +53,7 @@ function StockHistory() {
             data={data}
             columns={columns}
             btnName={btnName}
+            onDelete={handleDelete}
             title={title}
             invoice={invoice}
           />

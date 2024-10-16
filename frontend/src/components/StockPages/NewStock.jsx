@@ -15,11 +15,10 @@ const NewStock = () => {
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [productSearch, setProductSearch] = useState('');
-  const [products, setProducts] = useState([]);
-
+  const [tableData, setTableData] = useState(data || []);
 
   const columns = [
-    '#', 'Supplier Name/Position', 'Product Name', 'Supplied Date & Time', 'Supplied Quantity', 'Price Per Item', 'Total Price Before VAT', 'VAT %', 'Total Amount + VAT', 'Cash Amount', ' Cheque Amount'
+    'Stock Name', 'Supplier Name','Store', 'Supplied Date & Time','Product Name','Product Category', 'M Date', 'Exp Date','Price Per Item', 'Supplied Quantity',  'Total Price Before VAT', 'VAT %', 'Total Amount + VAT', 'Cash Amount', ' Cheque Amount', 'Due','Description'
   ];
 
   const [formData, setFormData] = useState({
@@ -67,7 +66,6 @@ const NewStock = () => {
     fetchStores();
     fetchCategories();
     fetchSuppliers();
-    fetchProducts();
   }, []);
 
   const fetchStock = async () => {
@@ -144,20 +142,6 @@ const NewStock = () => {
     }
   };
 
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch(`${config.BASE_URL}/products`);
-      if (response.ok) {
-        const data = await response.json();
-        setProducts(data);
-      } else {
-        console.error('Failed to fetch products');
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
-
   const fetchProductByName = async (name) => {
     try {
       const response = await fetch(`${config.BASE_URL}/product/productName/${name}`);
@@ -182,6 +166,12 @@ const NewStock = () => {
 
     setFormData((prevData) => {
       const newData = { ...prevData, [name]: value };
+
+      if (name === 'date' && value) {
+        const dateObject = new Date(value);
+        newData.date = dateObject.toISOString().slice(0, 16); // format to 'YYYY-MM-DDTHH:MM'
+      }
+  
 
       // Calculate total price when price or qty changes
       if (name === 'price' || name === 'qty') {
@@ -211,9 +201,11 @@ const NewStock = () => {
     e.preventDefault();
 
     const formDataToSend = new FormData();
+    const formattedDate = formData.date.replace('T', ' ');
 
     formDataToSend.append('stockName', formData.stockName);
-    formDataToSend.append('stockDate', formData.date);
+    formDataToSend.append('stockDate', formattedDate);
+    
     formDataToSend.append('stockPrice', formData.totalPrice);
     formDataToSend.append('due', formData.due);
     formDataToSend.append('vat', formData.vat);
@@ -290,15 +282,54 @@ const NewStock = () => {
     navigate('/stock-reports/current-stock');
   };
 
-  const handleNewProduct=()=>{
-    navigate('/product/create')
-  }
+  const handleAddStock = (e) => {
+    e.preventDefault();
+
+    
+    if (!formData.stockName || !formData.supplier || !formData.date ||
+        !formData.cashAmount || !formData.due || !formData.category || !formData.totalPrice) {
+        alert("Please fill necessary details.");
+        return;
+    }
+
+    const formattedDate = formData.date.replace('T', ' ');
+    // Create a new row from formData
+    const newRow = [
+        formData.stockName,
+        formData.supplier,
+        formData.store,
+        formattedDate,
+        formData.product,
+        formData.category,
+        formData.mfd,
+        formData.exp,
+        formData.price,
+        formData.qty,
+        formData.totalPrice,
+        formData.vat,
+        formData.totalPriceVAT,
+        formData.cashAmount,
+        formData.chequeAmount,
+        formData.due,
+        formData.description
+    ];
+
+    // Update table data 
+    setTableData(prevData => {
+        const updatedData = [...prevData, newRow];
+        console.log("Added new row:", newRow);
+        console.log("Updated table data:", updatedData);
+        return updatedData;
+    });
+};
+
+
 
   return (
     <div className="scrolling-container">
       <div className="container-fluid my-5 mt-2">
         <h4 className="mb-4">Create New Stock</h4>
-        {error && (
+        {/* {error && (
           <div className="alert alert-danger" role="alert">
             {error}
           </div>
@@ -308,7 +339,7 @@ const NewStock = () => {
           <div className="alert alert-success" role="alert">
             {successMessage}
           </div>
-        )}
+        )} */}
 
         <div className="d-flex justify-content-end mt-4">
           <button className='btn btn-warning' onClick={handleNewStockClick}>Current Stock</button>
@@ -382,15 +413,8 @@ const NewStock = () => {
             <div className="col-md-6">
               <div className="row">
                 <div className="col-md-6 mb-3">
-                  <label htmlFor="product" className="form-label">Product Name</label>
-                  <select name="product" value={formData.product} className="form-select" onChange={handleChange}>
-                    <option value="">Select Product</option>
-                    {products.map((product) => (
-                      <option key={product.productId} value={product.productId}>
-                        {product.productName}
-                      </option>
-                    ))}
-                  </select>
+                  <label htmlFor="productSearch" className="form-label">Product Name</label>
+                  <input type="text" name="productSearch" className="form-control" value={productSearch} onChange={handleProductSearch} />
                 </div>
                 <div className="col-md-6 mb-3">
                   <label htmlFor="category" className="form-label">Product Category</label>
@@ -441,19 +465,30 @@ const NewStock = () => {
               </div>
 
               <div className="d-flex justify-content-end mt-4">
-                <button type="button" className="btn btn-primary" onClick={handleNewProduct}>Add Product</button>
+                <button type="button" className="btn btn-primary" onClick={handleAddStock}>Add Stock +</button>
               </div>
             </div>
           </div>
-
+          
           {/* Table */}
           <div className="table-responsive mt-5">
+          {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
+
+        {successMessage && (
+          <div className="alert alert-success" role="alert">
+            {successMessage}
+          </div>
+        )}
             {isLoading ? (
               <p>Loading...</p>
             ) : (
               <Table
-                search="Search by Supplier Name"
-                data={data}
+                search="Search"
+                data={tableData}
                 columns={columns}
                 showButton={false}
                 showActions={false}

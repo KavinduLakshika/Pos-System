@@ -222,7 +222,7 @@ const CreateProductReturn = () => {
                 )}
                 <form onSubmit={handleSubmit}>
                     <div className="row">
-                        <div className="customer col-md-4">
+                        <div className="customer px-4 col-md-4">
                             <div className="row">
                                 <div className="Stock-details col-md-10 mb-2">
                                     <label htmlFor="cusNic">Customer NIC</label>
@@ -304,11 +304,12 @@ const CreateProductReturn = () => {
                                     <textarea className="form-control" name="productNote" value={formData.productNote} onChange={handleChange} rows={2} />
                                 </div>
                                 <div className="col-md-4 mt-5">
-                                    <button className="btn btn-primary btn-md">Add Product</button>
+                                    <button className="btn btn-danger btn-md" type="button" onClick={() => setFormData(initialFormData)}>Clear</button>
+                                    <button className="btn btn-primary btn-md">Proceed</button>
                                 </div>
                             </div>
 
-                            <div className="product-table">
+                            {/* <div className="product-table">
                                 {isLoading ? (
                                     <p>Loading...</p>
                                 ) : (
@@ -323,14 +324,14 @@ const CreateProductReturn = () => {
                                         showPDF={false}
                                     />
                                 )}
-                            </div>
+                            </div> */}
 
                         </div>
                     </div>
-                    <div className="d-grid d-md-flex me-md-2 justify-content-end px-5">
+                    {/* <div className="d-grid d-md-flex me-md-2 justify-content-end px-5">
                         <button className="btn btn-danger btn-md mb-2" type="button" onClick={() => setFormData(initialFormData)}>Clear</button>
                         <button className="btn btn-primary btn-md mb-2" type="submit">Proceed</button>
-                    </div>
+                    </div> */}
                 </form>
             </div>
         </div>

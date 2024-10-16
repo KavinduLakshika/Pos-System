@@ -137,6 +137,7 @@ function SupplierDetails() {
             onDelete={handleDelete}
             title={title}
             invoice={invoice}
+            showDate={false}
           />
         )}
         <SupplierForm
