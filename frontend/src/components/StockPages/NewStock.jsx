@@ -290,6 +290,9 @@ const NewStock = () => {
     navigate('/stock-reports/current-stock');
   };
 
+  const handleNewProduct=()=>{
+    navigate('/product/create')
+  }
 
   return (
     <div className="scrolling-container">
@@ -438,7 +441,7 @@ const NewStock = () => {
               </div>
 
               <div className="d-flex justify-content-end mt-4">
-                <button type="button" className="btn btn-primary" onClick={() => {/* Add logic to add product to the list */ }}>Add Product</button>
+                <button type="button" className="btn btn-primary" onClick={handleNewProduct}>Add Product</button>
               </div>
             </div>
           </div>
