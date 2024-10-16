@@ -18,7 +18,7 @@ const ProductList = () => {
 
   const fetchProductList = async () => {
     try {
-      const response = await fetch(`${config.BASE_URL}/products`);
+      const response = await fetch(`${config.BASE_URL}/product`);
       if (!response.ok) {
         setError(`Failed to fetch product list: ${response.status} ${response.statusText}`);
       }
@@ -147,7 +147,7 @@ const ProductList = () => {
         ) : error ? (
           <div className="error-message">
             <p>Error: {error}</p>
-            <button onClick={fetchProductList}>Retry</button>
+            <button className='btn btn-danger' onClick={fetchProductList}>Retry</button>
           </div>
         ) : (
           <Table
