@@ -168,7 +168,7 @@ const Table = ({
 
                 {showButton && (
                     <div className=" d-flex justify-content-end">
-                        <button className="btn btn-info text-white" onClick={onAdd}>
+                        <button className="btn btn-info text-dark" onClick={onAdd}>
                             {btnName}
                         </button>
                     </div>
