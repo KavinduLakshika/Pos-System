@@ -20,7 +20,7 @@ const ProductList = () => {
     try {
       const response = await fetch(`${config.BASE_URL}/products`);
       if (!response.ok) {
-        throw new Error(`Failed to fetch product list: ${response.status} ${response.statusText}`);
+        setError(`Failed to fetch product list: ${response.status} ${response.statusText}`);
       }
       const prod = await response.json();
       const formattedData = prod.map(prod => [
