@@ -24,7 +24,7 @@ const CreateStore = () => {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to update store status');
+                setError('Failed to update store status');
             }
             fetchStores();
         } catch (error) {
@@ -34,14 +34,14 @@ const CreateStore = () => {
 
     useEffect(() => {
         fetchStores();
-    }, []);
+    });
 
     const fetchStores = async () => {
         try {
             setIsLoading(true);
             const response = await fetch(`${config.BASE_URL}/stores`);
             if (!response.ok) {
-                throw new Error('Failed to fetch user list');
+                setError('Failed to fetch user list');
             }
             const stores = await response.json();
             const formattedData = stores.map(store => [
@@ -86,7 +86,7 @@ const CreateStore = () => {
             });
 
             if (!response.ok) {
-                alert('Failed to delete the department, it has an active staff member.')
+                setError('Failed to delete the department, it has an active staff member.')
             }
             fetchStores();
         } catch (err) {
