@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Header.css';
+import Switch from './Switch';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -44,6 +45,7 @@ const Header = () => {
           className="me-2" 
         />
         <h1 className="h4 mb-0">LOGO</h1>  */}
+        <Switch/>
       </div>
       <div className="d-flex align-items-center">
         <span className="trial-message text-white me-3 d-none d-md-block">
