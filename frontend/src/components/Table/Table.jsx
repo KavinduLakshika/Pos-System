@@ -188,7 +188,7 @@ const Table = ({
                                 </tr>
                             </thead>
                             <tbody>
-                                {currentItems.reverse().map((datum, rowIndex) => (
+                                {currentItems.map((datum, rowIndex) => (
                                     <tr key={rowIndex}>
                                         {datum.map((item, colIndex) => (
                                             <td key={colIndex} style={{ textAlign: 'center' }} >{item}</td>
