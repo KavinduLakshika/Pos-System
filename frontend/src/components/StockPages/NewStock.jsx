@@ -290,7 +290,7 @@ const NewStock = () => {
     navigate('/stock-reports/current-stock');
   };
 
-  const handleNewProduct=()=>{
+  const handleNewProduct = () => {
     navigate('/product/create')
   }
 
@@ -310,7 +310,8 @@ const NewStock = () => {
           </div>
         )}
 
-        <div className="d-flex justify-content-end mt-4">
+        <div className="d-flex justify-content-end mt-4 mb-3">
+          <button type="button" className="btn btn-primary" onClick={handleNewProduct}>Add Product</button>
           <button className='btn btn-warning' onClick={handleNewStockClick}>Current Stock</button>
         </div>
 
@@ -438,10 +439,6 @@ const NewStock = () => {
               <div className="product-details col-md-4 mb-2">
                 <label htmlFor="" className='mb-1'>Description</label>
                 <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
-              </div>
-
-              <div className="d-flex justify-content-end mt-4">
-                <button type="button" className="btn btn-primary" onClick={handleNewProduct}>Add Product</button>
               </div>
             </div>
           </div>
