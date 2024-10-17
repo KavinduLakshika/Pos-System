@@ -20,6 +20,7 @@ const RentalInvoiceController = require("./controller/RentalInvoiceController");
 const ReportController = require("./controller/Reports/ReportController");
 const ProductNStockController = require("./controller/Reports/ProductStockController");
 const StockHistoryController = require('./controller/StockHistoryController');
+const SwitchController = require('./controller/SwitchController');
 
 const app = express();
 const PORT = process.env.PORT;
@@ -28,6 +29,10 @@ const PORT = process.env.PORT;
 app.use(cors());
 app.use(bodyParser.json());
 
+// status endpoint
+app.get('/api/switch', SwitchController.getStatus);
+app.post('/api/switch', SwitchController.updateStatus);
+
 //user routes
 app.post("/user", UserController.createUser);
 app.get("/users", UserController.getAllUsers);
@@ -35,6 +40,8 @@ app.get("/user/:id", UserController.getUserById);
 app.put("/user/:id", UserController.updateUser);
 app.delete("/user/:id", UserController.deleteUser);
 app.post("/userLogin", UserController.userLogin);
+app.get("/users/hidden/:is_hidden", UserController.getUsersByHiddenStatus);
+
 
 //customer routes
 app.post("/customer", CustomerController.createCustomer);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import config from '../config';
@@ -7,30 +7,69 @@ function Login() {
   const [userName, setUserName] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [error, setError] = useState('');
+  const [switchStatus, setSwitchStatus] = useState(null);
   const navigate = useNavigate();
+
+  // Fetch switch status from the 'switch' table
+  useEffect(() => {
+    const fetchSwitchStatus = async () => {
+      try {
+        const response = await axios.get(`${config.BASE_URL}/api/switch`);
+        setSwitchStatus(response.data.status); // Expecting { status: 0 or 1 }
+      } catch (err) {
+        setError('Failed to fetch system status. Please try again later.');
+      }
+    };
+    fetchSwitchStatus();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-        const response = await axios.post(`${config.BASE_URL}/userLogin`, { userName, userPassword });
-        const { token, user } = response.data;
+      if (switchStatus === null) {
+        setError('Unable to verify system status. Please try again.');
+        return;
+      }
 
-        
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));  
+      // Fetch user data by login
+      const response = await axios.post(`${config.BASE_URL}/userLogin`, { userName, userPassword });
+      const { token, user } = response.data;
 
-        navigate('/');  
+      // If switch is off and the user is not 'master', deny login
+      if (switchStatus === false && user.userName !== 'master') {
+        setError('Contact admin');
+        return;
+      }
+
+      // If all conditions are met, allow login
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      navigate('/');
+
     } catch (error) {
-        setError('Invalid username or password');
+      if (error.response) {
+        if (error.response.status === 403) {
+          setError('Access denied. Please contact the administrator.');
+        } else if (error.response.status === 404) {
+          setError('User not found.');
+        } else if (error.response.status === 401) {
+          setError('Incorrect password.');
+        } else {
+          setError(error.response.data.error || 'An error occurred during login.');
+        }
+      } else if (error.request) {
+        setError('No response from server. Please try again later.');
+      } else {
+        setError('An error occurred. Please try again.');
+      }
     }
-};
-
+  };
 
   return (
     <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
       <div className="card p-4 rounded shadow-lg w-100" style={{ maxWidth: '400px' }}>
         <div className="text-center mb-4">
-          {/* <img src="/logo.png" alt="logo" className="mb-3" style={{ height: '40px' }} /> */}
           <h1>Pos System</h1>
         </div>
         <h2 className="text-center mb-4">Welcome!</h2>
