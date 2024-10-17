@@ -74,6 +74,7 @@ app.get("/stocks", StockController.getAllStocks);
 app.get("/stock/:id", StockController.getStockById);
 app.put("/stock/:id", StockController.updateStock);
 app.delete("/stock/:id", StockController.deleteStock);
+app.get('/stock/product/:products_productId', StockController.getStockIdUsingProductId);
 
 //Stock History routes
 app.get('/stockHistory', StockHistoryController.getAllStockHistory);

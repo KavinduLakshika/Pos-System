@@ -183,6 +183,19 @@ const getStockById = async (req, res) => {
     }
 };
 
+const getStockIdUsingProductId = async (req, res) => {
+    try {
+        const { products_productId } = req.params;
+        const stock = await Stock.findOne({ where: { products_productId } });
+        if (!stock) {
+            return res.status(404).json({ message: "Stock not found" });
+        }
+        res.status(200).json(stock);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // Update stock
 const updateStock = async (req, res) => {
     upload(req, res, async function (err) {
@@ -318,7 +331,7 @@ const deleteStock = async (req, res) => {
         if (stock.billImage) {
             const imagePath = path.join(__dirname, '..', 'uploads', 'stock', path.basename(stock.billImage));
             if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath); 
+                fs.unlinkSync(imagePath);
             }
         }
 
@@ -335,4 +348,5 @@ module.exports = {
     getStockById,
     updateStock,
     deleteStock,
+    getStockIdUsingProductId
 };

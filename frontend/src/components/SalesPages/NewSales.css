@@ -5,6 +5,10 @@
     margin: 20px 40px;
 }
 
+.displayNone{
+    display: none;
+}
+
 .customer {
     border-right: 1px solid #c3c3c3;
     padding-right: 40px;

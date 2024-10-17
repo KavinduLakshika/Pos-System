@@ -1,5 +1,6 @@
 const Transaction = require("../model/Transaction");
 const Invoice = require("../model/Invoice");
+const User =require("../model/User")
 
 const createTransaction = async (req, res) => {
     try {
@@ -25,6 +26,13 @@ const createTransaction = async (req, res) => {
             return res.status(400).json({ message: 'Invalid invoice ID' });
         }
 
+        // Validate user
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid user ID' });
+        }
+
+        // Create the transaction
         const newTransaction = await Transaction.create({
             transactionType,
             price,
@@ -39,9 +47,12 @@ const createTransaction = async (req, res) => {
 
         res.status(201).json(newTransaction);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error('Transaction creation error:', error);
+        res.status(500).json({ message: 'An error occurred while creating the transaction.' });
     }
 };
+
+
 
 // Get all transactions
 const getAllTransactions = async (req, res) => {
