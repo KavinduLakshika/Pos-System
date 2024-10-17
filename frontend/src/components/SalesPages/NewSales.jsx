@@ -16,7 +16,7 @@ const NewSales = ({ invoice }) => {
   const [productId, setProductId] = useState('');
   const [stockId, setStockId] = useState('');
 
-  const Columns = ["Customer Code", 'Customer Name', 'Customer Nic','Stock Id','Pro Id', 'Product Code', 'Product Name', 'Product Price', 'Quantity', 'Discount', 'Total Price', 'Warranty'];
+  const Columns = ["Customer Code", 'Customer Name', 'Customer Nic', 'Product Code', 'Product Name', 'Product Price', 'Quantity', 'Discount', 'Total Price', 'Warranty'];
   const [formData, setFormData] = useState({
     cusName: '',
     cusNic: '',
