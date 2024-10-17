@@ -140,9 +140,6 @@ const createStock = async (req, res) => {
     });
 };
 
-
-
-
 // Get all stocks
 const getAllStocks = async (req, res) => {
     try {

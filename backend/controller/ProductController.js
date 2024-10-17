@@ -276,7 +276,6 @@ const getProductByCodeOrName = async (req, res) => {
 };
 
 
-
 const getProductSuggestions = async (req, res) => {
     try {
         const { query } = req.query;
@@ -291,10 +290,9 @@ const getProductSuggestions = async (req, res) => {
             where: {
                 [Op.or]: [
                     { productName: { [Op.like]: `%${query}%` } },
-                    { productCode: { [Op.like]: `%${query}%` } }
                 ]
             },
-            attributes: ['productId', 'productName', 'productCode'], // Limit attributes to necessary fields
+            attributes: ['productId', 'productName'], 
             limit: 10 
         });
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import config from '../config';
 
 function Login() {
@@ -15,7 +16,7 @@ function Login() {
     const fetchSwitchStatus = async () => {
       try {
         const response = await axios.get(`${config.BASE_URL}/api/switch`);
-        setSwitchStatus(response.data.status); // Expecting { status: 0 or 1 }
+        setSwitchStatus(response.data.status);
       } catch (err) {
         setError('Failed to fetch system status. Please try again later.');
       }
@@ -36,9 +37,24 @@ function Login() {
       const response = await axios.post(`${config.BASE_URL}/userLogin`, { userName, userPassword });
       const { token, user } = response.data;
 
+      // Check if the user's status is active
+      if (user.userStatus && token === 'active') {
+        setError('Your account is inactive. Please contact support.');
+        return;
+      }
+
       // If switch is off and the user is not 'master', deny login
       if (switchStatus === false && user.userName !== 'master') {
-        setError('NM Digital Solutions Kandy එකට කෝල් කරන්න');
+        setError('Access denied. Please contact the administrator.');
+        return;
+      }
+
+      // Verify if the token is still valid by decoding it
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000; // Current time in seconds
+
+      if (decodedToken.exp < currentTime) {
+        setError('Session expired. Please log in again.');
         return;
       }
 

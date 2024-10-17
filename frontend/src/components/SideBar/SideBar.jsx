@@ -8,16 +8,34 @@ const Sidebar = () => {
     const [activeSubmenu, setActiveSubmenu] = useState(null);
     const navigate = useNavigate();
 
-  const handleLogout = () => {
-   
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    
-    
-    navigate('/login');
-  };
+    const handleLogout = () => {
+
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+
+        navigate('/login');
+    };
+
+    const checkTokenExpiration = () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            handleLogout();
+            return;
+        }
+
+        const payload = JSON.parse(atob(token.split('.')[1])); 
+        const now = Date.now() / 1000; 
+
+        if (payload.exp < now) {
+            handleLogout(); 
+        }
+    };
 
     useEffect(() => {
+        checkTokenExpiration();
+
+        const intervalId = setInterval(checkTokenExpiration, 60 * 1000); // 60 seconds
+
         const handleResize = () => {
             if (window.innerWidth <= 768) {
                 setIsCollapsed(true);
@@ -28,8 +46,11 @@ const Sidebar = () => {
 
         window.addEventListener('resize', handleResize);
 
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+        return () => {
+            clearInterval(intervalId);
+            window.removeEventListener('resize', handleResize);
+        };
+    });
 
     const toggleSidebar = () => {
         setIsCollapsed(!isCollapsed);
@@ -200,25 +221,25 @@ const Sidebar = () => {
                                                 <li key={subIndex} className="nav-item nav-sub">
                                                     <Link to={submenu.path} className="nav-link">{submenu.title}</Link>
                                                 </li>
-                                                
+
                                             ))}
-                                            
+
                                         </ul>
 
                                     </div>
-                                    
+
                                 </li>
-                               
+
                             ))}
-                              
+
                         </ul>
-                        
+
                     </div>
                     <div className="d-flex justify-content-center mt-auto p-5">
                         <button onClick={handleLogout} className="btn btn-danger">Logout</button>
                     </div>
                 </nav>
-               
+
             </div>
         </>
     );

@@ -314,59 +314,77 @@ const userLogin = async (req, res) => {
     try {
         const { userName, userPassword } = req.body;
 
+        // Check if both username and password are provided
         if (!userName || !userPassword) {
-            return res.status(400).json({ error: "Username and password are required." });
+            return res.status(400).json({
+                message_type: "error",
+                message: "Username and password are required."
+            });
         }
 
-        // Fetch switch status
-        const switchStatus = await Switch.findOne({ where: { id: 1 } });
-        if (!switchStatus) {
-            return res.status(500).json({ error: "System status not found." });
-        }
-
-        // Fetch user details
+        // Fetch user by username
         const user = await User.findOne({ where: { userName } });
-        if (!user) {
-            return res.status(404).json({ error: "User not found." });
-        }
 
-        // If switch is off (status = 0) and user is not 'master', deny access
-        if (switchStatus.status === 0 && user.userName !== 'master') {
-            return res.status(403).json({ error: "Access denied. Please contact the administrator." });
+        // If user not found, send error response
+        if (!user) {
+            return res.status(404).json({
+                message_type: "error",
+                message: "Incorrect username or password."
+            });
         }
 
         // Verify password
         const passwordMatch = await bcrypt.compare(userPassword, user.userPassword);
         if (!passwordMatch) {
-            return res.status(401).json({ error: "Incorrect password." });
+            return res.status(401).json({
+                message_type: "error",
+                message: "Incorrect username or password."
+            });
         }
 
-        // Generate token
+        // Check if the user's account is inactive
+        if (user.user_status === "inactive") {
+            return res.status(403).json({
+                message_type: "error",
+                message: "Your account is inactive. Please contact an admin for further information."
+            });
+        }
+
+        // Generate JWT token if login is successful
         const token = jwt.sign(
             {
-                id: user.id,
+                userId: user.id,
                 userName: user.userName,
-                userType: user.userType,
+                userType: user.userType
             },
             secretKey,
-            { expiresIn: "12h" }
+            { expiresIn: '6h' }
         );
 
-        // Return token and user info
-        res.status(200).json({
-            message: "Login successful",
+        // Respond with success, token, and user details
+        return res.status(200).json({
+            message_type: "success",
+            message: "User signed in successfully.",
             token,
             user: {
                 id: user.id,
                 userName: user.userName,
-                userType: user.userType,
                 userEmail: user.userEmail,
-            },
+                userType: user.userType,
+                userStatus: user.userStatus
+            }
         });
+
     } catch (error) {
-        res.status(500).json({ error: `An error occurred: ${error.message}` });
+        // Handle any errors
+        console.error("Error during login:", error);
+        return res.status(500).json({
+            message_type: "error",
+            message: `An error occurred: ${error.message}`
+        });
     }
 };
+
 
 
 // Get users by is_hidden status

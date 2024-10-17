@@ -169,7 +169,7 @@ const NewStock = () => {
 
       if (name === 'date' && value) {
         const dateObject = new Date(value);
-        newData.date = dateObject.toISOString().slice(0, 16); // format to 'YYYY-MM-DDTHH:MM'
+        newData.date = dateObject.toISOString().slice(0, 16); 
       }
   
 

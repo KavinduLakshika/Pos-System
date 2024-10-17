@@ -7,7 +7,7 @@ const SalesHistory = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const columns = ["ID", "Date/time", "Paid Amount", "Payable Amount", "Due Amount", "Total Amount", "Discount", "Customer", "Products"];
+  const columns = ["ID", "Date/time", "Total Amount", "Customer", "Products"];
   const btnName = 'Add New Sale';
 
   useEffect(() => {
@@ -30,11 +30,7 @@ const SalesHistory = () => {
         return [
           invoice.invoiceId,
           formattedInvoiceDate,
-          invoice.paidAmount,
-          invoice.payableAmount,
-          invoice.dueAmount,
           invoice.totalAmount,
-          invoice.discount,
           invoice.customer?.cusName || "Unknown",
           invoice.product?.productName || "Unknown"
         ];
@@ -57,8 +53,8 @@ const SalesHistory = () => {
 
           {isLoading ? (
             <p>Loading...</p>
-          // ) : error ? (
-          //   <p>Error: {error}</p>
+            // ) : error ? (
+            //   <p>Error: {error}</p>
           ) : (
             <Table
               data={data}
