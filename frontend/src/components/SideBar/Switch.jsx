@@ -17,15 +17,15 @@ const Switch = () => {
         throw new Error('Failed to fetch switch status');
       }
       const { status } = await response.json();
-      setIsChecked(status); 
+      setIsChecked(status);
     } catch (err) {
       setError(err.message);
     }
   };
 
   const handleToggle = async () => {
-    const newStatus = !isChecked; 
-    setIsChecked(newStatus);  
+    const newStatus = !isChecked;
+    setIsChecked(newStatus);
 
     try {
       const response = await fetch(`${config.BASE_URL}/api/switch`, {
@@ -33,7 +33,7 @@ const Switch = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: newStatus }),  
+        body: JSON.stringify({ status: newStatus }),
       });
       if (!response.ok) {
         throw new Error('Failed to update switch status');
@@ -46,14 +46,21 @@ const Switch = () => {
   return (
     <div>
       {error && <p>Error: {error}</p>}
-      <label className="toggle-switch">
+      <label >
         <input
+          className='toggle-checkbox'
           type="checkbox"
           checked={isChecked}
           onChange={handleToggle}
         />
-        <div className="toggle-switch-background">
-          <div className="toggle-switch-handle"></div>
+        <div class="toggle-slot">
+          <div class="sun-icon-wrapper">
+            <div class="iconify sun-icon" data-icon="feather-sun" data-inline="false"></div>
+          </div>
+          <div class="toggle-button"></div>
+          <div class="moon-icon-wrapper">
+            <div class="iconify moon-icon" data-icon="feather-moon" data-inline="false"></div>
+          </div>
         </div>
       </label>
     </div>

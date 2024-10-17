@@ -1,69 +1,83 @@
-/* From Uiverse.io by ErzenXz */
-.toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 80px;
-    height: 40px;
-    cursor: pointer;
-  }
-  
-  .toggle-switch input[type="checkbox"] {
-    display: none;
-  }
-  
-  .toggle-switch-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ddd;
-    border-radius: 20px;
-    box-shadow: inset 0 0 0 2px #ccc;
-    transition: background-color 0.3s ease-in-out;
-  }
-  
-  .toggle-switch-handle {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 30px;
-    height: 30px;
-    background-color: #fff;
-    border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .toggle-switch::before {
-    content: "";
-    position: absolute;
-    top: -25px;
-    right: -35px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #aaa;
-    text-shadow: 1px 1px #fff;
-    transition: color 0.3s ease-in-out;
-  }
-  
-  .toggle-switch input[type="checkbox"]:checked + .toggle-switch-handle {
-    transform: translateX(45px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 0 3px #05c46b;
-  }
-  
-  .toggle-switch input[type="checkbox"]:checked + .toggle-switch-background {
-    background-color: #05c46b;
-    box-shadow: inset 0 0 0 2px #04b360;
-  }
-  
-  .toggle-switch input[type="checkbox"]:checked + .toggle-switch:before {
-    content: "On";
-    color: #05c46b;
-    right: -15px;
-  }
-  
-  .toggle-switch input[type="checkbox"]:checked + .toggle-switch-background .toggle-switch-handle {
-    transform: translateX(40px);
-  }
-  
+ .toggle-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.toggle-slot {
+  font-size: 10px;
+  position: relative;
+  height: 3.5em;
+  width: 7em;
+  border: 0px solid transparent;
+  border-radius: 10em;
+  background-color: white;
+  transition: background-color 250ms;
+}
+
+.toggle-checkbox:checked ~ .toggle-slot {
+  background-color: #374151;
+}
+
+.toggle-button {
+  transform: translate(0.3em, 0.25em);
+  position: absolute;
+  height: 3em;
+  width: 3em;
+  border-radius: 50%;
+  background-color: #ffeccf;
+  box-shadow: inset 0px 0px 0px 0.75em #ff0000;
+  transition: background-color 250ms, border-color 250ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+}
+
+.toggle-checkbox:checked ~ .toggle-slot .toggle-button {
+  background-color: #485367;
+  box-shadow: inset 0px 0px 0px 0.75em rgb(0, 255, 0);
+  transform: translate(3.65em, 0.25em);
+}
+
+.sun-icon {
+  position: absolute;
+  height: 6em;
+  width: 6em;
+  color: #ff0000;
+}
+
+.sun-icon-wrapper {
+  position: absolute;
+  height: 6em;
+  width: 6em;
+  opacity: 1;
+  transform: translate(2em, 2em) rotate(15deg);
+  transform-origin: 50% 50%;
+  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2,.46,.71);
+}
+
+.toggle-checkbox:checked ~ .toggle-slot .sun-icon-wrapper {
+  opacity: 0;
+  transform: translate(3em, 2em) rotate(0deg);
+}
+
+.moon-icon {
+  position: absolute;
+  height: 6em;
+  width: 6em;
+  color: white;
+}
+
+.moon-icon-wrapper {
+  position: absolute;
+  height: 6em;
+  width: 6em;
+  opacity: 0;
+  transform: translate(11em, 2em) rotate(0deg);
+  transform-origin: 50% 50%;
+  transition: opacity 150ms, transform 500ms cubic-bezier(.26,2.5,.46,.71);
+}
+
+.toggle-checkbox:checked ~ .toggle-slot .moon-icon-wrapper {
+  opacity: 1;
+  transform: translate(2em, 2em) rotate(-15deg);
+}

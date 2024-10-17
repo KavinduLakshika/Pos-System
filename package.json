@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "concurrently": "^9.0.1",
+    "jwt-decode": "^4.0.0",
     "your-project": "file:"
   }
 }
