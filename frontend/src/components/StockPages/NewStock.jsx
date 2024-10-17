@@ -461,7 +461,7 @@ const NewStock = () => {
                     onChange={handleProductSearch}
                   />
                   {productSuggestions.length > 0 && (
-                    <ul className="list-group mt-2">
+                    <ul className="list-group mt-0">
                       {productSuggestions.map((product, index) => (
                         <li
                           key={index}

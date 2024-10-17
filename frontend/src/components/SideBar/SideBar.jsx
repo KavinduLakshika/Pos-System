@@ -12,6 +12,7 @@ const Sidebar = () => {
 
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        localStorage.removeItem('userStatus');
 
         navigate('/login');
     };
@@ -23,18 +24,18 @@ const Sidebar = () => {
             return;
         }
 
-        const payload = JSON.parse(atob(token.split('.')[1])); 
-        const now = Date.now() / 1000; 
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const now = Date.now() / 1000;
 
         if (payload.exp < now) {
-            handleLogout(); 
+            handleLogout();
         }
     };
 
     useEffect(() => {
         checkTokenExpiration();
 
-        const intervalId = setInterval(checkTokenExpiration, 60 * 1000); // 60 seconds
+        const intervalId = setInterval(checkTokenExpiration, 60 * 1000);
 
         const handleResize = () => {
             if (window.innerWidth <= 768) {
