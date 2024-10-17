@@ -15,6 +15,7 @@ const CreateProductReturn = () => {
     const [customerSearch, setCustomerSearch] = useState('');
     const [stores, setStores] = useState([]);
     const [users, setUsers] = useState([]);
+    const [productSuggestions, setProductSuggestions] = useState([]);
     const [data, setData] = useState([]);
     const Columns = ["id", 'product', 'Type', 'qty', 'price'];
 
@@ -110,27 +111,6 @@ const CreateProductReturn = () => {
         }
     };
 
-    // Fetch product by name
-    const fetchProductByName = async (name) => {
-        try {
-            const response = await fetch(`${config.BASE_URL}/product/productName/${name}`);
-            if (response.ok) {
-                const product = await response.json();
-                setFormData(prevData => ({
-                    ...prevData,
-                    product: product.productId,
-                    productNo: product.productCode,
-                    productName: product.productName,
-                    productNote: product.productDescription + '  ' + product.productWarranty,
-                }));
-            } else {
-                console.error('Product not found');
-            }
-        } catch (error) {
-            console.error('Error fetching product:', error);
-        }
-    };
-
     // Fetch customer by NIC
     const fetchCustomerByNic = async (nic) => {
         try {
@@ -178,12 +158,47 @@ const CreateProductReturn = () => {
         }
     };
 
-    // Handle product search
-    const handleProductSearch = (e) => {
-        const { value } = e.target;
-        setProductSearch(value);
-        if (value.length > 2) {
-            fetchProductByName(value);
+    const handleProductSearch = async (e) => {
+        const query = e.target.value;
+        setProductSearch(query);
+
+        if (query.length >= 2) {
+            try {
+                const response = await fetch(`${config.BASE_URL}/products/suggestions?query=${query}`);
+                if (response.ok) {
+                    const suggestions = await response.json();
+                    setProductSuggestions(suggestions);
+                } else {
+                    console.error('Failed to fetch product suggestions');
+                }
+            } catch (error) {
+                console.error('Error fetching product suggestions:', error);
+            }
+        } else {
+            setProductSuggestions([]);
+        }
+    };
+
+    const handleProductSelect = async (productName) => {
+        setProductSearch(productName);
+        setProductSuggestions([]);
+
+        try {
+            const response = await fetch(`${config.BASE_URL}/product/productName/${productName}`);
+            if (response.ok) {
+                const product = await response.json();
+                setFormData(prevData => ({
+                    ...prevData,
+                    product: product.productId,
+                    productNo: product.productCode,
+                    productName: product.productName,
+                    productNote: product.productDescription + '  ' + product.productWarranty,
+                }));
+            } else {
+                console.error('Product not found');
+            }
+        } catch (error) {
+            console.error('Error fetching product details:', error);
         }
     };
 
@@ -287,6 +302,19 @@ const CreateProductReturn = () => {
                                 <div className="Stock-details col-md-4 mb-2">
                                     <label htmlFor="productName">Product Name</label>
                                     <input type="text" className="form-control" name="productName" value={productSearch} onChange={handleProductSearch} />
+                                    {productSuggestions.length > 0 && (
+                                        <ul className="list-group mt-0">
+                                            {productSuggestions.map((product, index) => (
+                                                <li
+                                                    key={index}
+                                                    className="list-group-item list-group-item-action"
+                                                    onClick={() => handleProductSelect(product.productName)}
+                                                >
+                                                    {product.productName}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
                                 </div>
                                 <div className="Stock-details col-md-4">
                                     <label htmlFor="productNo">Product Number</label>

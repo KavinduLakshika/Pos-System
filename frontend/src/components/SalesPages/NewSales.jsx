@@ -138,21 +138,21 @@ if (name === 'salesPerson') {
       }
     };
 
-    useEffect(() => {
-      const fetchUsers = async () => {
-        try {
-          const response = await fetch(`${config.BASE_URL}/users`);
-          if (response.ok) {
-            const userData = await response.json();
-            setUsers(userData);
-          } else {
-            console.error('Failed to fetch users');
-          }
-        } catch (error) {
-          console.error('Error fetching users:', error);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`${config.BASE_URL}/users`);
+        if (response.ok) {
+          const userData = await response.json();
+          setUsers(userData);  // Populate users in state
+        } else {
+          console.error('Failed to fetch users');
         }
-      };
-      fetchUsers();
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+    fetchUsers();
 
       const discountedPrice = (formData.productPrice || 0) * (1 - (formData.discount || 0) / 100);
       const newTotalPrice = discountedPrice * (formData.qty || 1);

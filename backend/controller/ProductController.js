@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { Sequelize } = require('sequelize');
+const { Op } = require('sequelize');
 
 // Image upload setup
 const storage = multer.diskStorage({
@@ -167,7 +168,6 @@ const updateProduct = async (req, res) => {
                 productBuyingPrice,
                 productSellingPrice,
                 productWarranty,
-                productProfit,
                 productEmi,
                 productStatus,
                 categoryId
@@ -198,6 +198,8 @@ const updateProduct = async (req, res) => {
 
                 productImage = `${req.protocol}://${req.get('host')}/uploads/products/${req.file.filename}`;
             }
+
+            const productProfit = parseFloat(productSellingPrice) - parseFloat(productBuyingPrice);
 
             await product.update({
                 productName,
@@ -273,31 +275,34 @@ const getProductByCodeOrName = async (req, res) => {
     }
 };
 
+
 const getProductSuggestions = async (req, res) => {
     try {
         const { query } = req.query;
+
+        // Ensure query is at least 2 characters long
         if (!query || query.length < 2) {
             return res.status(400).json({ message: 'Query must be at least 2 characters long' });
         }
 
-        const product = await Product.findAll({
+        // Fetch products matching the query by productName or productCode
+        const products = await Product.findAll({
             where: {
                 [Op.or]: [
-                    { productId: { [Op.like]: `%${query}%` } },
                     { productName: { [Op.like]: `%${query}%` } },
-                    { productCode: { [Op.like]: `%${query}%` } }
                 ]
             },
-            attributes: ['productId', 'productName', 'productCode'],
-            limit: 10 
+            attributes: ['productName'],
+            limit: 10
         });
 
-        res.status(200).json(product);
+        res.status(200).json(products);
     } catch (error) {
         console.error('Error fetching product suggestions:', error);
         res.status(500).json({ error: error.message });
     }
 };
+
 
 
 module.exports = {

@@ -147,7 +147,7 @@ const ProductList = () => {
         ) : error ? (
           <div className="error-message">
             <p>Error: {error}</p>
-            <button onClick={fetchProductList}>Retry</button>
+            <button className='btn btn-danger' onClick={fetchProductList}>Retry</button>
           </div>
         ) : (
           <Table
