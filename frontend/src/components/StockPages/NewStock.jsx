@@ -522,14 +522,14 @@ const NewStock = () => {
                 <textarea onChange={handleChange} name='description' id='' value={formData.description} className='form-control' rows={2}></textarea>
               </div>
 
-              <div className="d-flex justify-content-end mt-4">
+              {/* <div className="d-flex justify-content-end mt-4">
                 <button type="button" className="btn btn-primary" onClick={handleAddStock}>Add Stock +</button>
-              </div>
+              </div> */}
             </div>
           </div>
 
           {/* Table */}
-          <div className="table-responsive mt-5">
+          {/* <div className="table-responsive mt-5">
             {error && (
               <div className="alert alert-danger" role="alert">
                 {error}
@@ -556,7 +556,7 @@ const NewStock = () => {
                 showRow={false}
               />
             )}
-          </div>
+          </div> */}
 
           {/* Footer Buttons */}
           <div className="d-flex justify-content-end mt-4">
