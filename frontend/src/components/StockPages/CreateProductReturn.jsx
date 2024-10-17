@@ -87,7 +87,7 @@ const CreateProductReturn = () => {
             }
             const invoiceData = await invoiceResponse.json();
 
-            const currentTime = new Date().toLocaleTimeString('en-GB', { hour12: false }); 
+            const currentTime = new Date().toLocaleTimeString('en-GB', { hour12: false });
             const selectedDate = new Date(formData.returnDate);
             const fullReturnDate = new Date(`${selectedDate.toISOString().split('T')[0]}T${currentTime}`);
 
@@ -265,7 +265,7 @@ const CreateProductReturn = () => {
                                 <Form closeModal={closeModal} />
                             </Modal>
                             <div className="Stock-details">
-                                <label htmlFor="invoiceNo">Invoice Number/ ID</label>
+                                <label htmlFor="invoiceNo">Invoice Number</label>
                                 <input type="number" className="form-control" name="invoiceNo" value={formData.invoiceNo} onChange={handleChange} onWheel={(e) => e.target.blur()} />
                             </div>
                             <div className="Stock-details mb-2">
