@@ -85,6 +85,7 @@ const NewSales = ({ invoice }) => {
             productName: productData.productName || prevData.productName,
             productPrice: productData.productSellingPrice,
             qty: 1,
+            discount:productData.productDiscount,
             totalPrice: productData.productSellingPrice,
             productNote: productData.productWarranty + ' ' + productData.productDescription,
             emi: productData.productEmi
@@ -338,6 +339,8 @@ if (name === 'salesPerson') {
           dueAmount: '',
           note: '',
           invoiceDate: '',
+          totalAmount:'',
+          discountPrice:'',
         });
         resetSalesPerson();
       } catch (error) {
@@ -349,7 +352,7 @@ if (name === 'salesPerson') {
     const resetSalesPerson = () => {
       setFormData(prevData => ({
         ...prevData,
-        salesPerson: 'select' // Resetting salesPerson to 'select'
+        salesPerson: 'select',
       }));
     };
 
@@ -407,7 +410,34 @@ if (name === 'salesPerson') {
         dueAmount: dueAmount.toFixed(2),
       }));
     };
-
+const clear=()=>{
+  setTableData([]);
+  setFormData({
+    cusName: '',
+    cusNic: '',
+    cusCode: '',
+    productNo: '',
+    productName: '',
+    productPrice: '',
+    qty: '',
+    discount: '',
+    totalPrice: '',
+    productNote: '',
+    emi: '',
+    amount: '',
+    card: '',
+    cheque: '',
+    bank: '',
+    cash: '',
+    paidAmount: '',
+    dueAmount: '',
+    note: '',
+    invoiceDate: '',
+    totalAmount:'',
+    discountPrice:'',
+  });
+  resetSalesPerson();
+}
 
     return (
       <div>
@@ -606,8 +636,8 @@ if (name === 'salesPerson') {
               </div>
 
               <div className="payment-form-button  d-grid d-md-flex me-md-2 justify-content-end px-5">
-                <button className='btn btn-danger btn-md mb-2' >Cancel</button>
-                <button className='btn btn-primary btn-md mb-2'>Create invoice</button>
+                <button className='btn btn-danger btn-md mb-2' type='reset' onClick={clear} >Cancel</button>
+                <button className='btn btn-primary btn-md mb-2' type='submit'>Create invoice</button>
               </div>
             </div>
           </form>
