@@ -101,7 +101,7 @@ const NewSales = ({ invoice }) => {
         const response = await fetch(`${config.BASE_URL}/users`);
         if (response.ok) {
           const userData = await response.json();
-          setUsers(userData);  // Populate users in state
+          setUsers(userData);  
         } else {
           console.error('Failed to fetch users');
         }
