@@ -204,7 +204,7 @@ if (name === 'salesPerson') {
         productNote: '',
         emi: ''
       }));
-
+      resetSalesPerson();
       console.log("Added new row:", newRow);
       console.log("Updated table data:", [...tableData, newRow]);
 
@@ -339,10 +339,18 @@ if (name === 'salesPerson') {
           note: '',
           invoiceDate: '',
         });
+        resetSalesPerson();
       } catch (error) {
         console.error('Error:', error);
         alert(`Failed to process: ${error.message}`);
       }
+    };
+
+    const resetSalesPerson = () => {
+      setFormData(prevData => ({
+        ...prevData,
+        salesPerson: 'select' // Resetting salesPerson to 'select'
+      }));
     };
 
     const openModal = () => {
@@ -500,8 +508,8 @@ if (name === 'salesPerson') {
                 <div className="sales-person-box">
                   <div className="sales-person">
                     <label id='label'>Sales Person</label>
-                    <select className="form-control" name="salesPerson" onChange={handleChange}>
-                      <option value="">Select</option>
+                    <select className="form-control" name="salesPerson" value={formData.salesPerson} onChange={handleChange}>
+                      <option value="Select">Select</option>
                       {users.map((user) => (
                         <option key={user.id} value={user.userId}>
                           {user.userName}
