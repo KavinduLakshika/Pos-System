@@ -16,9 +16,10 @@ const NewStock = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [productSearch, setProductSearch] = useState('');
   const [tableData, setTableData] = useState(data || []);
+  const [productSuggestions, setProductSuggestions] = useState([]);
 
   const columns = [
-    'Stock Name', 'Supplier Name','Store', 'Supplied Date & Time','Product Name','Product Category', 'M Date', 'Exp Date','Price Per Item', 'Supplied Quantity',  'Total Price Before VAT', 'VAT %', 'Total Amount + VAT', 'Cash Amount', ' Cheque Amount', 'Due','Description'
+    'Stock Name', 'Supplier Name', 'Store', 'Supplied Date & Time', 'Product Name', 'Product Category', 'M Date', 'Exp Date', 'Price Per Item', 'Supplied Quantity', 'Total Price Before VAT', 'VAT %', 'Total Amount + VAT', 'Cash Amount', ' Cheque Amount', 'Due', 'Description'
   ];
 
   const [formData, setFormData] = useState({
@@ -142,25 +143,6 @@ const NewStock = () => {
     }
   };
 
-  const fetchProductByName = async (name) => {
-    try {
-      const response = await fetch(`${config.BASE_URL}/product/productName/${name}`);
-      if (response.ok) {
-        const product = await response.json();
-        setFormData(prevData => ({
-          ...prevData,
-          product: product.productId,
-          category: product.category_categoryId,
-          price: product.productBuyingPrice,
-        }));
-      } else {
-        console.error('Product not found');
-      }
-    } catch (error) {
-      console.error('Error fetching product:', error);
-    }
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -169,9 +151,9 @@ const NewStock = () => {
 
       if (name === 'date' && value) {
         const dateObject = new Date(value);
-        newData.date = dateObject.toISOString().slice(0, 16); 
+        newData.date = dateObject.toISOString().slice(0, 16);
       }
-  
+
 
       // Calculate total price when price or qty changes
       if (name === 'price' || name === 'qty') {
@@ -205,7 +187,7 @@ const NewStock = () => {
 
     formDataToSend.append('stockName', formData.stockName);
     formDataToSend.append('stockDate', formattedDate);
-    
+
     formDataToSend.append('stockPrice', formData.totalPrice);
     formDataToSend.append('due', formData.due);
     formDataToSend.append('vat', formData.vat);
@@ -250,6 +232,49 @@ const NewStock = () => {
     }
   };
 
+  const handleProductSearch = async (e) => {
+    const query = e.target.value;
+    setProductSearch(query);
+
+    if (query.length >= 2) {
+      try {
+        const response = await fetch(`${config.BASE_URL}/products/suggestions?query=${query}`);
+        if (response.ok) {
+          const suggestions = await response.json();
+          setProductSuggestions(suggestions);
+        } else {
+          console.error('Failed to fetch product suggestions');
+        }
+      } catch (error) {
+        console.error('Error fetching product suggestions:', error);
+      }
+    } else {
+      setProductSuggestions([]);
+    }
+  };
+
+  const handleProductSelect = async (productName) => {
+    setProductSearch(productName);
+    setProductSuggestions([]);
+
+    try {
+      const response = await fetch(`${config.BASE_URL}/product/productName/${productName}`);
+      if (response.ok) {
+        const product = await response.json();
+        setFormData(prevData => ({
+          ...prevData,
+          product: product.productId,
+          category: product.category_categoryId,
+          price: product.productBuyingPrice,
+        }));
+      } else {
+        console.error('Product not found');
+      }
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+    }
+  };
+
   const resetForm = () => {
     setFormData(initialFormState);
     setImage(null);
@@ -268,14 +293,7 @@ const NewStock = () => {
       reader.readAsDataURL(file);
     }
   };
-
-  const handleProductSearch = (e) => {
-    setProductSearch(e.target.value);
-    if (e.target.value.length > 2) {
-      fetchProductByName(e.target.value);
-    }
-  };
-
+  
   const navigate = useNavigate();
 
   const handleNewStockClick = () => {
@@ -285,42 +303,42 @@ const NewStock = () => {
   const handleAddStock = (e) => {
     e.preventDefault();
 
-    
+
     if (!formData.stockName || !formData.supplier || !formData.date ||
-        !formData.cashAmount || !formData.due || !formData.category || !formData.totalPrice) {
-        alert("Please fill necessary details.");
-        return;
+      !formData.cashAmount || !formData.due || !formData.category || !formData.totalPrice) {
+      alert("Please fill necessary details.");
+      return;
     }
 
     const formattedDate = formData.date.replace('T', ' ');
     // Create a new row from formData
     const newRow = [
-        formData.stockName,
-        formData.supplier,
-        formData.store,
-        formattedDate,
-        formData.product,
-        formData.category,
-        formData.mfd,
-        formData.exp,
-        formData.price,
-        formData.qty,
-        formData.totalPrice,
-        formData.vat,
-        formData.totalPriceVAT,
-        formData.cashAmount,
-        formData.chequeAmount,
-        formData.due,
-        formData.description
+      formData.stockName,
+      formData.supplier,
+      formData.store,
+      formattedDate,
+      formData.product,
+      formData.category,
+      formData.mfd,
+      formData.exp,
+      formData.price,
+      formData.qty,
+      formData.totalPrice,
+      formData.vat,
+      formData.totalPriceVAT,
+      formData.cashAmount,
+      formData.chequeAmount,
+      formData.due,
+      formData.description
     ];
 
-     
+
     setTableData(prevData => {
       const updatedData = [...prevData, newRow];
       console.log("Added new row:", newRow);
       console.log("Updated table data:", updatedData);
       return updatedData;
-  });
+    });
     // Reset form fields after adding to table
     setFormData(prevData => ({
       ...prevData,
@@ -341,8 +359,8 @@ const NewStock = () => {
     }));
 
     // Update table data 
-    
-};
+
+  };
 
 
 
@@ -435,7 +453,26 @@ const NewStock = () => {
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <label htmlFor="productSearch" className="form-label">Product Name</label>
-                  <input type="text" name="productSearch" className="form-control" value={productSearch} onChange={handleProductSearch} />
+                  <input
+                    type="text"
+                    name="productSearch"
+                    className="form-control"
+                    value={productSearch}
+                    onChange={handleProductSearch}
+                  />
+                  {productSuggestions.length > 0 && (
+                    <ul className="list-group mt-2">
+                      {productSuggestions.map((product, index) => (
+                        <li
+                          key={index}
+                          className="list-group-item list-group-item-action"
+                          onClick={() => handleProductSelect(product.productName)}
+                        >
+                          {product.productName}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 <div className="col-md-6 mb-3">
                   <label htmlFor="category" className="form-label">Product Category</label>
@@ -490,20 +527,20 @@ const NewStock = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Table */}
           <div className="table-responsive mt-5">
-          {error && (
-          <div className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        )}
+            {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
 
-        {successMessage && (
-          <div className="alert alert-success" role="alert">
-            {successMessage}
-          </div>
-        )}
+            {successMessage && (
+              <div className="alert alert-success" role="alert">
+                {successMessage}
+              </div>
+            )}
             {isLoading ? (
               <p>Loading...</p>
             ) : (

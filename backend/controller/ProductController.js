@@ -292,8 +292,8 @@ const getProductSuggestions = async (req, res) => {
                     { productName: { [Op.like]: `%${query}%` } },
                 ]
             },
-            attributes: ['productId', 'productName'], 
-            limit: 10 
+            attributes: ['productName'],
+            limit: 10
         });
 
         res.status(200).json(products);
