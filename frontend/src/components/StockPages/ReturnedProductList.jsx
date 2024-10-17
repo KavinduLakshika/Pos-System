@@ -28,15 +28,21 @@ const ReturnedProductList = () => {
                 throw new Error('Failed to fetch return list');
             }
             const returns = await response.json();
-            const formattedData = returns.map(returns => [
-                returns.returnItemId,
-                returns.returnItemType,
-                returns.returnItemDate,
-                returns.products?.productName,
-                returns.store?.storeName,
-                returns.user?.userName,
-                returns.invoice?.invoiceId,
-            ]);
+
+            const formattedData = returns.map(returns => {
+                const returnDate = new Date(returns.returnItemDate).toLocaleString();
+
+                return [
+                    returns.returnItemId,
+                    returns.returnItemType,
+                    returnDate,
+                    returns.products?.productName,
+                    returns.store?.storeName,
+                    returns.user?.userName,
+                    returns.invoice?.invoiceNo,
+                ];
+            });
+
             setData(formattedData);
             setIsLoading(false);
         } catch (err) {
@@ -44,6 +50,7 @@ const ReturnedProductList = () => {
             setIsLoading(false);
         }
     };
+
 
     const title = 'Returned Product List';
     const invoice = 'Returned Product List.pdf';
