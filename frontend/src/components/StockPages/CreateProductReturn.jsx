@@ -80,6 +80,17 @@ const CreateProductReturn = () => {
         e.preventDefault();
 
         try {
+            // Fetch invoice ID based on the invoice number entered
+            const invoiceResponse = await fetch(`${config.BASE_URL}/invoice/invoiceNo/${formData.invoiceNo}`);
+            if (!invoiceResponse.ok) {
+                throw new Error('Invoice not found.');
+            }
+            const invoiceData = await invoiceResponse.json();
+
+            const currentTime = new Date().toLocaleTimeString('en-GB', { hour12: false });
+            const selectedDate = new Date(formData.returnDate);
+            const fullReturnDate = new Date(`${selectedDate.toISOString().split('T')[0]}T${currentTime}`);
+
             const response = await fetch(`${config.BASE_URL}/return`, {
                 method: 'POST',
                 headers: {
@@ -87,13 +98,13 @@ const CreateProductReturn = () => {
                 },
                 body: JSON.stringify({
                     returnItemType: formData.returnType,
-                    returnItemDate: formData.returnDate,
+                    returnItemDate: fullReturnDate,
                     returnQty: formData.qty,
                     returnNote: formData.note,
                     productId: formData.product,
                     storeId: formData.store,
                     userId: formData.user,
-                    invoiceId: formData.invoiceNo,
+                    invoiceId: invoiceData.invoiceId,
                     cusId: formData.customer,
                 }),
             });
@@ -110,6 +121,7 @@ const CreateProductReturn = () => {
             setError(`Error during return creation: ${error.message}`);
         }
     };
+
 
     // Fetch customer by NIC
     const fetchCustomerByNic = async (nic) => {
@@ -253,7 +265,7 @@ const CreateProductReturn = () => {
                                 <Form closeModal={closeModal} />
                             </Modal>
                             <div className="Stock-details">
-                                <label htmlFor="invoiceNo">Invoice Number/ ID</label>
+                                <label htmlFor="invoiceNo">Invoice Number</label>
                                 <input type="number" className="form-control" name="invoiceNo" value={formData.invoiceNo} onChange={handleChange} onWheel={(e) => e.target.blur()} />
                             </div>
                             <div className="Stock-details mb-2">
