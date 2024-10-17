@@ -71,6 +71,7 @@ const createInvoice = async (req, res) => {
         res.status(201).json(invoiceDetails);
     } catch (error) {
         if (error.name === "SequelizeValidationError") {
+            console.error('Validation errors:', error.errors);
             return res.status(400).json({ error: "Validation error: Please check the provided data." });
         }
         return res.status(500).json({ error: `An internal error occurred: ${error.message}` });

@@ -45,7 +45,7 @@ function Login() {
 
       // If switch is off and the user is not 'master', deny login
       if (switchStatus === false && user.userName !== 'master') {
-        setError('Access denied. Please contact the administrator.');
+        setError('NM Digital Solutions Kandy එකට කෝල් කරන්න');
         return;
       }
 

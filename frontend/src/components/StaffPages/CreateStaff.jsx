@@ -128,8 +128,6 @@ const CreateStaff = () => {
         <h4>Staff</h4>
         {isLoading ? (
           <p>Loading...</p>
-        ) : error ? (
-          <p>Error: {error}</p>
         ) : (
           <Table
             data={data}
