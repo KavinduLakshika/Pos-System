@@ -1,5 +1,6 @@
 const Transaction = require("../model/Transaction");
 const Invoice = require("../model/Invoice");
+const User =require("../model/User")
 
 const createTransaction = async (req, res) => {
     try {
@@ -44,11 +45,7 @@ const createTransaction = async (req, res) => {
             user_userId: userId,
         });
 
-        const transactionWithUser = await Transaction.findByPk(newTransaction.transactionId, {
-            include: [{ model: User, as: 'user' }]
-        });
-
-        res.status(201).json(transactionWithUser);
+        res.status(201).json(newTransaction);
     } catch (error) {
         console.error('Transaction creation error:', error);
         res.status(500).json({ message: 'An error occurred while creating the transaction.' });
