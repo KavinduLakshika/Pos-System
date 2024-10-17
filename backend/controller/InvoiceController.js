@@ -39,12 +39,12 @@ const createInvoice = async (req, res) => {
             return res.status(400).json({ message: 'Invalid stock ID' });
         }
 
-        // Ensure that there is enough quantity in stock
+        //is enough quantity in stock
         if (stock.stockQty < invoiceQty) {
             return res.status(400).json({ message: 'Not enough stock available' });
         }
 
-        // Update stock quantity by subtracting the invoice quantity
+        // Update stock quantity
         const updatedStockQty = stock.stockQty - invoiceQty;
         await stock.update({ stockQty: updatedStockQty });
 
