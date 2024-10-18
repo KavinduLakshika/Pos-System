@@ -16,7 +16,7 @@
     const [productId, setProductId] = useState('');
     const [stockId, setStockId] = useState('');
 
-    const Columns = ["Customer Code", 'Customer Name', 'Customer Nic', 'Product Code', 'Product Name', 'Product Price', 'Quantity', 'Discount', 'Total Price', 'Warranty'];
+    const Columns = ["Customer Code", 'Customer Name', 'Customer Nic','Product Code', 'Product Name', 'Product Price', 'Quantity', 'Discount', 'Total Price', 'Warranty','Product ID','Stock ID'];
     const [formData, setFormData] = useState({
       cusName: '',
       cusNic: '',
@@ -325,8 +325,8 @@
           productId: row[10], // Ensure this maps correctly to the `productId`
           stockId: row[11],
           invoiceId: invoiceResult.invoiceId,
-          totalAmount: tableData.reduce((total, row) => total + parseFloat(row[5] || 0) * parseInt(row[6] || 0), 0),
-          invoiceQty: tableData.reduce((total, row) => total + parseInt(row[6], 10), 0),
+          totalAmount:row[5]*row[6],
+          invoiceQty:row[6],
         }));
 
         const productResponse = await fetch(`${config.BASE_URL}/invoiceProduct`, {
