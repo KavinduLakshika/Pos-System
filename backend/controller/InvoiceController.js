@@ -9,22 +9,12 @@ const createInvoice = async (req, res) => {
         const {
             invoiceNo,
             invoiceDate,
-            invoiceQty,
-            totalAmount,
-            productId,
             cusId,
-            stockId,
         } = req.body;
 
         // Validate required fields
-        if (!invoiceDate || !invoiceQty) {
+        if (!invoiceDate ) {
             return res.status(400).json({ error: "All fields are required." });
-        }
-
-        // Check if product exists
-        const product = await Product.findByPk(productId);
-        if (!product) {
-            return res.status(400).json({ message: 'Invalid product ID' });
         }
 
         // Check if customer exists
@@ -33,38 +23,17 @@ const createInvoice = async (req, res) => {
             return res.status(400).json({ message: 'Invalid customer ID' });
         }
 
-        // Check if stock exists
-        const stock = await Stock.findByPk(stockId);
-        if (!stock) {
-            return res.status(400).json({ message: 'Invalid stock ID' });
-        }
-
-        //is enough quantity in stock
-        if (stock.stockQty < invoiceQty) {
-            return res.status(400).json({ message: 'Not enough stock available' });
-        }
-
-        // Update stock quantity
-        const updatedStockQty = stock.stockQty - invoiceQty;
-        await stock.update({ stockQty: updatedStockQty });
-
         // Create a new invoice
         const newInvoice = await Invoice.create({
             invoiceNo,
             invoiceDate,
-            invoiceQty,
-            totalAmount,
-            products_productId: productId,
             customer_cusId: cusId,
-            stock_stockId: stockId,
         });
 
         // Fetch newly created invoice information
         const invoiceDetails = await Invoice.findByPk(newInvoice.invoiceId, {
             include: [
-                { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
-                { model: Stock, as: 'stock' },
             ],
         });
 

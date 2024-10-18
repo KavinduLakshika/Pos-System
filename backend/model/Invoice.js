@@ -16,24 +16,8 @@ const Invoice = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        totalAmount: {
-            type: DataTypes.FLOAT,
-            allowNull: false,
-        },
         invoiceDate: {
             type: DataTypes.DATE,
-            allowNull: false,
-        },
-        invoiceQty: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        products_productId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Product,
-                key: "productId",
-            },
             allowNull: false,
         },
         customer_cusId: {
@@ -44,14 +28,6 @@ const Invoice = sequelize.define(
             },
             allowNull: false,
         },
-        stock_stockId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Stock,
-                key: "stockId",
-            },
-            allowNull: false,
-        },
     },
     {
         tableName: "invoice",
@@ -59,16 +35,8 @@ const Invoice = sequelize.define(
     }
 );
 
-Invoice.belongsTo(Product, {
-    foreignKey: "products_productId",
-    as: "product",
-});
 Invoice.belongsTo(Customer, {
     foreignKey: "customer_cusId",
     as: "customer",
-});
-Invoice.belongsTo(Stock, {
-    foreignKey: "stock_stockId",
-    as: "stock",
 });
 module.exports = Invoice;

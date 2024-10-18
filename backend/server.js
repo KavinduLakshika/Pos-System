@@ -21,6 +21,7 @@ const ReportController = require("./controller/Reports/ReportController");
 const ProductNStockController = require("./controller/Reports/ProductStockController");
 const StockHistoryController = require('./controller/StockHistoryController');
 const SwitchController = require('./controller/SwitchController');
+const InvoiceProductController = require('./controller/InvoiceProduct')
 
 const app = express();
 const PORT = process.env.PORT;
@@ -93,6 +94,9 @@ app.get("/invoice/:id", InvoiceController.getInvoiceById);
 app.put("/invoice/:id", InvoiceController.updateInvoice);
 app.delete("/invoice/:id", InvoiceController.deleteInvoice);
 app.get('/invoice/invoiceNo/:num', InvoiceController.getInvoiceByNo);
+
+//invoiceProduct Route
+app.post('/invoiceProduct',InvoiceProductController.createInvoiceProduct)
 
 //rental invoice routes
 app.post("/rentalInvoice", RentalInvoiceController.createRentalInvoice);
