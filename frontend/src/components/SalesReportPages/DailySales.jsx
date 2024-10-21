@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import Table from '../Table/Table';
 import { useNavigate } from 'react-router-dom';
 import config from '../../config';
@@ -7,7 +7,7 @@ function DailySales() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const columns = ['Date & Time', 'Product Name', 'Size', 'Customer Name', 'Customer Nic', 'Sold Price', 'Profit/Loss'];
+  const columns = ['#', 'Invoice No', 'Date & Time', 'Product Name', 'Quantity', 'Sold Price', 'Total Price', 'Profit/Loss'];
   const btnName = '+ New Sale';
 
   useEffect(() => {
@@ -16,45 +16,38 @@ function DailySales() {
 
   const fetchSummery = async () => {
     try {
-      const response = await fetch(`${config.BASE_URL}/invoices`);
+      const response = await fetch(`${config.BASE_URL}/invoiceProducts`);
       if (!response.ok) {
-        setError('Failed to fetch Sales Invoices');
-        setIsLoading(false);
-        return;
+        setError('Failed to fetch Summery');
       }
-      const invoices = await response.json();
+      const inv = await response.json();
 
-      // Get today's date
-      const today = new Date();
-      const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      // Get today's date in YYYY-MM-DD format
+      const today = new Date().toISOString().split('T')[0];
 
-      // Filter invoices for today's sales
-      const todaySales = invoices.filter(invoice => {
-        const invoiceDate = new Date(invoice.invoiceDate);
-        const formattedInvoiceDate = `${invoiceDate.getFullYear()}-${String(invoiceDate.getMonth() + 1).padStart(2, '0')}-${String(invoiceDate.getDate()).padStart(2, '0')}`;
-        return formattedInvoiceDate === formattedToday;
-      });
+      const formattedData = inv
+        .filter(inv => inv.invoice?.invoiceDate && inv.invoice.invoiceDate.split('T')[0] === today)
+        .map(inv => {
 
-      const formattedData = todaySales.map(invoice => {
-        const invoiceDate = new Date(invoice.invoiceDate);
+          const invoiceDate = new Date(inv.invoice?.invoiceDate);
 
-        // Format date and time to "YYYY-MM-DD HH:mm"
-        const formattedInvoiceDate = `${invoiceDate.getFullYear()}-${String(invoiceDate.getMonth() + 1).padStart(2, '0')}-${String(invoiceDate.getDate()).padStart(2, '0')} ${String(invoiceDate.getHours()).padStart(2, '0')}:${String(invoiceDate.getMinutes()).padStart(2, '0')}`;
+          // Format dates to "YYYY-MM-DD HH:mm"
+          const formattedInvoiceDate = `${invoiceDate.getFullYear()}-${String(invoiceDate.getMonth() + 1).padStart(2, '0')}-${String(invoiceDate.getDate()).padStart(2, '0')} ${String(invoiceDate.getHours()).padStart(2, '0')}:${String(invoiceDate.getMinutes()).padStart(2, '0')}`;
 
-        // Calculate total profit
-        const totalProfit = (invoice.product?.productProfit || 0) * (invoice.invoiceQty || 0);
+          // Calculate total profit
+          const totalProfit = (inv.product?.productProfit) * (inv.invoiceQty);
 
-        return [
-          // invoice.invoiceId,
-          formattedInvoiceDate,
-          invoice.product?.productName || "Unknown",
-          invoice.invoiceQty,
-          invoice.customer?.cusName || "Unknown",
-          invoice.customer?.cusNIC || "Unknown",
-          invoice.product?.productSellingPrice || "Unknown",
-          totalProfit
-        ];
-      });
+          return [
+            inv.id,
+            inv.invoice?.invoiceNo || ' - ',
+            formattedInvoiceDate,
+            inv.product?.productName || ' - ',
+            inv.invoiceQty,
+            inv.product?.productSellingPrice || "Unknown",
+            inv.totalAmount,
+            totalProfit,
+          ];
+        });
 
       setData(formattedData);
       setIsLoading(false);
@@ -68,7 +61,7 @@ function DailySales() {
 
   const handleNewSale = () => {
     navigate('/sales/new');
-  }
+  };
   const title = 'Day Job Report';
   const invoice = 'Day Job Report.pdf';
 
@@ -95,7 +88,7 @@ function DailySales() {
         )}
       </div>
     </div>
-  )
+  );
 }
 
 export default DailySales;

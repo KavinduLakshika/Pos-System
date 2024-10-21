@@ -60,7 +60,7 @@ InvoiceProduct.belongsTo(Stock, {
 });
 InvoiceProduct.belongsTo(Invoice, {
     foreignKey: "invoiceId",
-    as: "invioce", // This is the problem
+    as: "invoice", 
 });
 
 module.exports = InvoiceProduct;

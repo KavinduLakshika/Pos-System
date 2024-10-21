@@ -96,7 +96,8 @@ app.delete("/invoice/:id", InvoiceController.deleteInvoice);
 app.get('/invoice/invoiceNo/:num', InvoiceController.getInvoiceByNo);
 
 //invoiceProduct Route
-app.post('/invoiceProduct',InvoiceProductController.createInvoiceProduct)
+app.post('/invoiceProduct', InvoiceProductController.createInvoiceProduct);
+app.get('/invoiceProducts', InvoiceProductController.getAllInvoiceProducts);
 
 //rental invoice routes
 app.post("/rentalInvoice", RentalInvoiceController.createRentalInvoice);

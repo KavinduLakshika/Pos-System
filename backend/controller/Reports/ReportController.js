@@ -1,40 +1,28 @@
 const { Op } = require("sequelize");
 const Invoice = require("../../model/Invoice");
+const InvoiceProduct = require("../../model/InvoiceProduct");
 const Product = require("../../model/Products");
-const User = require("../../model/User");
 const sequelize = require("sequelize");
 
 async function getReports(req, res) {
   try {
     const report = {
       lifetimeRevenue: await lifetimeRevenue(),
-      lifetimeSales: await lifetimeSales(),
-
       revenueToday: await revenueToday(),
-      salesToday: await salesToday(),
-
       revenueYesterday: await revenueYesterday(),
-      salesYesterday: await salesYesterday(),
-
       revenueWeek: await revenueWeek(),
-      salesWeek: await salesWeek(),
-
       revenueLastMonth: await revenueLastMonth(),
-      salesLastMonth: await salesLastMonth(),
-
       revenueMonth: await revenueMonth(),
+      monthlyRevenue: await monthlyRevenue(),
+
+      lifetimeSales: await lifetimeSales(),
+      salesToday: await salesToday(),
+      salesYesterday: await salesYesterday(),
+      salesWeek: await salesWeek(),
+      salesLastMonth: await salesLastMonth(),
       salesMonth: await salesMonth(),
-
-      // dailyRevenue: await dailyRevenue(),
-      // dailySales: await dailySales(),
-
-      // dailyRevenueLast30Days: await dailyRevenueLast30Days(),
-      // dailySalesLast30Days: await dailySalesLast30Days(),
-
       mostSellingItemsWeek: await mostSellingItemsWeek(),
       mostSellingItemsMonth: await mostSellingItemsMonth(),
-
-      monthlyRevenue: await monthlyRevenue(),
       monthlySales: await monthlySales(),
     };
 
@@ -47,40 +35,25 @@ async function getReports(req, res) {
 
 // Lifetime Revenue
 async function lifetimeRevenue() {
-  const result = await Invoice.sum('totalAmount');
-  return result || 0;
-}
-
-// Lifetime Sales
-async function lifetimeSales() {
-  const result = await Invoice.count();
+  const result = await InvoiceProduct.sum('totalAmount');
   return result || 0;
 }
 
 // Today's Revenue
 async function revenueToday() {
   const today = new Date();
-  const result = await Invoice.sum('totalAmount', {
-    where: {
-      invoiceDate: {
-        [Op.gte]: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
-        [Op.lt]: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1),
+  const result = await InvoiceProduct.sum('totalAmount', {
+    include: [{
+      model: Invoice,
+      as: 'invoice',
+      attributes: [],
+      where: {
+        invoiceDate: {
+          [Op.gte]: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+          [Op.lt]: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1),
+        },
       },
-    },
-  });
-  return result || 0;
-}
-
-// Today's Sales
-async function salesToday() {
-  const today = new Date();
-  const result = await Invoice.count({
-    where: {
-      invoiceDate: {
-        [Op.gte]: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
-        [Op.lt]: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1),
-      },
-    },
+    }],
   });
   return result || 0;
 }
@@ -91,31 +64,18 @@ async function revenueYesterday() {
   const yesterdayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
   const yesterdayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
-  const result = await Invoice.sum('totalAmount', {
-    where: {
-      invoiceDate: {
-        [Op.gte]: yesterdayStart,
-        [Op.lt]: yesterdayEnd,
+  const result = await InvoiceProduct.sum('totalAmount', {
+    include: [{
+      model: Invoice,
+      as: 'invoice',
+      attributes: [],
+      where: {
+        invoiceDate: {
+          [Op.gte]: yesterdayStart,
+          [Op.lt]: yesterdayEnd,
+        },
       },
-    },
-  });
-
-  return result || 0;
-}
-
-// Yesterday's Sales
-async function salesYesterday() {
-  const today = new Date();
-  const yesterdayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
-  const yesterdayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-  const result = await Invoice.count({
-    where: {
-      invoiceDate: {
-        [Op.gte]: yesterdayStart,
-        [Op.lt]: yesterdayEnd,
-      },
-    },
+    }],
   });
 
   return result || 0;
@@ -125,28 +85,18 @@ async function salesYesterday() {
 async function revenueWeek() {
   const today = new Date();
   const last7Days = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-  const result = await Invoice.sum('totalAmount', {
-    where: {
-      invoiceDate: {
-        [Op.gte]: last7Days,
-        [Op.lt]: today,
+  const result = await InvoiceProduct.sum('totalAmount', {
+    include: [{
+      model: Invoice,
+      as: 'invoice',
+      attributes: [],
+      where: {
+        invoiceDate: {
+          [Op.gte]: last7Days,
+          [Op.lt]: today,
+        },
       },
-    },
-  });
-  return result || 0;
-}
-
-// Weekly Sales
-async function salesWeek() {
-  const today = new Date();
-  const last7Days = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-  const result = await Invoice.count({
-    where: {
-      invoiceDate: {
-        [Op.gte]: last7Days,
-        [Op.lt]: today,
-      },
-    },
+    }],
   });
   return result || 0;
 }
@@ -155,28 +105,18 @@ async function salesWeek() {
 async function revenueMonth() {
   const today = new Date();
   const last30Days = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-  const result = await Invoice.sum('totalAmount', {
-    where: {
-      invoiceDate: {
-        [Op.gte]: last30Days,
-        [Op.lt]: today,
+  const result = await InvoiceProduct.sum('totalAmount', {
+    include: [{
+      model: Invoice,
+      as: 'invoice',
+      attributes: [],
+      where: {
+        invoiceDate: {
+          [Op.gte]: last30Days,
+          [Op.lt]: today,
+        },
       },
-    },
-  });
-  return result || 0;
-}
-
-// Monthly Sales
-async function salesMonth() {
-  const today = new Date();
-  const last30Days = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
-  const result = await Invoice.count({
-    where: {
-      invoiceDate: {
-        [Op.gte]: last30Days,
-        [Op.lt]: today,
-      },
-    },
+    }],
   });
   return result || 0;
 }
@@ -186,153 +126,22 @@ async function revenueLastMonth() {
   const today = new Date();
   const startOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
   const startOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-  const endOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0); // The last day of the previous month
 
-  const result = await Invoice.sum('totalAmount', {
-    where: {
-      invoiceDate: {
-        [Op.gte]: startOfLastMonth,
-        [Op.lt]: startOfCurrentMonth,
+  const result = await InvoiceProduct.sum('totalAmount', {
+    include: [{
+      model: Invoice,
+      as: 'invoice',
+      attributes: [],
+      where: {
+        invoiceDate: {
+          [Op.gte]: startOfLastMonth,
+          [Op.lt]: startOfCurrentMonth,
+        },
       },
-    },
+    }],
   });
 
   return result || 0;
-}
-
-// Last Month's Sales
-async function salesLastMonth() {
-  const today = new Date();
-  const startOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  const startOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-  const endOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-
-  const result = await Invoice.count({
-    where: {
-      invoiceDate: {
-        [Op.gte]: startOfLastMonth,
-        [Op.lt]: startOfCurrentMonth,
-      },
-    },
-  });
-
-  return result || 0;
-}
-
-// Daily Revenue for the Last 7 Days
-async function dailyRevenue() {
-  const today = new Date();
-  const last7Days = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000);
-  const result = [];
-
-  for (let i = 0; i <= 6; i++) {
-    const day = new Date(last7Days.getTime() + i * 24 * 60 * 60 * 1000);
-    const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate());
-    const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
-
-    const revenue = await Invoice.sum('totalAmount', {
-      where: {
-        invoiceDate: {
-          [Op.gte]: dayStart,
-          [Op.lt]: dayEnd,
-        },
-      },
-    });
-
-    result.push({
-      date: dayStart.toISOString().split('T')[0],
-      revenue: revenue || 0,
-    });
-  }
-
-  return result;
-}
-
-// Daily Sales for the Last 7 Days
-async function dailySales() {
-  const today = new Date();
-  const last7Days = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000);
-  const result = [];
-
-  for (let i = 0; i <= 6; i++) {
-    const day = new Date(last7Days.getTime() + i * 24 * 60 * 60 * 1000);
-    const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate());
-    const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
-
-    const sales = await Invoice.count({
-      where: {
-        invoiceDate: {
-          [Op.gte]: dayStart,
-          [Op.lt]: dayEnd,
-        },
-      },
-    });
-
-    result.push({
-      date: dayStart.toISOString().split('T')[0],
-      sales: sales || 0,
-    });
-  }
-
-  return result;
-}
-
-// Daily Revenue for the Last 30 Days
-async function dailyRevenueLast30Days() {
-  const today = new Date();
-  const last30Days = new Date(today.getTime() - 29 * 24 * 60 * 60 * 1000);
-  const result = [];
-
-  for (let i = 0; i <= 29; i++) {
-    const day = new Date(last30Days.getTime() + i * 24 * 60 * 60 * 1000);
-    const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate());
-    const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
-
-    const revenue = await Invoice.sum('totalAmount', {
-      where: {
-        invoiceDate: {
-          [Op.gte]: dayStart,
-          [Op.lt]: dayEnd,
-        },
-      },
-    });
-
-    result.push({
-      date: dayStart.toISOString().split('T')[0],
-      revenue: revenue || 0,
-    });
-  }
-
-  return result;
-}
-
-// Daily Sales for the Last 30 Days
-async function dailySalesLast30Days() {
-  const today = new Date();
-  const last30Days = new Date(today.getTime() - 29 * 24 * 60 * 60 * 1000);
-  const result = [];
-
-  for (let i = 0; i <= 29; i++) {
-    const day = new Date(last30Days.getTime() + i * 24 * 60 * 60 * 1000);
-    const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate());
-    const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
-
-    const sales = await Invoice.count({
-      where: {
-        invoiceDate: {
-          [Op.gte]: dayStart,
-          [Op.lt]: dayEnd,
-        },
-      },
-    });
-
-    result.push({
-      date: dayStart.toISOString().split('T')[0],
-      sales: sales || 0,
-    });
-  }
-
-  return result;
 }
 
 // Month-wise Revenue for the Last 12 Months
@@ -344,13 +153,18 @@ async function monthlyRevenue() {
     const monthStart = new Date(today.getFullYear(), today.getMonth() - i, 1);
     const monthEnd = new Date(today.getFullYear(), today.getMonth() - i + 1, 1);
 
-    const revenue = await Invoice.sum('totalAmount', {
-      where: {
-        invoiceDate: {
-          [Op.gte]: monthStart,
-          [Op.lt]: monthEnd,
+    const revenue = await InvoiceProduct.sum('totalAmount', {
+      include: [{
+        model: Invoice,
+        as: 'invoice',
+        attributes: [],
+        where: {
+          invoiceDate: {
+            [Op.gte]: monthStart,
+            [Op.lt]: monthEnd,
+          },
         },
-      },
+      }],
     });
 
     result.push({
@@ -391,28 +205,113 @@ async function monthlySales() {
   return result.reverse();
 }
 
-// Most Selling Items for the Week
-async function mostSellingItemsWeek() {
+
+// Lifetime Sales
+async function lifetimeSales() {
+  const result = await Invoice.count();
+  return result || 0;
+}
+// Today's Sales
+async function salesToday() {
+  const today = new Date();
+  const result = await Invoice.count({
+    where: {
+      invoiceDate: {
+        [Op.gte]: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+        [Op.lt]: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1),
+      },
+    },
+  });
+  return result || 0;
+}
+// Yesterday's Sales
+async function salesYesterday() {
+  const today = new Date();
+  const yesterdayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+  const yesterdayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  const result = await Invoice.count({
+    where: {
+      invoiceDate: {
+        [Op.gte]: yesterdayStart,
+        [Op.lt]: yesterdayEnd,
+      },
+    },
+  });
+
+  return result || 0;
+}
+// Weekly Sales
+async function salesWeek() {
   const today = new Date();
   const last7Days = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-
-  const result = await Invoice.findAll({
-    attributes: [
-      [sequelize.col('productName'), 'productName'],
-      [sequelize.fn('SUM', sequelize.col('invoiceQty')), 'totalQuantity']
-    ],
-    include: [{
-      model: Product,
-      as: 'product',
-      attributes: []
-    }],
+  const result = await Invoice.count({
     where: {
       invoiceDate: {
         [Op.gte]: last7Days,
         [Op.lt]: today,
       },
     },
-    group: ['productId'],
+  });
+  return result || 0;
+}
+// Monthly Sales
+async function salesMonth() {
+  const today = new Date();
+  const last30Days = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const result = await Invoice.count({
+    where: {
+      invoiceDate: {
+        [Op.gte]: last30Days,
+        [Op.lt]: today,
+      },
+    },
+  });
+  return result || 0;
+}
+// Last Month's Sales
+async function salesLastMonth() {
+  const today = new Date();
+  const startOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const startOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+
+  const result = await Invoice.count({
+    where: {
+      invoiceDate: {
+        [Op.gte]: startOfLastMonth,
+        [Op.lt]: startOfCurrentMonth,
+      },
+    },
+  });
+
+  return result || 0;
+}
+// Most Selling Items for the Week
+async function mostSellingItemsWeek() {
+  const today = new Date();
+  const last7Days = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+  const result = await InvoiceProduct.findAll({
+    attributes: [
+      [sequelize.col('product.productName'), 'productName'],
+      [sequelize.fn('SUM', sequelize.col('invoiceQty')), 'totalQuantity']
+    ],
+    include: [{
+      model: Product,
+      as: 'product',
+      attributes: []
+    }, {
+      model: Invoice,
+      as: 'invoice',
+      attributes: [],
+      where: {
+        invoiceDate: {
+          [Op.gte]: last7Days,
+          [Op.lt]: today,
+        },
+      },
+    }],
+    group: ['product.productId'],
     order: [[sequelize.fn('SUM', sequelize.col('invoiceQty')), 'DESC']],
     limit: 5,
     raw: true
@@ -426,23 +325,27 @@ async function mostSellingItemsMonth() {
   const today = new Date();
   const last30Days = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-  const result = await Invoice.findAll({
+  const result = await InvoiceProduct.findAll({
     attributes: [
-      [sequelize.col('productName'), 'productName'],
+      [sequelize.col('product.productName'), 'productName'],
       [sequelize.fn('SUM', sequelize.col('invoiceQty')), 'totalQuantity']
     ],
     include: [{
       model: Product,
       as: 'product',
       attributes: []
-    }],
-    where: {
-      invoiceDate: {
-        [Op.gte]: last30Days,
-        [Op.lt]: today,
+    }, {
+      model: Invoice,
+      as: 'invoice',
+      attributes: [],
+      where: {
+        invoiceDate: {
+          [Op.gte]: last30Days,
+          [Op.lt]: today,
+        },
       },
-    },
-    group: ['productId'],
+    }],
+    group: ['product.productId'],
     order: [[sequelize.fn('SUM', sequelize.col('invoiceQty')), 'DESC']],
     limit: 5,
     raw: true
@@ -450,6 +353,34 @@ async function mostSellingItemsMonth() {
 
   return result;
 }
+// Month-wise Sales for the Last 12 Months
+async function monthlySales() {
+  const today = new Date();
+  const result = [];
+
+  for (let i = 0; i < 12; i++) {
+    const monthStart = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    const monthEnd = new Date(today.getFullYear(), today.getMonth() - i + 1, 1);
+
+    const sales = await Invoice.count({
+      where: {
+        invoiceDate: {
+          [Op.gte]: monthStart,
+          [Op.lt]: monthEnd,
+        },
+      },
+    });
+
+    result.push({
+      month: monthStart.toLocaleString('default', { month: 'long' }),
+      year: monthStart.getFullYear(),
+      sales: sales || 0,
+    });
+  }
+
+  return result.reverse();
+}
+
 module.exports = {
   getReports,
 };

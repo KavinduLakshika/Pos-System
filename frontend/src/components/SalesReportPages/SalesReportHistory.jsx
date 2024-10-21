@@ -6,7 +6,7 @@ const SalesHistory = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const columns = ['Date & Time', 'Product Name', 'Size', 'Customer Name', 'Sold Price', 'Profit/Loss'];
+  const columns = ['#', 'Invoice No', 'Date & Time', 'Product Name', 'Size', 'Sold Price', 'Total Price', 'Profit/Loss'];
 
   useEffect(() => {
     fetchSummery();
@@ -14,26 +14,28 @@ const SalesHistory = () => {
 
   const fetchSummery = async () => {
     try {
-      const response = await fetch(`${config.BASE_URL}/invoices`);
+      const response = await fetch(`${config.BASE_URL}/invoiceProducts`);
       if (!response.ok) {
         throw new Error('Failed to fetch Sales Invoices');
       }
       const invoices = await response.json();
       const formattedData = invoices.map(invoice => {
-        const invoiceDate = new Date(invoice.invoiceDate);
 
+        const invoiceDate = new Date(invoice.invoice?.invoiceDate);
         // Format dates to "YYYY-MM-DD HH:mm"
         const formattedInvoiceDate = `${invoiceDate.getFullYear()}-${String(invoiceDate.getMonth() + 1).padStart(2, '0')}-${String(invoiceDate.getDate()).padStart(2, '0')} ${String(invoiceDate.getHours()).padStart(2, '0')}:${String(invoiceDate.getMinutes()).padStart(2, '0')}`;
 
         // Calculate total profit
-        const totalProfit = (invoice.product?.productProfit || 0) * (invoice.invoiceQty || 0);
+        const totalProfit = (invoice.product?.productProfit) * (invoice.invoiceQty);
 
         return [
+          invoice.id,
+          invoice.invoice?.invoiceNo,
           formattedInvoiceDate,
           invoice.product?.productName || "Unknown",
           invoice.invoiceQty,
-          invoice.customer?.cusName || "Unknown",
           invoice.product?.productSellingPrice || "Unknown",
+          invoice.totalAmount,
           totalProfit
         ];
       });

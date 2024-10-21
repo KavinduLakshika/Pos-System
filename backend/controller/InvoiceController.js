@@ -13,7 +13,7 @@ const createInvoice = async (req, res) => {
         } = req.body;
 
         // Validate required fields
-        if (!invoiceDate ) {
+        if (!invoiceDate) {
             return res.status(400).json({ error: "All fields are required." });
         }
 
@@ -51,9 +51,7 @@ const getAllInvoice = async (req, res) => {
     try {
         const invoices = await Invoice.findAll({
             include: [
-                { model: Product, as: 'product' },
                 { model: Customer, as: 'customer' },
-                { model: Stock, as: 'stock' },
             ],
         });
 
