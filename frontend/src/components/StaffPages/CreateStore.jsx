@@ -13,28 +13,9 @@ const CreateStore = () => {
     const columns = ['id', 'Department name', 'Address', 'Status'];
     const btnName = 'Add Department';
 
-    const handleStatusChange = async (storeId, newStatus) => {
-        try {
-            const response = await fetch(`${config.BASE_URL}/store/${storeId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ storeStatus: newStatus }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update store status');
-            }
-            fetchStores();
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-
     useEffect(() => {
         fetchStores();
-    }, []);
+    });
 
     const fetchStores = async () => {
         try {
@@ -62,6 +43,25 @@ const CreateStore = () => {
         } catch (err) {
             setError(err.message);
             setIsLoading(false);
+        }
+    };
+
+    const handleStatusChange = async (storeId, newStatus) => {
+        try {
+            const response = await fetch(`${config.BASE_URL}/store/${storeId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ storeStatus: newStatus }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update store status');
+            }
+            fetchStores();
+        } catch (error) {
+            setError(error.message);
         }
     };
 

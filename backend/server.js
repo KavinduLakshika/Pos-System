@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const sequelize = require("./dbConfig");
+const path = require('path');
 
 //Controllers
 const SupplierController = require("./controller/SupplerController");
@@ -42,7 +43,7 @@ app.put("/user/:id", UserController.updateUser);
 app.delete("/user/:id", UserController.deleteUser);
 app.post("/userLogin", UserController.userLogin);
 app.get("/users/hidden/:is_hidden", UserController.getUsersByHiddenStatus);
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //customer routes
 app.post("/customer", CustomerController.createCustomer);

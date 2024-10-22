@@ -45,7 +45,6 @@ const Dashboard = () => {
         console.error('Error:', error);
       }
     };
-
     fetchReports();
   }, [base_url]);
 
@@ -78,7 +77,7 @@ const Dashboard = () => {
   }, [base_url]);
 
   const topSellingLabels = (reportData.mostSellingItemsMonth || []).map(item => item.productName);
-  const topSellingValues = (reportData.mostSellingItemsMonth || []).map(item => parseInt(item.totalQuantity, 10));
+  const topSellingValues = (reportData.mostSellingItemsMonth || []).map(item => parseInt(item.totalQuantity));
 
   return (
     <div>
@@ -118,6 +117,7 @@ const Dashboard = () => {
                 labels={labels}
               />
             </div>
+
             <div className="col-lg-6 col-sm-12">
               <CardFour
                 dataValues={topSellingValues}
@@ -125,6 +125,7 @@ const Dashboard = () => {
                 title="Top Selling Items This Month"
               />
             </div>
+
           </div>
         </div>
       </div>

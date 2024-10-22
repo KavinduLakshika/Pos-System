@@ -5,7 +5,7 @@ const InvoiceProduct = require('../model/InvoiceProduct')
 
 const createInvoiceProduct = async (req, res) => {
   try {
-    const invoiceProducts = req.body; // Expecting an array of products
+    const invoiceProducts = req.body; 
 
     // Validate input
     if (!Array.isArray(invoiceProducts) || invoiceProducts.length === 0) {
