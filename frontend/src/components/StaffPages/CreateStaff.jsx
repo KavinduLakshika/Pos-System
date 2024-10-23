@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import Table from '../Table/Table';
 import StaffModal from '../../Models/StaffModel/StaffModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage } from '@fortawesome/free-solid-svg-icons';
 import config from '../../config';
+import './CreateStaff.css';
 
 const CreateStaff = () => {
 
   const [data, setData] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedStaff, setSelectedStaff] = useState(null);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  const columns = ["#", "Title", "Full Name", "Department / Job Position", "User Type", "User Name", "Email", "Contact 1", "Contact 2", "Address", "Nic", "Status"];
+  const columns = ["#", "Title", "Full Name", "Department / Job Position", "User Type", "User Name", "Email", "Contact 1", "Contact 2", "Address", "Nic", 'Image', "Status"];
   const btnName = 'Add New Staff Member';
 
   useEffect(() => {
@@ -26,17 +31,23 @@ const CreateStaff = () => {
       }
       const user = await response.json();
       const formattedData = user.map(user => [
+
         user.userId,
         user.userTitle,
         user.userFullName,
-        user.store?.storeName || "unknown",
+        user.store?.storeName || "Unknown",
         user.userType,
         user.userName,
         user.userEmail,
         user.userTP,
-        user.userSecondTP,
+        user.userSecondTP || "Unknown",
         user.userAddress,
         user.userNIC,
+        <FontAwesomeIcon
+          icon={faImage}
+          style={{ cursor: 'pointer' }}
+          onClick={() => handleImageClick(user.userImage)}
+        />,
         <select
           className='form-control'
           value={user.userStatus}
@@ -45,6 +56,7 @@ const CreateStaff = () => {
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
         </select>
+
       ]);
       setData(formattedData);
       setIsLoading(false);
@@ -73,7 +85,6 @@ const CreateStaff = () => {
     }
   };
 
-
   const handleDelete = async (rowIndex) => {
     try {
       const userId = data[rowIndex][0];
@@ -94,11 +105,21 @@ const CreateStaff = () => {
 
   const handleAddNewStaff = () => {
     setSelectedStaff(null);
-    setShowModal(true);
+    setShowEditModal(true);
   };
 
-  const closeModal = () => {
-    setShowModal(false);
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setShowImageModal(true);
+  };
+
+  const closeEditModal = () => {
+    setShowEditModal(false);
+  };
+
+  const closeImageModal = () => {
+    setSelectedImage(null);
+    setShowImageModal(false);
   };
 
   const handleEdit = (rowIndex) => {
@@ -106,17 +127,18 @@ const CreateStaff = () => {
     setSelectedStaff({
       userId: selectedStaffData[0],
       title: selectedStaffData[1],
-      department: selectedStaffData[2],
-      fullName: selectedStaffData[3],
+      department: selectedStaffData[3],
+      fullName: selectedStaffData[2],
       userType: selectedStaffData[4],
       userName: selectedStaffData[5],
       email: selectedStaffData[6],
       contact1: selectedStaffData[7],
       contact2: selectedStaffData[8],
       address: selectedStaffData[9],
-      nic: selectedStaffData[10]
+      nic: selectedStaffData[10],
+      photo: selectedStaffData[11]
     });
-    setShowModal(true);
+    setShowEditModal(true);
   };
 
   const title = 'Staff List';
@@ -141,15 +163,28 @@ const CreateStaff = () => {
             invoice={invoice}
           />
         )}
+
+        {/* Edit Modal */}
         <StaffModal
-          showModal={showModal}
-          closeModal={closeModal}
+          showModal={showEditModal}
+          closeModal={closeEditModal}
           onSave={fetchStaff}
           staff={selectedStaff}
         />
+
+        {/* Image Modal */}
+        {showImageModal && selectedImage && (
+          <div className="image-modal">
+            <div className="image-modal-content">
+              <span className="close" onClick={closeImageModal}>&times;</span>
+              <h4>User Image</h4>
+              <img src={selectedImage} alt="User" style={{ width: '100%' }} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
-  )
+  );
 }
 
 export default CreateStaff;
