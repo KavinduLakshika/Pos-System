@@ -1,6 +1,6 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const sequelize = require("./dbConfig");
 const path = require('path');
 
@@ -30,6 +30,7 @@ const PORT = process.env.PORT;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // status endpoint
 app.get('/api/switch', SwitchController.getStatus);
@@ -43,7 +44,6 @@ app.put("/user/:id", UserController.updateUser);
 app.delete("/user/:id", UserController.deleteUser);
 app.post("/userLogin", UserController.userLogin);
 app.get("/users/hidden/:is_hidden", UserController.getUsersByHiddenStatus);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //customer routes
 app.post("/customer", CustomerController.createCustomer);
@@ -76,6 +76,7 @@ app.delete("/product/:id", ProductController.deleteProduct);
 app.get("/product/productName/:name", ProductController.getProductByName);
 app.get('/product/codeOrName/:value', ProductController.getProductByCodeOrName);
 app.get('/products/suggestions', ProductController.getProductSuggestions);
+
 
 //stock routes
 app.post("/stock", StockController.createStock);
