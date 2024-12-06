@@ -7,34 +7,50 @@ const SalesHistory = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const columns = ["ID", "Date/time", "Total Amount", "Customer", "Products"];
+  const columns = ["ID", "Date/time", "Total Amount", "Customer"];
   const btnName = 'Add New Sale';
 
   useEffect(() => {
     fetchSalesHistory();
   }, []);
-
   const fetchSalesHistory = async () => {
     try {
       const response = await fetch(`${config.BASE_URL}/invoices`);
       if (!response.ok) {
         setError('Failed to fetch Sales Invoices');
+        return;
       }
       const invoices = await response.json();
-      const formattedData = invoices.map(invoice => {
+  
+      // Fetch transaction data for each invoice if required (assuming there is a relationship)
+      const transactionPromises = invoices.map(async (invoice) => {
+        const transactionResponse = await fetch(`${config.BASE_URL}/transaction/invoice/${invoice.invoiceId}`);
+        if (transactionResponse.ok) {
+          return await transactionResponse.json();
+        }
+        return [];
+      });
+  
+      // Wait for all transaction data to be fetched
+      const transactionsData = await Promise.all(transactionPromises);
+  
+      const formattedData = invoices.map((invoice, index) => {
         const invoiceDate = new Date(invoice.invoiceDate);
-
+        
         // Format dates to "YYYY-MM-DD HH:mm"
         const formattedInvoiceDate = `${invoiceDate.getFullYear()}-${String(invoiceDate.getMonth() + 1).padStart(2, '0')}-${String(invoiceDate.getDate()).padStart(2, '0')} ${String(invoiceDate.getHours()).padStart(2, '0')}:${String(invoiceDate.getMinutes()).padStart(2, '0')}`;
-
+  
+        // Assuming transactionsData[index] contains the transaction for this invoice
+        const transactionPrice = transactionsData[index]?.reduce((total, transaction) => total + transaction.price, 0)  ;
+  
         return [
           invoice.invoiceId,
           formattedInvoiceDate,
-          invoice.totalAmount,
+          transactionPrice, 
           invoice.customer?.cusName || "Unknown",
-          invoice.product?.productName || "Unknown"
         ];
       });
+  
       setData(formattedData);
       setIsLoading(false);
     } catch (err) {
@@ -42,6 +58,7 @@ const SalesHistory = () => {
       setIsLoading(false);
     }
   };
+  
   const title = 'Sales History';
   const invoice = 'Sales History.pdf';
 

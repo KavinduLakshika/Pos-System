@@ -113,7 +113,8 @@ app.delete("/rentalInvoice/:id", RentalInvoiceController.deleteRentalInvoice);
 app.post("/transaction", TransactionController.createTransaction);
 app.get("/transactions", TransactionController.getAllTransactions);
 app.get("/transactions/:id", TransactionController.getTransactionById);
-app.delete('/transaction/invoice/:invoice_invoiceId',TransactionController.deleteByInvoiceId);
+app.get('/transaction/invoice/:invoiceId', TransactionController.getTransactionsByInvoiceId);
+app.delete('/transactions/invoice/:invoice_invoiceId',TransactionController.deleteByInvoiceId);
 
 //store routes
 app.post("/store", StoreController.createStore);

@@ -99,9 +99,31 @@ const deleteByInvoiceId = async (req, res) => {
     }
 };
 
+const getTransactionsByInvoiceId = async (req, res) => {
+    try {
+        const { invoiceId } = req.params; // Extract invoiceId from route parameters
+
+        // Find all transactions associated with the given invoiceId
+        const transactions = await Transaction.findAll({
+            where: { invoice_invoiceId: invoiceId },
+        });
+
+        if (transactions.length === 0) {
+            return res.status(404).json({ message: `No transactions found for invoice ID: ${invoiceId}` });
+        }
+
+        // Return the found transactions
+        res.status(200).json(transactions);
+    } catch (error) {
+        console.error('Error fetching transactions:', error);
+        res.status(500).json({ message: 'An error occurred while fetching the transactions.', error: error.message });
+    }
+};
+
 module.exports = {
     createTransaction,
     getAllTransactions,
     getTransactionById,
-    deleteByInvoiceId
+    deleteByInvoiceId,
+    getTransactionsByInvoiceId
 };
