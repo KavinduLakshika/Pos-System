@@ -7,7 +7,7 @@ const SalesHistory = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const columns = ["ID", "Date/time", "Total Amount", "Customer"];
+  const columns = ["ID" ,"Customer", "Date/time","Transaction Type", "Total Amount","Due"];
   const btnName = 'Add New Sale';
 
   useEffect(() => {
@@ -22,7 +22,6 @@ const SalesHistory = () => {
       }
       const invoices = await response.json();
   
-      // Fetch transaction data for each invoice if required (assuming there is a relationship)
       const transactionPromises = invoices.map(async (invoice) => {
         const transactionResponse = await fetch(`${config.BASE_URL}/transaction/invoice/${invoice.invoiceId}`);
         if (transactionResponse.ok) {
@@ -31,23 +30,24 @@ const SalesHistory = () => {
         return [];
       });
   
-      // Wait for all transaction data to be fetched
       const transactionsData = await Promise.all(transactionPromises);
   
       const formattedData = invoices.map((invoice, index) => {
         const invoiceDate = new Date(invoice.invoiceDate);
         
-        // Format dates to "YYYY-MM-DD HH:mm"
         const formattedInvoiceDate = `${invoiceDate.getFullYear()}-${String(invoiceDate.getMonth() + 1).padStart(2, '0')}-${String(invoiceDate.getDate()).padStart(2, '0')} ${String(invoiceDate.getHours()).padStart(2, '0')}:${String(invoiceDate.getMinutes()).padStart(2, '0')}`;
   
-        // Assuming transactionsData[index] contains the transaction for this invoice
-        const transactionPrice = transactionsData[index]?.reduce((total, transaction) => total + transaction.price, 0)  ;
+        const transactionPrice = transactionsData[index]?.reduce((total, transaction) => total + transaction.paid, 0)  ;
+        const transactiondue = transactionsData[index]?.reduce((total, transaction) => total + transaction.due, 0)  ;
+        const transactionTypes = transactionsData[index]?.map((transaction) => transaction.transactionType).join(', ') || "Unknown";
   
         return [
           invoice.invoiceId,
-          formattedInvoiceDate,
-          transactionPrice, 
           invoice.customer?.cusName || "Unknown",
+          formattedInvoiceDate,
+          transactionTypes,
+          transactionPrice, 
+          transactiondue,
         ];
       });
   
@@ -70,17 +70,18 @@ const SalesHistory = () => {
 
           {isLoading ? (
             <p>Loading...</p>
-            // ) : error ? (
-            //   <p>Error: {error}</p>
-          ) : (
-            <Table
+             ) : error ? (
+             <p>Error: {error}</p>
+          ) : (<p></p>)}
+          <Table
               data={data}
               columns={columns}
               btnName={btnName}
               title={title}
               invoice={invoice}
+              showEdit={false}
             />
-          )}
+          
         </div>
       </div>
     </div>
