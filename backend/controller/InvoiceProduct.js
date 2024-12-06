@@ -51,7 +51,6 @@ const createInvoiceProduct = async (req, res) => {
       });
     }
 
-    // Respond with success
     res.status(201).json({
       message: 'Invoice products created successfully',
     });
@@ -81,7 +80,39 @@ const getAllInvoiceProducts = async (req, res) => {
   }
 };
 
+const deleteInvoiceProduct = async (req, res) => {
+  try {
+    const { invoiceId } = req.params;
+
+    const invoiceProducts = await InvoiceProduct.findAll({ where: { invoiceId } });
+
+    if (invoiceProducts.length === 0) {
+      return res.status(404).json({ message: `No products found for invoice ID: ${invoiceId}` });
+    }
+
+    for (const invoiceProduct of invoiceProducts) {
+      const { stockId, invoiceQty } = invoiceProduct;
+
+      const stock = await Stock.findByPk(stockId);
+      if (!stock) {
+        return res.status(404).json({ message: `Stock with ID ${stockId} not found` });
+      }
+
+      const updatedStockQty = stock.stockQty + invoiceQty;
+      await stock.update({ stockQty: updatedStockQty });
+
+      await invoiceProduct.destroy();
+    }
+
+    res.status(200).json({ message: `All products for invoice ID ${invoiceId} deleted successfully` });
+  } catch (error) {
+    console.error('Error deleting invoice products:', error);
+    res.status(500).json({ error: `An error occurred: ${error.message}` });
+  }
+};
+
 module.exports = {
   createInvoiceProduct,
   getAllInvoiceProducts,
+  deleteInvoiceProduct,
 };

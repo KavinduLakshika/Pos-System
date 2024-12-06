@@ -100,6 +100,7 @@ app.get('/invoice/invoiceNo/:num', InvoiceController.getInvoiceByNo);
 //invoiceProduct Route
 app.post('/invoiceProduct', InvoiceProductController.createInvoiceProduct);
 app.get('/invoiceProducts', InvoiceProductController.getAllInvoiceProducts);
+app.delete('/invoiceProduct/:invoiceId',InvoiceProductController.deleteInvoiceProduct)
 
 //rental invoice routes
 app.post("/rentalInvoice", RentalInvoiceController.createRentalInvoice);
@@ -111,7 +112,8 @@ app.delete("/rentalInvoice/:id", RentalInvoiceController.deleteRentalInvoice);
 //transaction routes
 app.post("/transaction", TransactionController.createTransaction);
 app.get("/transactions", TransactionController.getAllTransactions);
-app.get("/transaction/:id", TransactionController.getTransactionById);
+app.get("/transactions/:id", TransactionController.getTransactionById);
+app.delete('/transaction/invoice/:invoice_invoiceId',TransactionController.deleteByInvoiceId);
 
 //store routes
 app.post("/store", StoreController.createStore);

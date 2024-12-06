@@ -1,6 +1,6 @@
 const Transaction = require("../model/Transaction");
 const Invoice = require("../model/Invoice");
-const User =require("../model/User")
+const User = require("../model/User")
 
 const createTransaction = async (req, res) => {
     try {
@@ -78,8 +78,30 @@ const getTransactionById = async (req, res) => {
     }
 };
 
+const deleteByInvoiceId = async (req, res) => {
+    try {
+        const { invoice_invoiceId } = req.params;
+
+        // Find all transactions associated with the given invoice_invoiceId
+        const transactions = await Transaction.findAll({ where: { invoice_invoiceId } });
+
+        if (transactions.length === 0) {
+            return res.status(404).json({ message: `No transactions found for invoice ID: ${invoice_invoiceId}` });
+        }
+
+        // Delete all transactions associated with the invoice_invoiceId
+        await Transaction.destroy({ where: { invoice_invoiceId } });
+
+        res.status(200).json({ message: `Transactions for invoice ID ${invoice_invoiceId} deleted successfully` });
+    } catch (error) {
+        console.error('Error deleting transactions:', error);
+        res.status(500).json({ message: 'An error occurred while deleting the transactions.', error: error.message });
+    }
+};
+
 module.exports = {
     createTransaction,
     getAllTransactions,
     getTransactionById,
+    deleteByInvoiceId
 };
