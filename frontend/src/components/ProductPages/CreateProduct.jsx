@@ -78,6 +78,11 @@ const CreateProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (formData.productCategory === 'select') {
+      setError('Please select a valid product category.');
+      return;
+    }
+
     const formDataToSend = new FormData();
     // Append all text fields
     formDataToSend.append('productName', formData.productName);
