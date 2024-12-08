@@ -110,11 +110,6 @@ const CreateStore = () => {
         <div>
             <div className="scrolling-container">
                 <h4>Department</h4>
-                {isLoading ? (
-                    <p>Loading...</p>
-                ) : error ? (
-                    <p>Error: {error}</p>
-                ) : (
                     <Table
                         data={data}
                         columns={columns}
@@ -126,7 +121,6 @@ const CreateStore = () => {
                         title={title}
                         invoice={invoice}
                     />
-                )}
                 <StoreForm
                     showModal={showModal}
                     closeModal={closeModal}

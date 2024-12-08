@@ -89,6 +89,7 @@ const SalesHistory = () => {
         }
   
         setData((prevData) => prevData.filter(item => item[0] !== rowIndex));
+        fetchSalesHistory();
       } catch (err) {
         setError(err.message);
       }
