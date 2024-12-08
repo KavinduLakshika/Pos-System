@@ -66,12 +66,6 @@ const SalesHistory = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this invoice?");
     if (confirmDelete) {
       try {
-        const invoiceResponse = await fetch(`${config.BASE_URL}/invoice/${invoiceId}`, {
-          method: 'DELETE',
-        });
-        if (!invoiceResponse.ok) {
-          throw new Error('Failed to delete the invoice');
-        }
         const transactionResponse = await fetch(`${config.BASE_URL}/transactions/invoice/${invoiceId}`, {
           method: 'DELETE',
         });
@@ -85,6 +79,14 @@ const SalesHistory = () => {
         if (!invoiceProductResponse.ok) {
           throw new Error('Failed to delete invoice products');
         }
+  
+        const invoiceResponse = await fetch(`${config.BASE_URL}/invoice/${invoiceId}`, {
+          method: 'DELETE',
+        });
+        if (!invoiceResponse.ok) {
+          throw new Error('Failed to delete the invoice');
+        }
+  
         setData((prevData) => prevData.filter(item => item[0] !== invoiceId));
       } catch (err) {
         setError(err.message);
