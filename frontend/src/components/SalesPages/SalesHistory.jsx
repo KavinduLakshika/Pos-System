@@ -62,6 +62,37 @@ const SalesHistory = () => {
   const title = 'Sales History';
   const invoice = 'Sales History.pdf';
 
+  const handleDelete = async (invoiceId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this invoice?");
+    if (confirmDelete) {
+      try {
+        const invoiceResponse = await fetch(`${config.BASE_URL}/invoice/${invoiceId}`, {
+          method: 'DELETE',
+        });
+        if (!invoiceResponse.ok) {
+          throw new Error('Failed to delete the invoice');
+        }
+        const transactionResponse = await fetch(`${config.BASE_URL}/transactions/invoice/${invoiceId}`, {
+          method: 'DELETE',
+        });
+        if (!transactionResponse.ok) {
+          throw new Error('Failed to delete transactions');
+        }
+  
+        const invoiceProductResponse = await fetch(`${config.BASE_URL}/invoiceProduct/${invoiceId}`, {
+          method: 'DELETE',
+        });
+        if (!invoiceProductResponse.ok) {
+          throw new Error('Failed to delete invoice products');
+        }
+        setData((prevData) => prevData.filter(item => item[0] !== invoiceId));
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+  };
+  
+
   return (
     <div>
       <div className="scrolling-container">
@@ -80,8 +111,8 @@ const SalesHistory = () => {
               title={title}
               invoice={invoice}
               showEdit={false}
+              onDelete={handleDelete}
             />
-          
         </div>
       </div>
     </div>
