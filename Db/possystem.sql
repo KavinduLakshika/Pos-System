@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 18, 2024 at 08:07 PM
+-- Generation Time: Dec 09, 2024 at 02:06 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -39,7 +39,8 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`categoryId`, `categoryName`, `categoryType`, `categoryStatus`) VALUES
-(1, 'cat 1', 'cat', 'In stock');
+(1, 'cat 1', 'cat', 'In stock'),
+(2, 'cat 2', 'gold', 'In stock');
 
 -- --------------------------------------------------------
 
@@ -70,8 +71,7 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`cusId`, `cusTitle`, `cusName`, `cusCode`, `cusAddress`, `cusPhone`, `cusEmail`, `cusNIC`, `cusCity`, `cusJob`, `cusCompany`, `cusWorkPlaceTP`, `cusWorkPlaceAddress`, `cusPoints`, `cusStatus`) VALUES
-(1, 'Mr.', 'Buddhika', 'BUD8724', 'zzzzz', '1234567890', 'buddhika@gmail.com', '123456789V', 'Unknown', 'xxxx', 'avc', '1234567890', '', '10', 'Active'),
-(2, 'Mr.', 'kavindu', 'KAV8876', 'xxx', '1234567890', 'kunage@gmail.com', '223456789V', 'Unknown', 'xxxx', 'Abc', '1234567890', '', '10', 'Active');
+(3, 'Mr.', 'MY Business', 'MY 7058', 'new', '1234567890', 'kunage0@gmail.com', '222222222222', 'Unknown', 'bhalla', 'Abc', '1234567890', 'xx', '10', 'Active');
 
 -- --------------------------------------------------------
 
@@ -115,14 +115,6 @@ CREATE TABLE `invoice` (
   `customer_cusId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `invoice`
---
-
-INSERT INTO `invoice` (`invoiceId`, `invoiceNo`, `invoiceDate`, `customer_cusId`) VALUES
-(143, 'InvNO0457', '2024-10-25 17:59:00', 1),
-(144, 'InvNO4566', '2024-10-11 18:00:00', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -137,17 +129,6 @@ CREATE TABLE `invoiceproduct` (
   `invoiceQty` varchar(255) NOT NULL,
   `totalAmount` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `invoiceproduct`
---
-
-INSERT INTO `invoiceproduct` (`id`, `invoiceId`, `productId`, `stockId`, `invoiceQty`, `totalAmount`) VALUES
-(22, 143, 1, 1, '2', '220'),
-(23, 143, 2, 3, '2', '220'),
-(24, 144, 1, 1, '7', '740'),
-(25, 144, 2, 3, '7', '740'),
-(26, 144, 3, 4, '7', '740');
 
 -- --------------------------------------------------------
 
@@ -179,7 +160,7 @@ CREATE TABLE `products` (
 INSERT INTO `products` (`productId`, `productName`, `productCode`, `productUnit`, `productDiscount`, `productBuyingPrice`, `productSellingPrice`, `productWarranty`, `productProfit`, `productEmi`, `productDescription`, `productImage`, `productStatus`, `category_categoryId`) VALUES
 (1, 'product 1', 'p1', '10', NULL, 100, 100, '', 0, NULL, 'ss', NULL, 'In stock', 1),
 (2, 'product 2', 'p2', '10', NULL, 120, 120, '', 0, NULL, 'gg', NULL, 'In stock', 1),
-(3, 'product 3', 'p3', '10', NULL, 100, 100, '10 Months', 0, NULL, '100', NULL, 'In stock', 1);
+(3, 'product 3', 'p3', '10', NULL, 1002, 100, '10 Months', -902, NULL, '100', NULL, 'In stock', 2);
 
 -- --------------------------------------------------------
 
@@ -249,9 +230,12 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`stockId`, `stockName`, `stockdate`, `billImage`, `stockPrice`, `due`, `vat`, `total`, `stockQty`, `mfd`, `exp`, `cashAmount`, `chequeAmount`, `stockDescription`, `stockStatus`, `products_productId`, `supplier_supplierId`, `store_storeId`, `category_categoryId`) VALUES
-(1, 'stock1', '2024-10-16 17:09:18', NULL, 100, 1, 1, 100, 91, '2024-10-16', '2024-10-31', 500, NULL, 'note', '', 1, 1, 1, 1),
-(3, 'stock 2', '2024-10-17 01:28:56', NULL, 100, 1, 1, 1, 91, '2024-10-17', '2024-10-31', 500, 211, 'booo', '', 2, 1, 1, 1),
-(4, '5', '2024-10-18 09:01:00', NULL, 10000, 0, 0, 0, 93, '2024-10-18', '2024-10-17', 98, NULL, NULL, 'In stock', 3, 1, 1, 1);
+(1, 'stock1', '2024-10-16 17:09:18', NULL, 100, 1, 1, 100, 2147483647, '2024-10-16', '2024-10-31', 500, NULL, 'note', '', 1, 1, 1, 1),
+(3, 'stock 2', '2024-10-17 01:28:56', NULL, 100, 1, 1, 1, 2147483647, '2024-10-17', '2024-10-31', 500, 211, 'booo', '', 2, 1, 1, 1),
+(4, '5', '2024-10-18 09:01:00', NULL, 10000, 0, 0, 0, 83, '2024-10-18', '2024-10-17', 98, NULL, NULL, 'In stock', 3, 1, 1, 1),
+(5, '1', '2024-12-19 07:42:00', 'http://localhost:5000/uploads/stock/1_1733663580933.png', 500, 0, 0, 0, 5, '2024-12-26', '2024-12-18', 120, NULL, '5', 'In stock', 3, 1, 1, 1),
+(6, '5', '2024-12-10 07:09:00', 'http://localhost:5000/uploads/stock/5_1733747989746.png', 200, 0, 0, 0, 2, '2024-12-10', '2024-12-16', 112, 121, NULL, 'In stock', 1, 2, 1, 1),
+(7, 'ww', '2024-12-10 07:14:00', NULL, 500, 0, 0, 0, 5, '2024-12-12', '2024-12-11', 122, NULL, NULL, 'In stock', 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -271,7 +255,10 @@ CREATE TABLE `stockhistory` (
 --
 
 INSERT INTO `stockhistory` (`stockHistoryId`, `stockHistoryQty`, `stock_stockId`, `products_productId`) VALUES
-(1, 100, 4, 3);
+(1, 100, 4, 3),
+(2, 5, 5, 3),
+(3, 2, 6, 1),
+(4, 5, 7, 1);
 
 -- --------------------------------------------------------
 
@@ -315,7 +302,8 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`supplierId`, `supplierName`, `supplierAddress`, `supplierNic`, `supplierEmail`, `supplierTP`, `supplierSecondTP`, `supplierStatus`) VALUES
-(1, 'kavindu', 'xxxxx', '123456789V', 'kunage07@gmail.com', '1234567890', '', 'Active');
+(1, 'kavindu', 'xxxxx', '123456789V', 'kunage07@gmail.com', '1234567890', '', 'Active'),
+(2, 'Buddhika', 'gg', '121212121212', 'buddhika@gmail.com', '1234567890', '12334567890', 'Active');
 
 -- --------------------------------------------------------
 
@@ -353,14 +341,6 @@ CREATE TABLE `transaction` (
   `invoice_invoiceId` int(11) NOT NULL,
   `user_userId` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `transaction`
---
-
-INSERT INTO `transaction` (`transactionId`, `transactionType`, `price`, `discount`, `dateTime`, `note`, `paid`, `due`, `invoice_invoiceId`, `user_userId`) VALUES
-(71, 'cash', '220', 0, '2024-10-25 17:59:00', '', 220, 0, 143, 2),
-(72, 'cash', '740', 0, '2024-10-11 18:00:00', '', 740, 0, 144, 2);
 
 -- --------------------------------------------------------
 
@@ -527,13 +507,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `categoryId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `categoryId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `cusId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `cusId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `expenses`
@@ -551,19 +531,19 @@ ALTER TABLE `expensescat`
 -- AUTO_INCREMENT for table `invoice`
 --
 ALTER TABLE `invoice`
-  MODIFY `invoiceId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+  MODIFY `invoiceId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
 
 --
 -- AUTO_INCREMENT for table `invoiceproduct`
 --
 ALTER TABLE `invoiceproduct`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `rentalinvoice`
@@ -581,13 +561,13 @@ ALTER TABLE `returnitems`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `stockId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `stockId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `stockhistory`
 --
 ALTER TABLE `stockhistory`
-  MODIFY `stockHistoryId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `stockHistoryId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `store`
@@ -599,7 +579,7 @@ ALTER TABLE `store`
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `supplierId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `supplierId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `switch`
@@ -611,7 +591,7 @@ ALTER TABLE `switch`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `user`

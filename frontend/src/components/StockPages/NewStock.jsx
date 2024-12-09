@@ -184,10 +184,8 @@ const NewStock = () => {
 
     const formDataToSend = new FormData();
     const formattedDate = formData.date.replace('T', ' ');
-
     formDataToSend.append('stockName', formData.stockName);
     formDataToSend.append('stockDate', formattedDate);
-
     formDataToSend.append('stockPrice', formData.totalPrice);
     formDataToSend.append('due', formData.due);
     formDataToSend.append('vat', formData.vat);
@@ -223,6 +221,7 @@ const NewStock = () => {
 
       const result = await response.json();
       console.log('Stock saved successfully:', result);
+      alert('Stock is Successfully added')
       setSuccessMessage('Stock saved successfully!');
       resetForm();
       fetchStock();
@@ -389,11 +388,11 @@ const NewStock = () => {
             {/* Left Column */}
             <div className="col-md-6">
               <label htmlFor="stockName" className="form-label">Stock Name / Stock Number</label>
-              <input type="text" name="stockName" value={formData.stockName} className="form-control" onChange={handleChange} />
+              <input type="text" name="stockName" value={formData.stockName} className="form-control" onChange={handleChange} required/>
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <label htmlFor="supplier" className="form-label">Supplier Name</label>
-                  <select name="supplier" value={formData.supplier} className="form-select" onChange={handleChange}>
+                  <select name="supplier" value={formData.supplier} className="form-select" required onChange={handleChange} >
                     <option value="select">Select Supplier</option>
                     {suppliers.map((supplier) => (
                       <option key={supplier.supplierId} value={supplier.supplierId}>
@@ -405,7 +404,7 @@ const NewStock = () => {
 
                 <div className="col-md-6 mb-3">
                   <label htmlFor="store" className="form-label">Store</label>
-                  <select name="store" value={formData.store} onChange={handleChange} className="form-select">
+                  <select name="store" value={formData.store} onChange={handleChange} className="form-select" required>
                     <option value="">Select Store</option>
                     {stores.map((store) => (
                       <option key={store.storeId} value={store.storeId}>
@@ -418,13 +417,13 @@ const NewStock = () => {
 
               <div className="mb-3">
                 <label htmlFor="date" className="form-label">Supplied Date</label>
-                <input type="datetime-local" name="date" value={formData.date} className="form-control" onChange={handleChange} />
+                <input type="datetime-local" name="date" value={formData.date} className="form-control" onChange={handleChange} required />
               </div>
 
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <label htmlFor="cashAmount" className="form-label">Cash Amount</label>
-                  <input type="number" name="cashAmount" value={formData.cashAmount} className="form-control" onChange={handleChange} />
+                  <input type="number" name="cashAmount" value={formData.cashAmount} className="form-control" onChange={handleChange} required />
                 </div>
                 <div className="col-md-6 mb-3">
                   <label htmlFor="chequeAmount" className="form-label">Cheque Amount</label>
@@ -459,6 +458,7 @@ const NewStock = () => {
                     className="form-control"
                     value={productSearch}
                     onChange={handleProductSearch}
+                    required
                   />
                   {productSuggestions.length > 0 && (
                     <ul className="list-group mt-0">
@@ -488,11 +488,11 @@ const NewStock = () => {
 
                 <div className="col-md-6 mb-3">
                   <label htmlFor="" className='mb-1'>Manufacture Date </label>
-                  <input onChange={handleChange} type="date" name='mfd' id='' onWheel={(e) => e.target.blur()} value={formData.mfd} className='form-control' />
+                  <input onChange={handleChange} type="date" name='mfd' id='' required onWheel={(e) => e.target.blur()} value={formData.mfd} className='form-control' />
                 </div>
                 <div className="col-md-6 mb-3">
                   <label htmlFor="" className='mb-1'>Expiration date</label>
-                  <input onChange={handleChange} type="date" name='exp' id='' onWheel={(e) => e.target.blur()} value={formData.exp} className='form-control' />
+                  <input onChange={handleChange} type="date" name='exp' id='' required onWheel={(e) => e.target.blur()} value={formData.exp} className='form-control' />
                 </div>
 
                 <div className="col-md-4 mb-3">
@@ -501,7 +501,7 @@ const NewStock = () => {
                 </div>
                 <div className="col-md-4 mb-3">
                   <label htmlFor="qty" className="form-label">Quantity</label>
-                  <input type="number" name="qty" value={formData.qty} className="form-control" onChange={handleChange} />
+                  <input type="number" name="qty" value={formData.qty} required className="form-control" onChange={handleChange} />
                 </div>
                 <div className="col-md-4 mb-3">
                   <label htmlFor="totalPrice" className="form-label">Total Price</label>

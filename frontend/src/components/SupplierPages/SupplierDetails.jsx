@@ -89,7 +89,6 @@ function SupplierDetails() {
   const handleDelete = async (rowIndex) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this supplier?');
     if (!confirmDelete) return;
-
     try {
       const supplierId = data[rowIndex][0];
       const response = await fetch(`${config.BASE_URL}/supplier/${supplierId}`, {
@@ -97,7 +96,7 @@ function SupplierDetails() {
       });
 
       if (!response.ok) {
-        setError('Failed to delete the supplier');
+        alert('Supplier is User for create stock');
       } else {
         fetchSuppliers();
       }
@@ -126,20 +125,20 @@ function SupplierDetails() {
           <p>Loading...</p>
         ) : error ? (
           <p>Error: {error}</p>
-        ) : (
-          <Table
-            search={'Search by Supplier Name'}
-            data={data}
-            columns={columns}
-            btnName={btnName}
-            onAdd={openModal}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            title={title}
-            invoice={invoice}
-            showDate={false}
-          />
-        )}
+        ) : (<p></p>)}
+        <Table
+          search={'Search by Supplier Name'}
+          data={data}
+          columns={columns}
+          btnName={btnName}
+          onAdd={openModal}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          title={title}
+          invoice={invoice}
+          showDate={false}
+        />
+
         <SupplierForm
           showModal={showModal}
           closeModal={closeModal}

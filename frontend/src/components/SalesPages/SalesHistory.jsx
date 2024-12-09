@@ -8,7 +8,6 @@ const SalesHistory = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const columns = ["ID" ,"Customer", "Date/time","Transaction Type", "Total Amount","Due"];
-  const btnName = 'Add New Sale';
 
   useEffect(() => {
     fetchSalesHistory();
@@ -111,10 +110,10 @@ const SalesHistory = () => {
           <Table
               data={data}
               columns={columns}
-              btnName={btnName}
               title={title}
               invoice={invoice}
               showEdit={false}
+              showButton={false}
               onDelete={handleDelete}
             />
         </div>

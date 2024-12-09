@@ -72,21 +72,25 @@ const ProductList = () => {
   };
 
   const handleDelete = async (rowIndex) => {
-    try {
-      const productId = data[rowIndex][0];
-      const response = await fetch(`${config.BASE_URL}/product/${productId}`, {
-        method: 'DELETE',
-      });
+    const confirmDelete = window.confirm("Are you sure you want to delete this Product?");
+    if (confirmDelete) {
+      try {
+        const productId = data[rowIndex][0];
+        const response = await fetch(`${config.BASE_URL}/product/${productId}`, {
+          method: 'DELETE',
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Failed to delete Product: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`Failed to delete Product: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
+        }
+
+        setData(prevData => prevData.filter((_, index) => index !== rowIndex));
+        await fetchProductList();
+      } catch (err) {
+        setError(`Error deleting product: ${err.message}`);
+        alert('This product used for create invoice')
       }
-
-      setData(prevData => prevData.filter((_, index) => index !== rowIndex));
-      await fetchProductList();
-    } catch (err) {
-      setError(`Error deleting product: ${err.message}`);
     }
   };
 
@@ -145,11 +149,9 @@ const ProductList = () => {
         {isLoading ? (
           <p>Loading...</p>
         ) : error ? (
-          <div className="error-message">
             <p>Error: {error}</p>
-            <button className='btn btn-danger' onClick={fetchProductList}>Retry</button>
-          </div>
-        ) : (
+        ) : (<p></p>
+        )}
           <Table
             data={data}
             columns={columns}
@@ -162,7 +164,6 @@ const ProductList = () => {
             title={title}
             invoice={invoice}
           />
-        )}
       </div>
     </div>
   );

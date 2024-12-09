@@ -38,20 +38,22 @@ const ProductCategory = () => {
   };
 
   const handleDelete = async (rowIndex) => {
-    try {
-      const categoryId = data[rowIndex][0];
-      const response = await fetch(`${config.BASE_URL}/category/${categoryId}`, {
-        method: 'DELETE',
-      });
+    const confirmDelete = window.confirm("Are you sure you want to delete this invoice?");
+    if (confirmDelete) {
+      try {
+        const categoryId = data[rowIndex][0];
+        const response = await fetch(`${config.BASE_URL}/category/${categoryId}`, {
+          method: 'DELETE',
+        });
 
-      if (!response.ok) {
-        throw new Error('Failed to delete category');
+        if (!response.ok) {
+          throw new Error('Failed to delete category');
+        }
+        setData((prevData) => prevData.filter((_, index) => index !== rowIndex));
+      } catch (err) {
+        // setError(err.message);
+        alert("This category used for Create Products")
       }
-
-
-      setData((prevData) => prevData.filter((_, index) => index !== rowIndex));
-    } catch (err) {
-      setError(err.message);
     }
   };
 
@@ -89,20 +91,18 @@ const ProductCategory = () => {
           <p>Loading...</p>
         ) : error ? (
           <p>Error: {error}</p>
-        ) : (
-          <Table
-            data={data}
-            columns={columns}
-            btnName={btnName}
-            onAdd={openModal}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-            showDate={false}
-            title={title}
-            invoice={invoice}
-          />
-        )}
-
+        ) : (<p></p>)}
+        <Table
+          data={data}
+          columns={columns}
+          btnName={btnName}
+          onAdd={openModal}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+          showDate={false}
+          title={title}
+          invoice={invoice}
+        />
         <CategoryForm
           showModal={showModal}
           closeModal={closeModal}
