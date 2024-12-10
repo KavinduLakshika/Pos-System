@@ -12,6 +12,8 @@ const createInvoiceProduct = async (req, res) => {
       return res.status(400).json({ message: 'No products provided' });
     }
 
+    const insufficientStockProducts = [];
+
     for (const invoiceProduct of invoiceProducts) {
       const { productId, stockId, invoiceId, totalAmount, invoiceQty } = invoiceProduct;
 
@@ -34,25 +36,48 @@ const createInvoiceProduct = async (req, res) => {
 
       // Check if enough stock is available
       if (stock.stockQty < invoiceQty) {
-        return res.status(400).json({ message: `Not enough stock available for ID: ${stockId}` });
+        insufficientStockProducts.push({
+          productId,
+          productName: product.productName,
+          availableStock: stock.stockQty,
+          requestedQuantity: invoiceQty
+        });
       }
+    }
 
-      // Update stock quantity
+    // If any products have insufficient stock, return detailed error
+    if (insufficientStockProducts.length > 0) {
+      return res.status(400).json({
+        message: 'Insufficient stock for some products',
+        insufficientProducts: insufficientStockProducts
+      });
+    }
+
+    // Process invoice products if all stock is sufficient
+    const createdInvoiceProducts = [];
+    for (const invoiceProduct of invoiceProducts) {
+      const { productId, stockId, invoiceId, totalAmount, invoiceQty } = invoiceProduct;
+
+      // Find stock and update quantity
+      const stock = await Stock.findByPk(stockId);
       const updatedStockQty = stock.stockQty - invoiceQty;
       await stock.update({ stockQty: updatedStockQty });
 
       // Create the invoice product
-      await InvoiceProduct.create({
+      const newInvoiceProduct = await InvoiceProduct.create({
         productId,
         stockId,
         invoiceId,
         totalAmount,
         invoiceQty,
       });
+
+      createdInvoiceProducts.push(newInvoiceProduct);
     }
 
     res.status(201).json({
       message: 'Invoice products created successfully',
+      invoiceProducts: createdInvoiceProducts
     });
 
   } catch (error) {

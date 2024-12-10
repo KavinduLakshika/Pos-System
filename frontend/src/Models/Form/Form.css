@@ -111,6 +111,9 @@
   -webkit-backdrop-filter: blur(2px);
 }
 
+.error-text{
+  color: red;
+}
 /* Responsive styles */
 @media (max-width: 1920px) {
   .ReactModal__Content {

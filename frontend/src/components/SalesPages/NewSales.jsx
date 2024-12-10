@@ -339,10 +339,24 @@
 
         if (!productResponse.ok) {
           const errorData = await productResponse.json();
+          
+          if (errorData.insufficientProducts) {
+            const errorMessage = errorData.insufficientProducts
+              .map(product => 
+                `Product: ${product.productName}\n` +
+                `Available Stock: ${product.availableStock}\n` +
+                `Requested Quantity: ${product.requestedQuantity}`
+              )
+              .join('\n\n');
+            
+            alert(`Insufficient Stock:\n${errorMessage}`);
+            return;
+          }
+    
           console.error('Product error details:', errorData);
           throw new Error(errorData.error || 'Failed to send Product');
         }
-
+    
         const productResult = await productResponse.json();
         console.log('Product ID before sending:', productId);
         console.log('Sending product data:', productInvoice);
@@ -356,7 +370,7 @@
         resetSalesPerson();
       } catch (error) {
         console.error('Error:', error);
-        alert(`Failed to process: ${error.message}`);
+        alert(`${error.message}`);
       }
     };
     

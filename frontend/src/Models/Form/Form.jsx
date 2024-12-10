@@ -78,7 +78,7 @@ const Form = ({ closeModal, onSave, cus }) => {
 
     return errors;
   };
-  const handleSubmit = async (e) => {
+  const handleSubmitCus = async (e) => {
     e.preventDefault();
     const errors = validate();
     if (Object.keys(errors).length > 0) {
@@ -145,7 +145,7 @@ const Form = ({ closeModal, onSave, cus }) => {
     <div>
       <h2>{cus ? 'Edit Customer' : 'New Customer'}</h2>
       {error && <div className="error-message">{error}</div>}
-      <form onSubmit={handleSubmit} className="form-container">
+      <form onSubmit={handleSubmitCus} className="form-container">
         <div className="form-group-1">
           <div className="form-group-name-flex">
             <div className="form-group-name">
